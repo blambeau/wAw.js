@@ -2,7 +2,6 @@ fs            = require 'fs'
 path          = require 'path'
 {spawn, exec} = require 'child_process'
 coffee        = require 'coffee-script'
-Waw           = require './lib/waw'
 
 # ANSI Terminal Colors.
 bold  = '\033[0;1m'
@@ -25,7 +24,7 @@ task 'build', 'build the CoffeeScript language from source', ->
   compile ['-c', '-o', 'lib'].concat(files)
 
 # Run the CoffeeScript test suite.
-runTests = (CoffeeScript) ->
+runTests = ->
   startTime   = Date.now()
   currentFile = null
   passedTests = 0
@@ -102,4 +101,4 @@ runTests = (CoffeeScript) ->
 
 
 task 'test', 'run the CoffeeScript language test suite', ->
-  runTests Waw
+  runTests require('./src/cell')
