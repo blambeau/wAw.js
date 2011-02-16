@@ -1,16 +1,23 @@
-class Hello
-  constructor: ->
-    @current = new Cell
-    @content = new View(
-	    selector:    
-	      '#content'
-	    url: =>
-	      @current.get()
-	    autorefresh: [ @current.slot('changed') ])
-	
-  init: ->
-    @current.set "hello1.html"
+this.Hello = class Hello extends App
 
+  # Cell for the current view
+  current: new Cell
+
+  # View handler for #content 
+  content: new View
+      selector: 
+        '#content'
+      url:      
+        -> Waw.get('current')
+      autorefresh: [
+        'current/changed'
+      ]
+
+  init: ->
+    this.current.set('hello1.html')
+  
 $(document).ready ->
-  this.App = new Hello
-  this.App.init()
+  Waw.run(new Hello)
+  
+
+

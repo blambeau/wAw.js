@@ -10,8 +10,8 @@ def _ path
   File.expand_path("../#{path}", __FILE__)
 end
 
-set :public, _("public")
 get '/' do
+  set :public, _("public")
   [ 200, 
     NO_CACHE_HEADERS.merge("Content-Type" => "text/html"),
     File.open(_ "public/index.html") ]
