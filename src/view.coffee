@@ -39,7 +39,7 @@ exports.View = class View
   _init: ->
     @options['autorefresh'] ?= []
     for l in @options['autorefresh']
-      Waw.fetch(l)(this.refresh)
+      Waw.fetch(l).bind(this.refresh)
 
   # Returns the value of an option. If the options was 
   # installed as a function, it is executed to get the

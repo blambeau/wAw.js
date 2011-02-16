@@ -7,12 +7,15 @@ require 'rubygems'
 require 'sinatra'
 
 def compile_waw
-  sources = Dir[File.join(Root, 'src/*.coffee')]
+  sources = File.readlines(File.join(Root, 'src', 'dependencies')).
+                 collect{|x| File.join(Root, 'src', x.strip) }
   cmd = "coffee -j -c -o #{File.join(Root, 'lib')} #{sources.join(' ')}"
   puts cmd
   puts `#{cmd}`
   [ "var exports = this;\n",
+    "function require(x) {\n   return exports; \n};\n",
     File.read(File.join(Root, 'lib/concatenation.js')) ]
+#  [ File.read(File.join(Root, 'lib/concatenation.js')) ]
 end
 
 def _ path

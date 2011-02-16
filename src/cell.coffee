@@ -1,37 +1,28 @@
-#
-# A base class that installs signal and slot support
-#
-exports.Base = class Base
-  constructor: ->
-    @listeners = {}
-
-  emit: (slot) ->
-    @listeners[slot] ?= []
-    for l in @listeners[slot]
-      l(this)
-    this
-
-  bind: (slot, fn) ->
-    @listeners[slot] ?= []
-    @listeners[slot].push(fn)
-    this
-
-  slot: (name) ->
-    (fn) => this.bind(name, fn)
+{Base} = require './base'
 
 #
 # A Memory/State Cell supporting a 'changed' slot
 #
 exports.Cell = class Cell extends Base
+
   constructor: (@value) ->
     super
+    this.slot('changed')
 
-  get: -> @value
+  get: -> 
+	  @value
 
   set: (value) ->
+    oldval = @value
     @value = value
-    this.emit("changed")
+    this.emit("changed", this, oldval, value)
     @value
 
+  listen: (fn) -> 
+    this.bind('changed', fn)
+
   fetch: (sel) ->
-    this.slot(sel)
+	  if this.has_slot(sel)
+      this.slot(sel)
+    else
+      raise "No such slot #{sel}"

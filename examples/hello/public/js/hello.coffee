@@ -18,6 +18,3 @@ this.Hello = class Hello extends App
   
 $(document).ready ->
   Waw.run(new Hello)
-  
-
-
