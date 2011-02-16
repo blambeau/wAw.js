@@ -7,16 +7,14 @@
     child.prototype = new ctor;
     child.__super__ = parent.prototype;
     return child;
-  }, __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+  };
   Hello = (function() {
     __extends(Hello, Brick);
     function Hello() {
       this.current = new Cell;
       this.content = new View({
         selector: '#content',
-        url: __bind(function() {
-          return this.current.get();
-        }, this),
+        url: this.current,
         autorefresh: [this.current.changed]
       });
     }

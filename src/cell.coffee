@@ -11,12 +11,18 @@ exports.Cell = class Cell extends Brick
 
   get: -> 
 	  @value
+	
+  wget: ->
+    this.get()
 
   set: (value) ->
     oldval = @value
     @value = value
     this.emit("changed", this, oldval, value)
     @value
+
+  wset: (value) ->
+	  this.set(value)
 
   listen: (fn) -> 
     this.bind('changed', fn)

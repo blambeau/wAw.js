@@ -9,8 +9,8 @@ class Hello extends Brick
 	  @content = new View
 		  selector: 
 		    '#content'
-		  url: =>
-		    this.current.get();
+		  url: 
+		    this.current
 		  autorefresh: [
 		    this.current.changed
 		  ]

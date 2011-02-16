@@ -50,7 +50,16 @@ exports.View = class View extends Brick
   # option value
   _get_opt_value: (optkey) ->
     optvalue = @options[optkey]
-    if (typeof(optvalue) is 'function')
-	    optvalue()
-    else
-      optvalue
+    switch typeof(optvalue)
+      when 'function'
+  	    optvalue()
+      when 'string'
+        optvalue
+      else 
+        if optvalue? && optvalue['wget']?
+          optvalue.wget()
+        else if optvalue?
+          optvalue.toString()
+        else
+	        optvalue
+      
