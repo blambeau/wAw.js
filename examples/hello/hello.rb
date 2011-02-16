@@ -6,6 +6,15 @@ Root  = File.expand_path('../../../', __FILE__)
 require 'rubygems'
 require 'sinatra'
 
+def compile_waw
+  sources = Dir[File.join(Root, 'src/*.coffee')]
+  cmd = "coffee -j -c -o #{File.join(Root, 'lib')} #{sources.join(' ')}"
+  puts cmd
+  puts `#{cmd}`
+  [ "var exports = this;\n",
+    File.read(File.join(Root, 'lib/concatenation.js')) ]
+end
+
 def _ path
   File.expand_path("../#{path}", __FILE__)
 end
@@ -18,15 +27,9 @@ get '/' do
 end
 
 get '/waw.js' do
-  sources = Dir[File.join(Root, 'src/*.coffee')]
-  cmd = "coffee -c -o #{File.join(Root, 'lib')} #{sources.join(' ')}"
-  puts cmd
-  puts `#{cmd}`
-  targets = Dir[File.join(Root, 'lib/*.js')]
-  puts targets.inspect
   [ 200, 
     NO_CACHE_HEADERS.merge("Content-Type" => "text/javascript"),
-    targets.collect{|f| File.read(f)}.join("\n") ]
+    compile_waw ]
 end
 
 get '/app.js' do

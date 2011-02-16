@@ -21,7 +21,7 @@ log = (message, color, explanation) ->
 task 'build', 'build the CoffeeScript language from source', ->
   files = fs.readdirSync 'src'
   files = ('src/' + file for file in files when file.match(/\.coffee$/))
-  compile ['-c', '-o', 'lib'].concat(files)
+  compile ['-c', '-j', '-o', 'lib'].concat(files)
 
 # Run the CoffeeScript test suite.
 runTests = ->
