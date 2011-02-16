@@ -11,9 +11,8 @@ class Hello extends Brick
 		    '#content'
 		  url: 
 		    this.current
-		  autorefresh: [
+		  autorefresh:
 		    this.current.changed
-		  ]
 
   init: ->
     this.current.set('hello1.html')

@@ -15,7 +15,7 @@
       this.content = new View({
         selector: '#content',
         url: this.current,
-        autorefresh: [this.current.changed]
+        autorefresh: this.current.changed
       });
     }
     Hello.prototype.init = function() {

@@ -37,13 +37,18 @@ exports.View = class View extends Brick
 
   #### Private functions
 
-  # Installs the View
   init: ->
-    @options['autorefresh'] ?= []
+    @options['autorefresh'] = this._normalize_autorefresh(@options['autorefresh'])
     for l in @options['autorefresh']
 	    if (typeof(l) == "string")
         l = this.wfetch(l) 
       l.bind(this.refresh)
+
+  _normalize_autorefresh: (ar) ->
+    ar = [] unless ar?
+    if !(ar instanceof Array)
+	    ar = [ ar ]
+    ar
 
   # Returns the value of an option. If the options was 
   # installed as a function, it is executed to get the

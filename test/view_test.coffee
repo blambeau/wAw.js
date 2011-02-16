@@ -20,5 +20,16 @@ test "View's url getter as a function", ->
     url: -> 'funchello'
   ok v.url() is 'funchello' 
 
+test "View#_normalize_autorefresh", ->
+  v = new View
+  #
+  ar = v._normalize_autorefresh()
+  ok (ar instanceof Array && ar.length == 0)
+  #
+  ar = v._normalize_autorefresh('hello')
+  ok (ar instanceof Array && ar.length == 1 && ar[0] == 'hello')
+  #
+  ar = v._normalize_autorefresh(['hello'])
+  ok (ar instanceof Array && ar.length == 1 && ar[0] == 'hello')
 
 
