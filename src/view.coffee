@@ -41,7 +41,7 @@ exports.View = class View extends Brick
   init: ->
     @options['autorefresh'] ?= []
     for l in @options['autorefresh']
-	    if (l instanceof String)
+	    if (typeof(l) == "string")
         l = this.wfetch(l) 
       l.bind(this.refresh)
 

@@ -26,10 +26,10 @@ exports.Brick = class Brick extends Base
       if mine?
         if (sel.length-1 == index)
           mine
-        else if mine['wfetch']
+        else if mine['wfetch']?
           mine.wfetch(sel, index + 1)
         else
-          throw "Not a waw brick #{mine}"
+          throw "Not a waw brick under #{sel.join('/')} (#{selkey}), unable to fetch"
       else
         throw "No such key #{sel[index]}"
     else if (sel[0] == '/')
