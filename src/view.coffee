@@ -41,7 +41,9 @@ exports.View = class View extends Brick
   init: ->
     @options['autorefresh'] ?= []
     for l in @options['autorefresh']
-      this.wfetch(l).bind(this.refresh)
+	    if (l instanceof String)
+        l = this.wfetch(l) 
+      l.bind(this.refresh)
 
   # Returns the value of an option. If the options was 
   # installed as a function, it is executed to get the
@@ -49,6 +51,6 @@ exports.View = class View extends Brick
   _get_opt_value: (optkey) ->
     optvalue = @options[optkey]
     if (typeof(optvalue) is 'function')
-      optvalue.apply(this)
+	    optvalue()
     else
       optvalue

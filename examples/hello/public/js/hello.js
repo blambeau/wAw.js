@@ -7,20 +7,19 @@
     child.prototype = new ctor;
     child.__super__ = parent.prototype;
     return child;
-  };
+  }, __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
   Hello = (function() {
-    function Hello() {
-      Hello.__super__.constructor.apply(this, arguments);
-    }
     __extends(Hello, Brick);
-    Hello.prototype.current = new Cell;
-    Hello.prototype.content = new View({
-      selector: '#content',
-      url: function() {
-        return this.wget('../current');
-      },
-      autorefresh: ['../current/changed']
-    });
+    function Hello() {
+      this.current = new Cell;
+      this.content = new View({
+        selector: '#content',
+        url: __bind(function() {
+          return this.current.get();
+        }, this),
+        autorefresh: [this.current.changed]
+      });
+    }
     Hello.prototype.init = function() {
       return this.current.set('hello1.html');
     };
