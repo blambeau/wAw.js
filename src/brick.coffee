@@ -13,6 +13,15 @@ exports.Brick = class Brick extends Base
         v.winit(waw, this, k)
     this.init() if this['init']?
 
+  wid: ->
+	  pwid = @wparent.wid()
+	  if pwid == ''
+		  @wname
+	  else if pwid[pwid.length - 1] is '/'
+      pwid + @wname
+    else
+      pwid + '/' + @wname
+
   wfetch: (sel, index = 0) -> 
     if (sel instanceof Array)
 	    selkey = sel[index]

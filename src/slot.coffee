@@ -1,6 +1,6 @@
 exports.Slot = class Slot
 
-  constructor: (@base) ->
+  constructor: ->
     @listeners = []
 
   bind: (l) ->

@@ -18,6 +18,13 @@ test "Brick#winit", ->
   ok b1.b2.b3['wparent'] is b1.b2
   ok b1.b2.b3['waw'] is Waw
 
+# wid
+
+test "Brick#wid", ->
+  ok b1.wid() is '/'
+  ok b1.b2.wid() is '/b2'
+  ok b1.b2.b3.wid() is '/b2/b3'
+
 # wfetch
 
 test "Brick#wfetch with relative", ->
