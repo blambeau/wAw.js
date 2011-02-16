@@ -1,13 +1,13 @@
-waw = require '../lib/waw'
+{Cell} = require '../lib/cell'
 
 test "Cell's basic contract", ->
-  c = new waw.Cell
+  c = new Cell
   c.set(12)
   ok c.get() is 12
 
 test "Cell's listener contract", ->
   local = 0
-  c = new waw.Cell
+  c = new Cell
   c.add_listener (cell) ->
     local = cell.get()
   c.set(12)
