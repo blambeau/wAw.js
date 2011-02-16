@@ -49,6 +49,6 @@ exports.View = class View extends Brick
   _get_opt_value: (optkey) ->
     optvalue = @options[optkey]
     if (typeof(optvalue) is 'function')
-      optvalue()
+      optvalue.apply(this)
     else
       optvalue

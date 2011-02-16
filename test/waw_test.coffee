@@ -10,6 +10,7 @@ Waw.run(new Hello)
 
 test "Waw#fetch", ->
   ok Waw.fetch('state') instanceof Cell
+  ok Waw.fetch('/state') instanceof Cell
 
 test "Waw#set and Waw#get", ->
   Waw.set('state', 12) 

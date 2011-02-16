@@ -7,7 +7,7 @@ exports.Brick = class Brick extends Base
     @wname = name
     @wparent = parent
     for k, v of this
-	    if (k == 'waw' || k == 'wparent') 
+      if (k == 'waw' || k == 'wparent') 
         continue 
       else if (v? && v['winit']?)
         v.winit(waw, this, k)
@@ -15,7 +15,14 @@ exports.Brick = class Brick extends Base
 
   wfetch: (sel, index = 0) -> 
     if (sel instanceof Array)
-      mine = this[sel[index]]
+	    selkey = sel[index]
+	    mine = switch selkey
+	      when '.'
+	        this
+	      when '..'
+          @wparent
+        else
+          this[selkey]
       if mine?
         if (sel.length-1 == index)
           mine
@@ -29,3 +36,17 @@ exports.Brick = class Brick extends Base
       @waw.fetch(sel)
     else
       this.wfetch(sel.split('/'))
+
+  wget: (sel) ->
+    fetched = this.wfetch(sel)
+    if (fetched? && fetched['get']?)
+      fetched.get()
+    else
+      throw "Not gettable #{sel}"
+
+  wset: (sel, value) ->
+    fetched = this.wfetch(sel)
+    if (fetched? && fetched['set']?)
+      fetched.set(value)
+    else
+      throw "Not settable #{sel}"

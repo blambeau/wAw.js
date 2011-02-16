@@ -8,7 +8,7 @@
     child.__super__ = parent.prototype;
     return child;
   };
-  this.Hello = Hello = (function() {
+  Hello = (function() {
     function Hello() {
       Hello.__super__.constructor.apply(this, arguments);
     }
@@ -17,9 +17,9 @@
     Hello.prototype.content = new View({
       selector: '#content',
       url: function() {
-        return Waw.get('/current');
+        return this.wget('../current');
       },
-      autorefresh: ['/current/changed']
+      autorefresh: ['../current/changed']
     });
     Hello.prototype.init = function() {
       return this.current.set('hello1.html');

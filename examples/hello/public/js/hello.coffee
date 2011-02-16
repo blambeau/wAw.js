@@ -1,4 +1,4 @@
-this.Hello = class Hello extends Brick
+class Hello extends Brick
 
   # Cell for the current view
   current: new Cell
@@ -7,10 +7,10 @@ this.Hello = class Hello extends Brick
   content: new View
       selector: 
         '#content'
-      url:      
-        -> Waw.get('/current')
+      url: ->
+        this.wget('../current');
       autorefresh: [
-        '/current/changed'
+        '../current/changed'
       ]
 
   init: ->
