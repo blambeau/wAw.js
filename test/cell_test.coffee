@@ -23,11 +23,11 @@ test "Cell#listen and Cell#set", ->
     ok (cell is c && oldval is 12 && newval is 14)
   c.set(14)
 
-test "Cell#fetch", ->
+test "Cell#wfetch", ->
   c = new Cell(12)
-  ok (c.fetch('changed') instanceof Slot)
+  ok (c.wfetch('changed') instanceof Slot)
   try
-    c.fetch('changd')
+    c.wfetch('changd')
     ok false
   catch ex
     ok true

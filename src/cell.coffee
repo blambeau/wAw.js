@@ -1,13 +1,13 @@
-{Base} = require './base'
+{Brick} = require './brick'
 
 #
 # A Memory/State Cell supporting a 'changed' slot
 #
-exports.Cell = class Cell extends Base
+exports.Cell = class Cell extends Brick
 
   constructor: (@value) ->
     super
-    this.slot('changed')
+    @changed = this.slot('changed')
 
   get: -> 
 	  @value
@@ -20,9 +20,3 @@ exports.Cell = class Cell extends Base
 
   listen: (fn) -> 
     this.bind('changed', fn)
-
-  fetch: (sel) ->
-	  if this.has_slot(sel)
-      this.slot(sel)
-    else
-      raise "No such slot #{sel}"

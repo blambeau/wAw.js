@@ -1,4 +1,4 @@
-this.Hello = class Hello extends App
+this.Hello = class Hello extends Brick
 
   # Cell for the current view
   current: new Cell
@@ -8,9 +8,9 @@ this.Hello = class Hello extends App
       selector: 
         '#content'
       url:      
-        -> Waw.get('current')
+        -> Waw.get('/current')
       autorefresh: [
-        'current/changed'
+        '/current/changed'
       ]
 
   init: ->

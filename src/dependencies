@@ -1,6 +1,6 @@
 slot.coffee
 base.coffee
+brick.coffee
 cell.coffee
 view.coffee
-app.coffee
 waw.coffee

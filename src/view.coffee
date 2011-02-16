@@ -1,7 +1,9 @@
+{Brick} = require './brick'
+
 #
 # Defines the View class.
 #
-exports.View = class View
+exports.View = class View extends Brick
   
   # Builds a View instance. Options can be:
   #
@@ -36,10 +38,10 @@ exports.View = class View
   #### Private functions
 
   # Installs the View
-  _init: ->
+  init: ->
     @options['autorefresh'] ?= []
     for l in @options['autorefresh']
-      Waw.fetch(l).bind(this.refresh)
+      this.wfetch(l).bind(this.refresh)
 
   # Returns the value of an option. If the options was 
   # installed as a function, it is executed to get the

@@ -12,14 +12,14 @@
     function Hello() {
       Hello.__super__.constructor.apply(this, arguments);
     }
-    __extends(Hello, App);
+    __extends(Hello, Brick);
     Hello.prototype.current = new Cell;
     Hello.prototype.content = new View({
       selector: '#content',
       url: function() {
-        return Waw.get('current');
+        return Waw.get('/current');
       },
-      autorefresh: ['current/changed']
+      autorefresh: ['/current/changed']
     });
     Hello.prototype.init = function() {
       return this.current.set('hello1.html');
