@@ -7,5 +7,8 @@ exports.Slot = class Slot
     @listeners.push(l)
     this
 
+  listen: (l) ->
+	  this.bind(l)
+
   emit: ->
     l(arguments...) for l in @listeners

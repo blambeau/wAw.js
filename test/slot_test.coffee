@@ -11,6 +11,11 @@ test "Slot's bind contract", ->
   x = s.bind (arg) -> arg
   ok x is s
 
+test "Slot's listen contract", ->
+  s = new Slot
+  x = s.listen (arg) -> arg
+  ok x is s
+
 test "Slot's emit contract", ->
   local = 0
   s = new Slot
