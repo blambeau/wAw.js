@@ -2,7 +2,7 @@ exports.Waw = {
 	
   run: (app) ->
     @app = app
-    @app.winit(this, this, '/')
+    @app.wInit(this, this, '/')
 
   fetch: (selector) ->
 	  if selector[0] == '/'

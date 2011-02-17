@@ -8,10 +8,10 @@ b1.b2.b3 = new Brick
 b1.b2.c1 = new Cell(12)
 Waw.run b1
 
-# winit
+# wInit
 
-test "Brick#winit", ->
-  b1.winit(Waw, Waw, '/')
+test "Brick#wInit", ->
+  b1.wInit(Waw, Waw, '/')
   ok b1['waw'] is Waw
   ok b1.b2['wparent'] is b1
   ok b1.b2['waw'] is Waw

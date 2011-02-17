@@ -4,15 +4,15 @@ exports.Brick = class Brick extends Base
   
   # wPrivate methods
 
-  winit: (waw, parent, name) ->
+  wInit: (waw, parent, name) ->
     @waw = waw
     @wname = name
     @wparent = parent
     for k, v of this
       if (k == 'waw' || k == 'wparent') 
         continue 
-      else if (v? && v['winit']?)
-        v.winit(waw, this, k)
+      else if (v? && v['wInit']?)
+        v.wInit(waw, this, k)
     this.init() if this['init']?
 
   # wQuery methods
