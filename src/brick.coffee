@@ -88,8 +88,11 @@ exports.Brick = class Brick
   #   - the component cannot be found
   # 
   wFetch: (sel, index = 0) -> 
+	  # recursive part
     if (sel instanceof Array)
 	    selkey = sel[index]
+      
+      # make one step by resolving my part
 	    mine = switch selkey
 	      when '.'
 	        this
@@ -97,6 +100,8 @@ exports.Brick = class Brick
           @wParent
         else
           this[selkey]
+
+      # handle substeps
       if mine?
         if (sel.length-1 == index)
           mine
@@ -106,6 +111,8 @@ exports.Brick = class Brick
           throw "Not a waw brick under #{sel.join('/')} (#{selkey}), unable to fetch"
       else
         throw "No such key #{sel[index]}"
+
+    # end user part
     else if (sel[0] == '/')
       @wAw.fetch(sel)
     else
