@@ -1,6 +1,6 @@
 exports.Slot = class Slot
 
-  constructor: ->
+  constructor: (@brick) ->
     @listeners = []
 
   wBind: (l) ->

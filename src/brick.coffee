@@ -39,7 +39,7 @@ exports.Brick = class Brick
   #   - name: a slot name
   #
   wSlot: (name) ->
-    @wSlots[name] ?= new Slot
+    @wSlots[name] ?= new Slot(this)
 
   #
   # Convenient method for wSlot(name).wBind(fn)

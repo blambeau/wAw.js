@@ -25,8 +25,10 @@ test "Brick#wSlot", ->
   b = new Brick
   h1 = b.wSlot('hello')
   ok (h1 instanceof Slot)
+  ok h1.brick is b
   h2 = b.wSlot('hello')
   ok (h1 == h2)
+  ok h2.brick is b
 
 test "Brick#wBind", ->
   b = new Brick

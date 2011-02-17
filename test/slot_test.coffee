@@ -1,7 +1,13 @@
 {Slot} = require '../src/slot'
 
-test "Slot's wBind contract", ->
+test "Slot's constructor", ->
+  s = new Slot
+  ok !s.brick?
   s = new Slot(12)
+  ok s.brick is 12
+
+test "Slot's wBind contract", ->
+  s = new Slot
   x = s.wBind (arg) -> arg
   ok x is s
 
