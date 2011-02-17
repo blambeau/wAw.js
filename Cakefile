@@ -9,21 +9,50 @@ red   = '\033[0;31m'
 green = '\033[0;32m'
 reset = '\033[0m'
 
-compile = (args) ->
-  proc =         spawn 'coffee', args
-  proc.stderr.on 'data', (buffer) -> console.log buffer.toString()
-  proc.on        'exit', (status) -> process.exit(1) if status != 0
+# Library version
+VERSION = "1.0.0"
 
 # Log a message with a color.
 log = (message, color, explanation) ->
   console.log color + message + reset + ' ' + (explanation or '')
 
-task 'build', 'build the CoffeeScript language from source', ->
-  files = fs.readdirSync 'src'
-  files = ('src/' + file for file in files when file.match(/\.coffee$/))
-  compile ['-c', '-j', '-o', 'lib'].concat(files)
+# Handle error and kill the process.
+onerror = (err)->
+  if err
+    process.stdout.write "#{red}#{err.stack}#{reset}\n"
+    process.exit -1
 
-# Run the CoffeeScript test suite.
+# Build process
+
+build = (callback)->
+  log "Compiling CoffeeScript to JavaScript ...", green
+  exec "rm -rf lib && coffee -c -l -o lib src", (err, stdout)->
+    callback err
+task "build", "Compile CoffeeScript to JavaScript", -> build onerror
+
+dist = (callback)->
+  target = "dist/waw-#{VERSION}.js"
+  log "Compiling #{target}", green
+
+  # get the browser heading
+  code = fs.readFileSync("dist/browser.js")
+
+  # compile .coffee files in order
+  order = fs.readFileSync("src/dependencies").toString().split("\n")
+  exec "coffee -p -c -l -j src/#{order.join(' src/')}", (err, stdout)->
+    callback err
+    code += stdout.toString()
+    fs.writeFileSync target, code
+task "dist", "Building waw.js distribution", -> dist onerror
+
+clean = (callback)->
+  exec "rm -rf lib", callback
+task "clean", "Remove temporary files and such", -> clean onerror
+
+
+
+# Tests
+
 runTests = ->
   startTime   = Date.now()
   currentFile = null
@@ -98,6 +127,5 @@ runTests = ->
           coffee.run code.toString(), {filename}
         catch e
           failures.push file: currentFile, error: e
-
 task 'test', 'run the CoffeeScript language test suite', ->
   runTests require('./src/cell')

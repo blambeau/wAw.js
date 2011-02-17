@@ -6,18 +6,6 @@ Root  = File.expand_path('../../../', __FILE__)
 require 'rubygems'
 require 'sinatra'
 
-def compile_waw
-  sources = File.readlines(File.join(Root, 'src', 'dependencies')).
-                 collect{|x| File.join(Root, 'src', x.strip) }
-  cmd = "coffee -j -c -o #{File.join(Root, 'lib')} #{sources.join(' ')}"
-  puts cmd
-  puts `#{cmd}`
-  [ "var exports = this;\n",
-    "function require(x) {\n   return exports; \n};\n",
-    File.read(File.join(Root, 'lib/concatenation.js')) ]
-#  [ File.read(File.join(Root, 'lib/concatenation.js')) ]
-end
-
 def _ path
   File.expand_path("../#{path}", __FILE__)
 end
@@ -30,9 +18,10 @@ get '/' do
 end
 
 get '/waw.js' do
+ puts `cd #{Root} && cake build`
   [ 200, 
     NO_CACHE_HEADERS.merge("Content-Type" => "text/javascript"),
-    compile_waw ]
+    File.open(File.join(Root, 'dist/waw-1.0.0.js')) ]
 end
 
 get '/app.js' do
