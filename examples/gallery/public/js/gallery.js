@@ -11,20 +11,20 @@
   Gallery = (function() {
     __extends(Gallery, Brick);
     function Gallery() {
-      this.currentImg = new Cell;
-      this.currentImg.listen(function(cell, oldval, newval) {
-        return $('#image-display img').attr('src', "/images/" + newval);
-      });
       this.mainPage = new View({
         selector: '#main-page',
         url: 'main-page'
       });
+      this.currentImg = new Cell;
+      this.currentImg.listen(function(cell, oldval, newval) {
+        return $('#image-display img').attr('src', "/img/" + newval);
+      });
       this.imageInfo = new View({
         selector: '#image-info',
+        autorefresh: this.currentImg,
         url: function(v) {
-          return "image-info/" + (v.wGet('/currentImg'));
-        },
-        autorefresh: this.currentImg
+          return "image-info/" + v.wGet('/currentImg');
+        }
       });
     }
     Gallery.prototype.wInit = function() {

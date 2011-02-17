@@ -17,7 +17,7 @@ class Gallery extends Brick
     # The big image at right can simply be reloaded via an explicit 
     # listen to the cell.
     @currentImg.listen (cell, oldval, newval)->
-      $('#image-display img').attr('src', "/images/#{newval}")
+      $('#image-display img').attr('src', "/img/#{newval}")
     
     # The information page will better be a view, autorefreshed when
     # when the cell changes. Dynamic URLs can simply be installed via 

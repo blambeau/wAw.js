@@ -5,10 +5,10 @@
 </div>
 
 <div id="right">
+  <div id="image-info">
+  </div>
   <div id="image-display">
     <img/>
-  </div>
-  <div id="image-info">
   </div>
 </div>
 

@@ -33,8 +33,13 @@ end
 require 'rubygems'
 require 'sinatra'
 
+NO_CACHE_HEADERS = {'Cache-control' => "no-store, no-cache, must-revalidate", 
+                    'Pragma'        => "no-cache", 
+                    'Expires'       => "Thu, 01 Dec 1994 16:00:00 GMT"}
+
 # This serves the application
 set :public, _('public')
+
 get '/' do
   puts `cd #{_('')} && rake build`
   fread('public/index.html')
@@ -48,4 +53,11 @@ end
 # Returns information about an image
 get '/image-info/:image' do 
   wlang "image-info.whtml", params
+end
+
+# We force NO CACHE in headers to avoid a known bug in google Chrome 
+# (http://www.google.com/support/forum/p/Chrome/thread?tid=4f4114448b03b409&hl=en&start=120)
+get '/img/:image' do
+  headers NO_CACHE_HEADERS
+  send_file _("public/images/#{params[:image]}")
 end
