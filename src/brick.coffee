@@ -53,14 +53,14 @@ exports.Brick = class Brick
     this
 
   # 
-  # Convenient method for slot(name).emit(args...)
+  # Convenient method for slot(name).wEmit(args...)
   # 
   # Parameters:
   #   - name: a slot name
   #   - args: arguments of the signal emission
   #
-  emit: (name, args...) ->
-    this.slot(name).emit(args...)
+  wEmit: (name, args...) ->
+    this.slot(name).wEmit(args...)
 
   ############################################################## wQuery methods
 

@@ -34,12 +34,12 @@ test "Brick#wBind", ->
     "Hello #{name}"
   ok (x == b)
 
-test "Brick#emit", ->
+test "Brick#wEmit", ->
   local = ""
   b = new Brick
   b.wBind 'hello', (name) ->
     local = "Hello #{name}"
-  b.emit 'hello', 'waw'
+  b.wEmit 'hello', 'waw'
   ok ("Hello waw" == local)
 
 
