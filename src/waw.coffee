@@ -16,7 +16,7 @@ exports.Waw = {
   set: (selector, value) ->
 	  this.fetch(selector).set(value);
 	
-	wid: ->
+	wQid: ->
 		''
 	
 }

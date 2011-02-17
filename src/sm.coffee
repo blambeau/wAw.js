@@ -14,5 +14,5 @@ exports.SM = class SM extends Cell
     self = this
     for k,v of @def
       self.wFetch(k).listen (cell, oldval, newval) ->
-        self.set self.value_for(cell.wid())
+        self.set self.value_for(cell.wQid())
     this

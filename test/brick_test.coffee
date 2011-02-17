@@ -18,12 +18,12 @@ test "Brick#winit", ->
   ok b1.b2.b3['wparent'] is b1.b2
   ok b1.b2.b3['waw'] is Waw
 
-# wid
+# wQid
 
-test "Brick#wid", ->
-  ok b1.wid() is '/'
-  ok b1.b2.wid() is '/b2'
-  ok b1.b2.b3.wid() is '/b2/b3'
+test "Brick#wQid", ->
+  ok b1.wQid() is '/'
+  ok b1.b2.wQid() is '/b2'
+  ok b1.b2.b3.wQid() is '/b2/b3'
 
 # wFetch
 
