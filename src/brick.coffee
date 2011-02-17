@@ -55,7 +55,7 @@ exports.Brick = class Brick extends Base
     else
       throw "Not gettable #{sel}"
 
-  wset: (sel, value) ->
+  wSet: (sel, value) ->
     fetched = this.wFetch(sel)
     if (fetched? && fetched['set']?)
       fetched.set(value)

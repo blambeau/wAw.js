@@ -45,12 +45,12 @@ test "Brick#wGet with relative", ->
 test "Brick#wGet with absolute", ->
   ok b1.wGet('/b2/c1') is 12
 
-# wset
+# wSet
 
-test "Brick#wset with relative", ->
-  b1.wset('b2/c1', 15)
+test "Brick#wSet with relative", ->
+  b1.wSet('b2/c1', 15)
   ok b1.wGet('b2/c1') is 15
 
 test "Brick#wGet with absolute", ->
-  b1.wset('/b2/c1', 15)
+  b1.wSet('/b2/c1', 15)
   ok b1.wGet('/b2/c1') is 15

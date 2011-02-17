@@ -10,7 +10,7 @@ test "Cell's basic contract", ->
 test "Cell's basic w contract", ->
   c = new Cell(14)
   ok c.wGet('.') is 14
-  c.wset('.', 12)
+  c.wSet('.', 12)
   ok c.wGet('.') is 12
 
 test "Cell#has_slot", ->
