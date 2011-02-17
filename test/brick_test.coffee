@@ -21,11 +21,11 @@ test "Brick#wInit", ->
 
 # Signals and slots
 
-test "Brick#slot", ->
+test "Brick#wSlot", ->
   b = new Brick
-  h1 = b.slot('hello')
+  h1 = b.wSlot('hello')
   ok (h1 instanceof Slot)
-  h2 = b.slot('hello')
+  h2 = b.wSlot('hello')
   ok (h1 == h2)
 
 test "Brick#wBind", ->

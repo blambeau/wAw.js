@@ -7,7 +7,7 @@ exports.Cell = class Cell extends Brick
 
   constructor: (@value) ->
     super
-    @changed = this.slot('changed')
+    @changed = this.wSlot('changed')
 
   get: -> 
 	  @value

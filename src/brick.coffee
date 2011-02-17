@@ -8,7 +8,7 @@ exports.Brick = class Brick
   # Builds a brick instance
   # 
   constructor: -> 
-    @slots = {}
+    @wSlots = {}
 
   # 
   # Initializes the brick and all its children recursively.
@@ -30,37 +30,37 @@ exports.Brick = class Brick
         v.wInit(waw, this, k)
     this.init() if this['init']?
 
-  ############################################################## Signals and slots
+  ############################################################## Signals and wSlots
 
   #
-  # Returns a slot by name, creating it is required
+  # Returns a wSlot by name, creating it is required
   #
   # Parameters:
   #   - name: a slot name
   #
-  slot: (name) ->
-    @slots[name] ?= new Slot
+  wSlot: (name) ->
+    @wSlots[name] ?= new Slot
 
   #
-  # Convenient method for slot(name).wBind(fn)
+  # Convenient method for wSlot(name).wBind(fn)
   #
   # Parameters:
   #   - name: a slot name
-  #   - fn: a function to wBind to the slot
+  #   - fn: a function to bind to the slot
   #
   wBind: (name, fn) ->
-    this.slot(name).wBind(fn)
+    this.wSlot(name).wBind(fn)
     this
 
   # 
-  # Convenient method for slot(name).wEmit(args...)
+  # Convenient method for wSlot(name).wEmit(args...)
   # 
   # Parameters:
   #   - name: a slot name
   #   - args: arguments of the signal emission
   #
   wEmit: (name, args...) ->
-    this.slot(name).wEmit(args...)
+    this.wSlot(name).wEmit(args...)
 
   ############################################################## wQuery methods
 
