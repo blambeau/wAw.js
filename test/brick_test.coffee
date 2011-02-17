@@ -21,17 +21,9 @@ test "Brick#wInit", ->
 
 # Signals and slots
 
-test "Brick#wSlot", ->
-  b = new Brick
-  h1 = b.wSlot('hello')
-  ok (h1 instanceof Slot)
-  ok h1.brick is b
-  h2 = b.wSlot('hello')
-  ok (h1 == h2)
-  ok h2.brick is b
-
 test "Brick#wBind", ->
   b = new Brick
+  b.hello = new Slot(b)
   x = b.wBind 'hello', (name) ->
     "Hello #{name}"
   ok (x == b)
@@ -39,6 +31,7 @@ test "Brick#wBind", ->
 test "Brick#wEmit", ->
   local = ""
   b = new Brick
+  b.hello = new Slot(b)
   b.wBind 'hello', (name) ->
     local = "Hello #{name}"
   b.wEmit 'hello', 'waw'

@@ -1,4 +1,5 @@
 {Brick} = require './brick'
+{Slot} = require './slot'
 
 #
 # A Memory/State Cell supporting a 'changed' slot
@@ -7,7 +8,7 @@ exports.Cell = class Cell extends Brick
 
   constructor: (@value) ->
     super
-    @changed = this.wSlot('changed')
+    @changed = new Slot(this)
 
   get: -> 
 	  @value

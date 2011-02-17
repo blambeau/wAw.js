@@ -2,13 +2,7 @@
 
 exports.Brick = class Brick
   
-  ############################################################## Construction and wInit
-
-  # 
-  # Builds a brick instance
-  # 
-  constructor: -> 
-    @wSlots = {}
+  ############################################################## wInit and wId
 
   # 
   # Initializes the brick and all its children recursively.
@@ -30,51 +24,19 @@ exports.Brick = class Brick
         v.wInit(waw, this, k)
     this.init() if this['init']?
 
-  ############################################################## Signals and wSlots
-
-  #
-  # Returns a wSlot by name, creating it is required
-  #
-  # Parameters:
-  #   - name: a slot name
-  #
-  wSlot: (name) ->
-    @wSlots[name] ?= new Slot(this)
-
-  #
-  # Convenient method for wSlot(name).bind(fn)
-  #
-  # Parameters:
-  #   - name: a slot name
-  #   - fn: a function to bind to the slot
-  #
-  wBind: (name, fn) ->
-    this.wSlot(name).bind(fn)
-    this
-
-  # 
-  # Convenient method for wSlot(name).emit(args...)
-  # 
-  # Parameters:
-  #   - name: a slot name
-  #   - args: arguments of the signal emission
-  #
-  wEmit: (name, args...) ->
-    this.wSlot(name).emit(args...)
-
-  ############################################################## wQuery methods
-
   # 
   # Returns brick's qualified identifier. 
   #
   wQid: ->
-	  pwQid = @wParent.wQid()
-	  if pwQid == ''
-		  @wName
-	  else if pwQid[pwQid.length - 1] is '/'
+    pwQid = @wParent.wQid()
+    if pwQid == ''
+      @wName
+    else if pwQid[pwQid.length - 1] is '/'
       pwQid + @wName
     else
       pwQid + '/' + @wName
+
+  ############################################################## wFetch
 
   # 
   # Fetches and returns a component in the w@w tree.
@@ -88,15 +50,15 @@ exports.Brick = class Brick
   #   - the component cannot be found
   # 
   wFetch: (sel, index = 0) -> 
-	  # recursive part
+    # recursive part
     if (sel instanceof Array)
-	    selkey = sel[index]
+      selkey = sel[index]
       
       # make one step by resolving my part
-	    mine = switch selkey
-	      when '.'
-	        this
-	      when '..'
+      mine = switch selkey
+        when '.'
+          this
+        when '..'
           @wParent
         else
           this[selkey]
@@ -117,6 +79,8 @@ exports.Brick = class Brick
       @wAw.fetch(sel)
     else
       this.wFetch(sel.split('/'))
+
+  ############################################################## wGet and wSet
 
   #
   # Convention method for wFetch(sel).get()
@@ -145,3 +109,35 @@ exports.Brick = class Brick
       fetched.set(value)
     else
       throw "Not settable #{sel}"
+
+  ############################################################## Signals and slots
+
+  #
+  # Convenient method for wFetch(sel).bind(fn)
+  #
+  # Throws when:
+  #   - wFetch(sel) throws an error itself
+  #   - No method bind() can be found on fetched component
+  #
+  wBind: (sel, fn) ->
+    fetched = this.wFetch(sel)
+    if (fetched? && fetched['bind']?)
+      fetched.bind(fn)
+    else
+      throw "Not a bindable #{fetched}"
+    this
+
+  # 
+  # Convenient method for wFetch(sel).emit(args...)
+  # 
+  # Throws when:
+  #   - wFetch(sel) throws an error itself
+  #   - No method emit() can be found on fetched component
+  #
+  wEmit: (sel, args...) ->
+    fetched = this.wFetch(sel)
+    if (fetched? && fetched['emit']?)
+      fetched.emit(args...)
+    else
+      throw "Not an emittable #{fetched}"
+    this
