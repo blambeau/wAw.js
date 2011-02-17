@@ -33,16 +33,6 @@ exports.Brick = class Brick
   ############################################################## Signals and slots
 
   #
-  # Checks if the brick has a given slot.
-  #
-  # Parameters:
-  #   - name: a slot name
-  #
-  has_slot: (name) ->
-	  x = @slots[name]
-	  x?
-
-  #
   # Returns a slot by name, creating it is required
   #
   # Parameters:

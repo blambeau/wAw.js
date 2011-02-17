@@ -28,12 +28,6 @@ test "Brick#slot", ->
   h2 = b.slot('hello')
   ok (h1 == h2)
 
-test "Brick#has_slot}", ->
-  b = new Brick
-  b.slot('hello')
-  ok b.has_slot('hello')
-  ok !b.has_slot('hello2')
-
 test "Brick#bind", ->
   b = new Brick
   x = b.bind 'hello', (name) ->

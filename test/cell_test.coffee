@@ -13,10 +13,6 @@ test "Cell's basic w contract", ->
   c.wSet('.', 12)
   ok c.wGet('.') is 12
 
-test "Cell#has_slot", ->
-  c = new Cell
-  ok c.has_slot('changed')
-
 test "Cell#bind and Cell#set", ->
   c = new Cell(12)
   c.bind "changed", (cell, oldval, newval) ->
