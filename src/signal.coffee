@@ -1,14 +1,11 @@
-exports.Slot = class Slot
+exports.Signal = class Signal
 
   constructor: (@brick) ->
     @listeners = []
 
-  bind: (l) ->
+  listen: (l) ->
     @listeners.push(l)
     this
-
-  listen: (l) ->
-	  this.bind(l)
 
   emit: ->
     l(arguments...) for l in @listeners

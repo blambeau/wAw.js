@@ -14,7 +14,7 @@ exports.View = class View extends Brick
   #     The server side URL that will be called to get the view 
   #     content (supports a function)
   #   autorefresh:
-  #     A list of slots to register to for automatically refreshing
+  #     A list of signals to register to for automatically refreshing
   #     the view
   #
   constructor: (@options) ->
@@ -41,9 +41,9 @@ exports.View = class View extends Brick
     @options['autorefresh'] = this._normalize_autorefresh(@options['autorefresh'])
     for l in @options['autorefresh']
 	    if (typeof(l) == "string")
-        this.wBind(l, this.refresh) 
+        this.wListen(l, this.refresh) 
       else
-        l.bind(this.refresh)
+        l.listen(this.refresh)
 
   _normalize_autorefresh: (ar) ->
     ar = [] unless ar?

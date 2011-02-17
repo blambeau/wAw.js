@@ -1,4 +1,4 @@
-{Slot} = require('./slot')
+{Signal} = require('./signal')
 
 exports.Brick = class Brick
   
@@ -157,21 +157,21 @@ exports.Brick = class Brick
     else
       throw "Not settable #{sel}"
 
-  ############################################################## Signals and slots
+  ############################################################## Signals
 
   #
-  # Convenient method for wFetch(sel).bind(fn)
+  # Convenient method for wFetch(sel).listen(fn)
   #
   # Throws when:
   #   - wFetch(sel) throws an error itself
-  #   - No method bind() can be found on fetched component
+  #   - No method listen() can be found on fetched component
   #
-  wBind: (sel, fn) ->
+  wListen: (sel, fn) ->
     fetched = this.wFetch(sel)
-    if (fetched? && fetched['bind']?)
-      fetched.bind(fn)
+    if (fetched? && fetched['listen']?)
+      fetched.listen(fn)
     else
-      throw "Not a bindable #{fetched}"
+      throw "Not a listenable #{fetched}"
     this
 
   # 

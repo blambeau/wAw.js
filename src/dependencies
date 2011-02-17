@@ -1,4 +1,4 @@
-slot.coffee
+signal.coffee
 brick.coffee
 cell.coffee
 sm.coffee

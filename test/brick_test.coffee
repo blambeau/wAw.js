@@ -1,5 +1,5 @@
 {Brick} = require('../src/brick')
-{Slot}  = require('../src/slot')
+{Signal}  = require('../src/signal')
 {Cell}  = require('../src/cell')
 
 b1 = new Brick
@@ -49,20 +49,20 @@ test "Brick#wFetch with sel references", ->
   ok b1.b2.wFetch('.') is b1.b2
   ok b1.wFetch('/b2/.') is b1.b2
 
-# Signals and slots
+# Signals and signals
 
-test "Brick#wBind", ->
+test "Brick#wListen", ->
   b = new Brick
-  b.hello = new Slot(b)
-  x = b.wBind 'hello', (name) ->
+  b.hello = new Signal(b)
+  x = b.wListen 'hello', (name) ->
     "Hello #{name}"
   ok (x == b)
 
 test "Brick#wEmit", ->
   local = ""
   b = new Brick
-  b.hello = new Slot(b)
-  b.wBind 'hello', (name) ->
+  b.hello = new Signal(b)
+  b.wListen 'hello', (name) ->
     local = "Hello #{name}"
   b.wEmit 'hello', 'waw'
   ok ("Hello waw" == local)

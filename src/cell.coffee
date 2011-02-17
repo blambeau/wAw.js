@@ -1,14 +1,14 @@
 {Brick} = require './brick'
-{Slot} = require './slot'
+{Signal} = require './signal'
 
 #
-# A Memory/State Cell supporting a 'changed' slot
+# A Memory/State Cell supporting a 'changed' signal
 #
 exports.Cell = class Cell extends Brick
 
   constructor: (@value) ->
     super
-    @changed = new Slot(this)
+    @changed = new Signal(this)
 
   get: -> 
 	  @value
@@ -20,4 +20,4 @@ exports.Cell = class Cell extends Brick
     @value
 
   listen: (fn) -> 
-    this.wBind('changed', fn)
+    this.wListen('changed', fn)

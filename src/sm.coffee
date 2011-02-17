@@ -1,5 +1,5 @@
 {Cell} = require './cell'
-{Slot} = require './slot'
+{Signal} = require './signal'
 
 exports.SM = class SM extends Cell
   
@@ -10,9 +10,10 @@ exports.SM = class SM extends Cell
   value_for: (key) ->
     @def[key]
 
+  _build_fn: (k, v) ->
+    => this.set(v) 
+
   wInit: (parent, name) ->
-    self = this
     for k,v of @def
-      self.wFetch(k).listen (cell, oldval, newval) ->
-        self.set self.value_for(cell.wQid())
+      this.wListen(k, this._build_fn(k, v)) 
     this
