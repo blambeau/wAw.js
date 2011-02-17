@@ -58,7 +58,7 @@ exports.View = class View extends Brick
     optvalue = @options[optkey]
     switch typeof(optvalue)
       when 'function'
-  	    optvalue()
+  	    optvalue(this)
       when 'string'
         optvalue
       else 
