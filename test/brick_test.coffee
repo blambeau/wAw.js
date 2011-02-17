@@ -28,16 +28,16 @@ test "Brick#slot", ->
   h2 = b.slot('hello')
   ok (h1 == h2)
 
-test "Brick#bind", ->
+test "Brick#wBind", ->
   b = new Brick
-  x = b.bind 'hello', (name) ->
+  x = b.wBind 'hello', (name) ->
     "Hello #{name}"
   ok (x == b)
 
 test "Brick#emit", ->
   local = ""
   b = new Brick
-  b.bind 'hello', (name) ->
+  b.wBind 'hello', (name) ->
     local = "Hello #{name}"
   b.emit 'hello', 'waw'
   ok ("Hello waw" == local)

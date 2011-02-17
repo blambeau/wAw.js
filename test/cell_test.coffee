@@ -13,9 +13,9 @@ test "Cell's basic w contract", ->
   c.wSet('.', 12)
   ok c.wGet('.') is 12
 
-test "Cell#bind and Cell#set", ->
+test "Cell#wBind and Cell#set", ->
   c = new Cell(12)
-  c.bind "changed", (cell, oldval, newval) ->
+  c.wBind "changed", (cell, oldval, newval) ->
     ok (cell is c && oldval is 12 && newval is 14)
   c.set(14)
 

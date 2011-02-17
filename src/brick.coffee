@@ -42,14 +42,14 @@ exports.Brick = class Brick
     @slots[name] ?= new Slot
 
   #
-  # Convenient method for slot(name).bind(fn)
+  # Convenient method for slot(name).wBind(fn)
   #
   # Parameters:
   #   - name: a slot name
-  #   - fn: a function to bind to the slot
+  #   - fn: a function to wBind to the slot
   #
-  bind: (name, fn) ->
-    this.slot(name).bind(fn)
+  wBind: (name, fn) ->
+    this.slot(name).wBind(fn)
     this
 
   # 

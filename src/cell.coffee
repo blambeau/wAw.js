@@ -19,4 +19,4 @@ exports.Cell = class Cell extends Brick
     @value
 
   listen: (fn) -> 
-    this.bind('changed', fn)
+    this.wBind('changed', fn)

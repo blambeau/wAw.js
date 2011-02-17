@@ -42,7 +42,7 @@ exports.View = class View extends Brick
     for l in @options['autorefresh']
 	    if (typeof(l) == "string")
         l = this.wFetch(l) 
-      l.bind(this.refresh)
+      l.wBind(this.refresh)
 
   _normalize_autorefresh: (ar) ->
     ar = [] unless ar?

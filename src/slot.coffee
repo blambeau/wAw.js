@@ -3,7 +3,7 @@ exports.Slot = class Slot
   constructor: ->
     @listeners = []
 
-  bind: (l) ->
+  wBind: (l) ->
     @listeners.push(l)
     this
 
