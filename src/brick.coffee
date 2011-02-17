@@ -48,7 +48,7 @@ exports.Brick = class Brick extends Base
     else
       this.wFetch(sel.split('/'))
 
-  wget: (sel) ->
+  wGet: (sel) ->
     fetched = this.wFetch(sel)
     if (fetched? && fetched['get']?)
       fetched.get()

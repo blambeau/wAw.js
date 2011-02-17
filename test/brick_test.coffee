@@ -37,20 +37,20 @@ test "Brick#wFetch with absolute", ->
 test "Brick#wFetch with parent references", ->
   ok b1.b2.wFetch('..') is b1
 
-## wget
+## wGet
 
-test "Brick#wget with relative", ->
-  ok b1.wget('b2/c1') is 12
+test "Brick#wGet with relative", ->
+  ok b1.wGet('b2/c1') is 12
 
-test "Brick#wget with absolute", ->
-  ok b1.wget('/b2/c1') is 12
+test "Brick#wGet with absolute", ->
+  ok b1.wGet('/b2/c1') is 12
 
 # wset
 
 test "Brick#wset with relative", ->
   b1.wset('b2/c1', 15)
-  ok b1.wget('b2/c1') is 15
+  ok b1.wGet('b2/c1') is 15
 
-test "Brick#wget with absolute", ->
+test "Brick#wGet with absolute", ->
   b1.wset('/b2/c1', 15)
-  ok b1.wget('/b2/c1') is 15
+  ok b1.wGet('/b2/c1') is 15

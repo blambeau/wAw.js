@@ -61,8 +61,8 @@ exports.View = class View extends Brick
       when 'string'
         optvalue
       else 
-        if optvalue? && optvalue['wget']?
-          optvalue.wget()
+        if optvalue? && optvalue['wGet']?
+          optvalue.wGet()
         else if optvalue?
           optvalue.toString()
         else

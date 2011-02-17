@@ -9,9 +9,9 @@ test "Cell's basic contract", ->
 
 test "Cell's basic w contract", ->
   c = new Cell(14)
-  ok c.wget('.') is 14
+  ok c.wGet('.') is 14
   c.wset('.', 12)
-  ok c.wget('.') is 12
+  ok c.wGet('.') is 12
 
 test "Cell#has_slot", ->
   c = new Cell
