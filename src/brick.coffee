@@ -2,8 +2,17 @@
 
 exports.Brick = class Brick extends Base
   
-  # wPrivate methods
+  ############################################################## wPrivate methods
 
+  # 
+  # Initializes the brick and all its children recursively.
+  #
+  # Parameters: 
+  #   - waw: instance of the w@w engine to refer to for 
+  #          resolving qualified queries
+  #   - parent: the parent brick in the tree
+  #   - name: name of the brick as used in the parent
+  #
   wInit: (waw, parent, name) ->
     @waw = waw
     @wname = name
@@ -15,8 +24,11 @@ exports.Brick = class Brick extends Base
         v.wInit(waw, this, k)
     this.init() if this['init']?
 
-  # wQuery methods
+  ############################################################## wQuery methods
 
+  # 
+  # Returns brick's qualified identifier. 
+  #
   wQid: ->
 	  pwQid = @wparent.wQid()
 	  if pwQid == ''
@@ -26,6 +38,17 @@ exports.Brick = class Brick extends Base
     else
       pwQid + '/' + @wname
 
+  # 
+  # Fetches and returns a component in the w@w tree.
+  #
+  # Parameters: 
+  #   - sel: a query selector (i.e. 'a/tree/selector')
+  #
+  # Throws when:
+  #   - a component fetched along the query is not a brick (unless
+  #     the last one).
+  #   - the component cannot be found
+  # 
   wFetch: (sel, index = 0) -> 
     if (sel instanceof Array)
 	    selkey = sel[index]
@@ -50,6 +73,13 @@ exports.Brick = class Brick extends Base
     else
       this.wFetch(sel.split('/'))
 
+  #
+  # Convention method for wFetch(sel).get()
+  #
+  # Throws when:
+  #   - wFetch(sel) throws an error itself
+  #   - No method get() can be found on fetched component
+  #
   wGet: (sel) ->
     fetched = this.wFetch(sel)
     if (fetched? && fetched['get']?)
@@ -57,6 +87,13 @@ exports.Brick = class Brick extends Base
     else
       throw "Not gettable #{sel}"
 
+  #
+  # Convention method for wFetch(sel).set(value)
+  #
+  # Throws when:
+  #   - wFetch(sel) throws an error itself
+  #   - No method set() can be found on fetched component
+  #
   wSet: (sel, value) ->
     fetched = this.wFetch(sel)
     if (fetched? && fetched['set']?)
