@@ -99,6 +99,5 @@ runTests = ->
         catch e
           failures.push file: currentFile, error: e
 
-
 task 'test', 'run the CoffeeScript language test suite', ->
   runTests require('./src/cell')

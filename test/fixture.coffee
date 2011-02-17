@@ -15,7 +15,10 @@ exports.FixtureApp = class FixtureApp extends Brick
     @c3 = new Cell(0)
 
     # A State Machine
-    @sm = new SM {'/c1/changed': 1, '/c2/changed': 2}
+    @sm = new SM { 
+      '/c1': 1, 
+      '/c2': (cell, oldval, newval) -> newval
+    }
 
 test "Fixture sanity", ->
   app = new FixtureApp
