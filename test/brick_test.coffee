@@ -25,17 +25,17 @@ test "Brick#wid", ->
   ok b1.b2.wid() is '/b2'
   ok b1.b2.b3.wid() is '/b2/b3'
 
-# wfetch
+# wFetch
 
-test "Brick#wfetch with relative", ->
-  ok b1.wfetch('b2') is b1.b2
-  ok b1.wfetch('b2/b3') is b1.b2.b3
+test "Brick#wFetch with relative", ->
+  ok b1.wFetch('b2') is b1.b2
+  ok b1.wFetch('b2/b3') is b1.b2.b3
 
-test "Brick#wfetch with absolute", ->
-  ok b1.wfetch('/b2/b3') is b1.b2.b3
+test "Brick#wFetch with absolute", ->
+  ok b1.wFetch('/b2/b3') is b1.b2.b3
 
-test "Brick#wfetch with parent references", ->
-  ok b1.b2.wfetch('..') is b1
+test "Brick#wFetch with parent references", ->
+  ok b1.b2.wFetch('..') is b1
 
 ## wget
 

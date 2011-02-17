@@ -41,7 +41,7 @@ exports.View = class View extends Brick
     @options['autorefresh'] = this._normalize_autorefresh(@options['autorefresh'])
     for l in @options['autorefresh']
 	    if (typeof(l) == "string")
-        l = this.wfetch(l) 
+        l = this.wFetch(l) 
       l.bind(this.refresh)
 
   _normalize_autorefresh: (ar) ->

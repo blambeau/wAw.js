@@ -6,9 +6,9 @@ exports.Waw = {
 
   fetch: (selector) ->
 	  if selector[0] == '/'
-      @app.wfetch(selector.substring(1).split('/'), 0)
+      @app.wFetch(selector.substring(1).split('/'), 0)
     else
-      @app.wfetch(selector.split('/'), 0)
+      @app.wFetch(selector.split('/'), 0)
 
   get: (selector) ->
     this.fetch(selector).get();

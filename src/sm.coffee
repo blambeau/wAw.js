@@ -13,6 +13,6 @@ exports.SM = class SM extends Cell
   init: ->
     self = this
     for k,v of @def
-      self.wfetch(k).listen (cell, oldval, newval) ->
+      self.wFetch(k).listen (cell, oldval, newval) ->
         self.set self.value_for(cell.wid())
     this

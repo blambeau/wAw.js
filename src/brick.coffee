@@ -22,7 +22,9 @@ exports.Brick = class Brick extends Base
     else
       pwid + '/' + @wname
 
-  wfetch: (sel, index = 0) -> 
+  # wQuery methods
+
+  wFetch: (sel, index = 0) -> 
     if (sel instanceof Array)
 	    selkey = sel[index]
 	    mine = switch selkey
@@ -35,8 +37,8 @@ exports.Brick = class Brick extends Base
       if mine?
         if (sel.length-1 == index)
           mine
-        else if mine['wfetch']?
-          mine.wfetch(sel, index + 1)
+        else if mine['wFetch']?
+          mine.wFetch(sel, index + 1)
         else
           throw "Not a waw brick under #{sel.join('/')} (#{selkey}), unable to fetch"
       else
@@ -44,17 +46,17 @@ exports.Brick = class Brick extends Base
     else if (sel[0] == '/')
       @waw.fetch(sel)
     else
-      this.wfetch(sel.split('/'))
+      this.wFetch(sel.split('/'))
 
   wget: (sel) ->
-    fetched = this.wfetch(sel)
+    fetched = this.wFetch(sel)
     if (fetched? && fetched['get']?)
       fetched.get()
     else
       throw "Not gettable #{sel}"
 
   wset: (sel, value) ->
-    fetched = this.wfetch(sel)
+    fetched = this.wFetch(sel)
     if (fetched? && fetched['set']?)
       fetched.set(value)
     else
