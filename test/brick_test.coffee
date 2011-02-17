@@ -14,9 +14,9 @@ Waw.run b1
 test "Brick#wInit", ->
   b1.wInit(Waw, Waw, '/')
   ok b1['waw'] is Waw
-  ok b1.b2['wparent'] is b1
+  ok b1.b2['wParent'] is b1
   ok b1.b2['waw'] is Waw
-  ok b1.b2.b3['wparent'] is b1.b2
+  ok b1.b2.b3['wParent'] is b1.b2
   ok b1.b2.b3['waw'] is Waw
 
 # Signals and slots

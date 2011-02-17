@@ -21,10 +21,10 @@ exports.Brick = class Brick
   #
   wInit: (waw, parent, name) ->
     @waw = waw
-    @wname = name
-    @wparent = parent
+    @wName = name
+    @wParent = parent
     for k, v of this
-      if (k == 'waw' || k == 'wparent') 
+      if (k == 'waw' || k == 'wParent') 
         continue 
       else if (v? && v['wInit']?)
         v.wInit(waw, this, k)
@@ -68,13 +68,13 @@ exports.Brick = class Brick
   # Returns brick's qualified identifier. 
   #
   wQid: ->
-	  pwQid = @wparent.wQid()
+	  pwQid = @wParent.wQid()
 	  if pwQid == ''
-		  @wname
+		  @wName
 	  else if pwQid[pwQid.length - 1] is '/'
-      pwQid + @wname
+      pwQid + @wName
     else
-      pwQid + '/' + @wname
+      pwQid + '/' + @wName
 
   # 
   # Fetches and returns a component in the w@w tree.
@@ -94,7 +94,7 @@ exports.Brick = class Brick
 	      when '.'
 	        this
 	      when '..'
-          @wparent
+          @wParent
         else
           this[selkey]
       if mine?
