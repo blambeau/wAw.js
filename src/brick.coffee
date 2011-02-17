@@ -20,11 +20,11 @@ exports.Brick = class Brick
   #   - name: name of the brick as used in the parent
   #
   wInit: (waw, parent, name) ->
-    @waw = waw
+    @wAw = waw
     @wName = name
     @wParent = parent
     for k, v of this
-      if (k == 'waw' || k == 'wParent') 
+      if (k == 'wAw' || k == 'wParent') 
         continue 
       else if (v? && v['wInit']?)
         v.wInit(waw, this, k)
@@ -107,7 +107,7 @@ exports.Brick = class Brick
       else
         throw "No such key #{sel[index]}"
     else if (sel[0] == '/')
-      @waw.fetch(sel)
+      @wAw.fetch(sel)
     else
       this.wFetch(sel.split('/'))
 
