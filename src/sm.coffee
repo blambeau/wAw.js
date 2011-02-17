@@ -10,7 +10,7 @@ exports.SM = class SM extends Cell
   value_for: (key) ->
     @def[key]
 
-  init: ->
+  wInit: (parent, name) ->
     self = this
     for k,v of @def
       self.wFetch(k).listen (cell, oldval, newval) ->

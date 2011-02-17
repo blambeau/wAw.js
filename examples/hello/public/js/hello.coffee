@@ -14,8 +14,9 @@ class Hello extends Brick
 		  autorefresh:
 		    this.current.changed
 
-  init: ->
+  wInit: ->
     this.current.set('hello1.html')
   
 $(document).ready ->
-  Waw.run(new Hello)
+  this.HelloApp = new Hello
+  this.HelloApp.wRun()

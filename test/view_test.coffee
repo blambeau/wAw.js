@@ -9,8 +9,8 @@ test "View's url getter on new line", ->
     url: 'hello'
   ok v.url() is 'hello' 
 
-test "View's url getter as an object responding to wGet", ->
-  o = { wGet: -> "objhello" }
+test "View's url getter as an object responding to get", ->
+  o = { get: -> "objhello" }
   v = new View 
     url: o
   ok v.url() is 'objhello' 

@@ -5,7 +5,11 @@ exports.Brick = class Brick
   ############################################################## wInit and wId
 
   # 
-  # Initializes the brick and all its children recursively.
+  # Initializes the brick and all its children recursively. 
+  #
+  # This function is not intended to be overriden. Please provide all 
+  # user-defined initializations in a wInit method that will be called
+  # at end of tree initialization provided by this method.
   #
   # Parameters: 
   #   - waw: instance of the w@w engine to refer to for 
@@ -13,28 +17,67 @@ exports.Brick = class Brick
   #   - parent: the parent brick in the tree
   #   - name: name of the brick as used in the parent
   #
-  wInit: (waw, parent, name) ->
-    @wAw = waw
-    @wName = name
-    @wParent = parent
+  _wInit: (parent, name) ->
+    # set parent, root and name
+    if parent?
+      @_wRoot = parent.wRoot()
+      @_wParent = parent
+    else
+      @_wRoot = this
+      @_wParent = null
+    @_wName = name
+
+    # set qualified name
+    @_wQid = if @_wParent is null
+      '/'
+    else 
+      pwQid = @_wParent.wQid()
+      if pwQid is '/'
+        pwQid + @_wName
+      else
+        pwQid + '/' + @_wName
+
+    # # propagate to children now
     for k, v of this
-      if (k == 'wAw' || k == 'wParent') 
+      if (k[0] == '_') 
         continue 
+      else if (v? && v['_wInit']?)
+        v._wInit(this, k)
       else if (v? && v['wInit']?)
-        v.wInit(waw, this, k)
-    this.init() if this['init']?
+        v.wInit(this, k)
+    
+    # User defined initialization
+    this.wInit(parent, k) if this['wInit']?
+
+  #
+  # Returns brick unqualified name
+  #
+  wName: ->
+	  @_wName
+
+  #
+  # Returns brick parent, null if the brick is root of the tree
+  #
+  wParent: ->
+	  @_wParent
+
+  #
+  # Returns root of the brick tree 
+  #
+  wRoot: ->
+	  @_wRoot
 
   # 
   # Returns brick's qualified identifier. 
   #
   wQid: ->
-    pwQid = @wParent.wQid()
-    if pwQid == ''
-      @wName
-    else if pwQid[pwQid.length - 1] is '/'
-      pwQid + @wName
-    else
-      pwQid + '/' + @wName
+	  @_wQid
+
+  #
+  # Runs the brick. 
+  #
+  wRun: ->
+	  this._wInit(null, '/')
 
   ############################################################## wFetch
 
@@ -56,10 +99,12 @@ exports.Brick = class Brick
       
       # make one step by resolving my part
       mine = switch selkey
+        when '/'
+          @_wRoot
         when '.'
           this
         when '..'
-          @wParent
+          @_wParent
         else
           this[selkey]
 
@@ -75,10 +120,12 @@ exports.Brick = class Brick
         throw "No such key #{sel[index]}"
 
     # end user part
-    else if (sel[0] == '/')
-      @wAw.fetch(sel)
+    else if sel == '/'
+      @_wRoot
     else
-      this.wFetch(sel.split('/'))
+      split = sel.split('/')
+      split[0] = '/' if split[0] == ""
+      this.wFetch(split, 0)
 
   ############################################################## wGet and wSet
 

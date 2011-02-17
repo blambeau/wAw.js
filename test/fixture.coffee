@@ -1,6 +1,5 @@
 {Brick}  = require('../src/brick')
 {Cell} = require('../src/cell')
-{Waw}  = require('../src/waw')
 {SM}  = require('../src/sm')
 
 exports.FixtureApp = class FixtureApp extends Brick
@@ -17,3 +16,14 @@ exports.FixtureApp = class FixtureApp extends Brick
 
     # A State Machine
     @sm = new SM {'/c1': 1, '/c2': 2}
+
+test "Fixture sanity", ->
+  app = new FixtureApp
+  app.wRun()
+
+  ok app.wFetch('.') is app
+  ok app.wFetch('/') is app
+  ok app.wFetch('/c1') is app.c1
+
+  ok app.wSet('/c1', 12) is 12
+  ok app.wGet('/c1') is 12

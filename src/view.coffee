@@ -37,12 +37,13 @@ exports.View = class View extends Brick
 
   #### Private functions
 
-  init: ->
+  wInit: (parent, name) ->
     @options['autorefresh'] = this._normalize_autorefresh(@options['autorefresh'])
     for l in @options['autorefresh']
 	    if (typeof(l) == "string")
-        l = this.wFetch(l) 
-      l.wBind(this.refresh)
+        this.wBind(l, this.refresh) 
+      else
+        l.bind(this.refresh)
 
   _normalize_autorefresh: (ar) ->
     ar = [] unless ar?
@@ -61,8 +62,8 @@ exports.View = class View extends Brick
       when 'string'
         optvalue
       else 
-        if optvalue? && optvalue['wGet']?
-          optvalue.wGet()
+        if optvalue? && optvalue['get']?
+          optvalue.get()
         else if optvalue?
           optvalue.toString()
         else

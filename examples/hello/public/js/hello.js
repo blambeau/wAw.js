@@ -18,12 +18,13 @@
         autorefresh: this.current.changed
       });
     }
-    Hello.prototype.init = function() {
+    Hello.prototype.wInit = function() {
       return this.current.set('hello1.html');
     };
     return Hello;
   })();
   $(document).ready(function() {
-    return Waw.run(new Hello);
+    this.HelloApp = new Hello;
+    return this.HelloApp.wRun();
   });
 }).call(this);
