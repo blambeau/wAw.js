@@ -1,4 +1,5 @@
 {Brick} = require('../src/brick')
+{Slot}  = require('../src/slot')
 {Cell}  = require('../src/cell')
 {Waw}   = require('../src/waw')
 
@@ -17,6 +18,36 @@ test "Brick#wInit", ->
   ok b1.b2['waw'] is Waw
   ok b1.b2.b3['wparent'] is b1.b2
   ok b1.b2.b3['waw'] is Waw
+
+# Signals and slots
+
+test "Brick#slot", ->
+  b = new Brick
+  h1 = b.slot('hello')
+  ok (h1 instanceof Slot)
+  h2 = b.slot('hello')
+  ok (h1 == h2)
+
+test "Brick#has_slot}", ->
+  b = new Brick
+  b.slot('hello')
+  ok b.has_slot('hello')
+  ok !b.has_slot('hello2')
+
+test "Brick#bind", ->
+  b = new Brick
+  x = b.bind 'hello', (name) ->
+    "Hello #{name}"
+  ok (x == b)
+
+test "Brick#emit", ->
+  local = ""
+  b = new Brick
+  b.bind 'hello', (name) ->
+    local = "Hello #{name}"
+  b.emit 'hello', 'waw'
+  ok ("Hello waw" == local)
+
 
 # wQid
 

@@ -1,8 +1,14 @@
-{Base} = require './base'
+{Slot} = require('./slot')
 
-exports.Brick = class Brick extends Base
+exports.Brick = class Brick
   
-  ############################################################## wPrivate methods
+  ############################################################## Construction and wInit
+
+  # 
+  # Builds a brick instance
+  # 
+  constructor: -> 
+    @slots = {}
 
   # 
   # Initializes the brick and all its children recursively.
@@ -23,6 +29,48 @@ exports.Brick = class Brick extends Base
       else if (v? && v['wInit']?)
         v.wInit(waw, this, k)
     this.init() if this['init']?
+
+  ############################################################## Signals and slots
+
+  #
+  # Checks if the brick has a given slot.
+  #
+  # Parameters:
+  #   - name: a slot name
+  #
+  has_slot: (name) ->
+	  x = @slots[name]
+	  x?
+
+  #
+  # Returns a slot by name, creating it is required
+  #
+  # Parameters:
+  #   - name: a slot name
+  #
+  slot: (name) ->
+    @slots[name] ?= new Slot
+
+  #
+  # Convenient method for slot(name).bind(fn)
+  #
+  # Parameters:
+  #   - name: a slot name
+  #   - fn: a function to bind to the slot
+  #
+  bind: (name, fn) ->
+    this.slot(name).bind(fn)
+    this
+
+  # 
+  # Convenient method for slot(name).emit(args...)
+  # 
+  # Parameters:
+  #   - name: a slot name
+  #   - args: arguments of the signal emission
+  #
+  emit: (name, args...) ->
+    this.slot(name).emit(args...)
 
   ############################################################## wQuery methods
 
