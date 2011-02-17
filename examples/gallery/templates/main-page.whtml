@@ -1,0 +1,20 @@
+<div id="left">
+  <ul id="thumbs">
+  *{thumbs as t}{<li><img class="thumb" src="thumbs/${t}" thumb-id="{t}"/></li>}
+  </ul>
+</div>
+
+<div id="right">
+  <div id="image-display">
+    <img/>
+  </div>
+  <div id="image-info">
+  </div>
+</div>
+
+<script>
+  $('.thumb').mouseover(function(){
+    imageId = $(this).attr('thumb-id');
+    $.gallery.wSet('currentImg', imageId);
+  });
+</script>

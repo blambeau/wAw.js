@@ -1,0 +1,42 @@
+WAWJS_ROOT = File.expand_path('../../../', __FILE__)
+WAWJS = Dir["#{WAWJS_ROOT}/dist/waw*.js"].last
+require 'fileutils'
+
+# Absolutizes a path from here (i.e. __DIR__)
+def _(relative) 
+  File.expand_path("../#{relative}", __FILE__)
+end
+
+desc "Build the thumbnails for all images"
+task :thumbs do
+  FileUtils.mkdir_p _('public/thumbs')
+  Dir[_('public/images/*.jpg')].each{|source|
+    target = "public/thumbs/#{File.basename(source)}"
+    cmd = "convert -define jpeg:size=200x200 "\
+          "-thumbnail 130x130^ "\
+          "-gravity center -extent 130x130 "\
+          "-quality 80 "\
+          "\"#{source}\" \"#{target}\""
+    puts "#{cmd}: " + `#{cmd}`
+  }
+end
+
+desc "Builds the application (gallery.coffee -> gallery.js)"
+task :build do
+  # Copy the last waw.js version 
+  `cd #{WAWJS_ROOT} && cake dist`
+  FileUtils.cp WAWJS, _("public/js")
+
+  # Compile the client application
+  puts "Building gallery.js"
+  client_coffee = _('client/gallery.coffee')
+  client_js     = _('public/js/gallery.js')
+  puts `coffee -c -o #{File.dirname(client_js)} #{client_coffee}`
+end
+
+desc "Runs the application"
+task :"run:sinatra" => :build do
+  Kernel.exec "ruby #{_('server/sinatra/gallery.rb')}"
+end
+
+task :default => :"run:sinatra"
