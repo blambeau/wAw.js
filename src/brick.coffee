@@ -42,25 +42,25 @@ exports.Brick = class Brick
     @wSlots[name] ?= new Slot(this)
 
   #
-  # Convenient method for wSlot(name).wBind(fn)
+  # Convenient method for wSlot(name).bind(fn)
   #
   # Parameters:
   #   - name: a slot name
   #   - fn: a function to bind to the slot
   #
   wBind: (name, fn) ->
-    this.wSlot(name).wBind(fn)
+    this.wSlot(name).bind(fn)
     this
 
   # 
-  # Convenient method for wSlot(name).wEmit(args...)
+  # Convenient method for wSlot(name).emit(args...)
   # 
   # Parameters:
   #   - name: a slot name
   #   - args: arguments of the signal emission
   #
   wEmit: (name, args...) ->
-    this.wSlot(name).wEmit(args...)
+    this.wSlot(name).emit(args...)
 
   ############################################################## wQuery methods
 

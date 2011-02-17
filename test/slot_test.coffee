@@ -6,21 +6,21 @@ test "Slot's constructor", ->
   s = new Slot(12)
   ok s.brick is 12
 
-test "Slot's wBind contract", ->
+test "Slot's bind contract", ->
   s = new Slot
-  x = s.wBind (arg) -> arg
+  x = s.bind (arg) -> arg
   ok x is s
 
-test "Slot's wEmit contract", ->
+test "Slot's emit contract", ->
   local = 0
   s = new Slot
-  s.wBind (arg) -> local = arg * 2
-  s.wEmit(12)
+  s.bind (arg) -> local = arg * 2
+  s.emit(12)
   ok local is 24
 
-test "Slot's wEmit contract with multiple params", ->
+test "Slot's emit contract with multiple params", ->
   local = 0
   s = new Slot
-  s.wBind (arg1, arg2) -> local = arg1 * arg2
-  s.wEmit(12, 10)
+  s.bind (arg1, arg2) -> local = arg1 * arg2
+  s.emit(12, 10)
   ok local is 120

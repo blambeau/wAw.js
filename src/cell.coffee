@@ -15,7 +15,7 @@ exports.Cell = class Cell extends Brick
   set: (value) ->
     oldval = @value
     @value = value
-    @changed.wEmit(this, oldval, value)
+    @changed.emit(this, oldval, value)
     @value
 
   listen: (fn) -> 

@@ -3,9 +3,9 @@ exports.Slot = class Slot
   constructor: (@brick) ->
     @listeners = []
 
-  wBind: (l) ->
+  bind: (l) ->
     @listeners.push(l)
     this
 
-  wEmit: ->
+  emit: ->
     l(arguments...) for l in @listeners
