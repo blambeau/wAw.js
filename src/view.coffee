@@ -19,37 +19,38 @@ exports.View = class View extends Brick
   #
   constructor: (@options) ->
     
-  #### Public functions
-
-  # Returns the View options
-  options: -> @options
-
-  # Returns the current server-side URL
-  url: -> this._get_opt_value 'url'
-
-  # Returns the current selector
-  selector: -> this._get_opt_value 'selector'
-
-  # Forces the view to refresh now
   refresh: =>
-    $.get this.url(), (data) =>
-      $(this.selector()).html data
+    sel = this.selector()
+    $(sel).html(this.toString())
+
+  toString: =>
+    this.render().toString()
 
   #### Private functions
 
   wInit: (parent, name) ->
-    @options['autorefresh'] = this._normalize_autorefresh(@options['autorefresh'])
-    for l in @options['autorefresh']
-	    if (typeof(l) == "string")
+    this._normalize_autorefresh()
+    for k,v of @options
+      f = this._build_function(v)
+      this[k] = f
+  
+  _build_function: (v) ->
+    if typeof(v) == 'function'
+      self = this
+      -> v(self)
+    else
+      -> v
+
+  _normalize_autorefresh: ->
+    ar = @options['autorefresh']
+    ar = [] unless ar?
+    ar = [ ar ] if !(ar instanceof Array)
+    for l in ar
+      if (typeof(l) == "string")
         this.wListen(l, this.refresh) 
       else
         l.listen(this.refresh)
-
-  _normalize_autorefresh: (ar) ->
-    ar = [] unless ar?
-    if !(ar instanceof Array)
-	    ar = [ ar ]
-    ar
+    @options['autorefresh'] = ar
 
   # Returns the value of an option. If the options was 
   # installed as a function, it is executed to get the
@@ -58,7 +59,7 @@ exports.View = class View extends Brick
     optvalue = @options[optkey]
     switch typeof(optvalue)
       when 'function'
-  	    optvalue(this)
+        optvalue(this)
       when 'string'
         optvalue
       else 
@@ -67,5 +68,5 @@ exports.View = class View extends Brick
         else if optvalue?
           optvalue.toString()
         else
-	        optvalue
+          optvalue
       
