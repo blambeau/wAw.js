@@ -11,8 +11,8 @@ exports.Cell = class Cell extends Brick
     @changed = new Signal(this)
 
   get: -> 
-	  @value
-	
+    @value
+  
   set: (value) ->
     oldval = @value
     @value = value
@@ -23,4 +23,8 @@ exports.Cell = class Cell extends Brick
     this.wListen('changed', fn)
 
   toString: ->
-	  this.get().toString()
+    v = this.get()
+    if v? 
+      v.toString()
+    else
+      null
