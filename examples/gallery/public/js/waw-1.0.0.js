@@ -237,10 +237,34 @@ function require(x) { return exports; };
   Brick = require('./brick').Brick;
   exports.View = View = (function() {
     __extends(View, Brick);
-    function View(options) {
-      this.options = options;
+    View.prototype.defaults = {
+      url: function(v) {
+        return v.wQid();
+      },
+      selector: function(v) {
+        return "#" + v.wName();
+      },
+      template: function(v) {
+        var _ref;
+        return (_ref = v._template) != null ? _ref : v._template = $.ajax({
+          url: v.url(),
+          async: false
+        }).responseText;
+      },
+      render: function(v) {
+        return $.ajax({
+          url: v.url(),
+          async: false
+        }).responseText;
+      }
+    };
+    function View(opts) {
       this.toString = __bind(this.toString, this);;
-      this.refresh = __bind(this.refresh, this);;
+      this.refresh = __bind(this.refresh, this);;      if (typeof $ != "undefined" && $ !== null) {
+        this.options = $.extend({}, View.prototype.defaults, opts);
+      } else {
+        this.options = opts;
+      }
     }
     View.prototype.refresh = function() {
       var sel;
@@ -293,24 +317,6 @@ function require(x) { return exports; };
         }
       }
       return this.options['autorefresh'] = ar;
-    };
-    View.prototype._get_opt_value = function(optkey) {
-      var optvalue;
-      optvalue = this.options[optkey];
-      switch (typeof optvalue) {
-        case 'function':
-          return optvalue(this);
-        case 'string':
-          return optvalue;
-        default:
-          if ((optvalue != null) && (optvalue['get'] != null)) {
-            return optvalue.get();
-          } else if (optvalue != null) {
-            return optvalue.toString();
-          } else {
-            return optvalue;
-          }
-      }
     };
     return View;
   })();

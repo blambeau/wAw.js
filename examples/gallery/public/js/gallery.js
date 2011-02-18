@@ -11,22 +11,6 @@
   MustacheView = (function() {
     __extends(MustacheView, View);
     MustacheView.prototype.defaults = {
-      id: function(v) {
-        return "" + (v.wName());
-      },
-      url: function(v) {
-        return "/" + (v.id());
-      },
-      selector: function(v) {
-        return "#" + v.id();
-      },
-      template: function(v) {
-        var _ref;
-        return (_ref = v._template) != null ? _ref : v._template = $.ajax({
-          url: "" + (v.url()) + ".whtml",
-          async: false
-        }).responseText;
-      },
       render: function(v) {
         return Mustache.to_html(v.template(), v.renderData());
       }

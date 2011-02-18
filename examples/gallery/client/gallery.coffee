@@ -1,14 +1,6 @@
 class MustacheView extends View
   
   defaults:
-    id: (v)-> 
-      "#{v.wName()}"
-    url: (v)-> 
-      "/#{v.id()}"
-    selector: (v)->
-      "#" + v.id()
-    template: (v)->
-      v._template ?= $.ajax(url: "#{v.url()}.whtml", async: false).responseText
     render: (v)->
       Mustache.to_html(v.template(), v.renderData())
   

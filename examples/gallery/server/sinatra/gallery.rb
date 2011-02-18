@@ -63,7 +63,7 @@ get '/thumb/:album/:image' do
 end
 
 # Returns uninstantiated templates to the client part
-get %r{/([\w]+).whtml} do
+get %r{^/([\w]+)$} do
   send_file _("templates/#{params[:captures].first}.whtml")
 end
 
