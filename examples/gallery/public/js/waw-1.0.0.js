@@ -185,6 +185,9 @@ function require(x) { return exports; };
     Cell.prototype.listen = function(fn) {
       return this.wListen('changed', fn);
     };
+    Cell.prototype.toString = function() {
+      return this.get().toString();
+    };
     return Cell;
   })();
   Cell = require('./cell').Cell;
@@ -230,41 +233,60 @@ function require(x) { return exports; };
     __extends(View, Brick);
     function View(options) {
       this.options = options;
+      this.toString = __bind(this.toString, this);;
       this.refresh = __bind(this.refresh, this);;
     }
-    View.prototype.options = function() {
-      return this.options;
-    };
-    View.prototype.url = function() {
-      return this._get_opt_value('url');
-    };
-    View.prototype.selector = function() {
-      return this._get_opt_value('selector');
-    };
     View.prototype.refresh = function() {
-      return $.get(this.url(), __bind(function(data) {
-        return $(this.selector()).html(data);
-      }, this));
+      var sel;
+      sel = this.selector();
+      return $(sel).html(this.toString());
+    };
+    View.prototype.toString = function() {
+      return this.render().toString();
     };
     View.prototype.wInit = function(parent, name) {
-      var l, _i, _len, _ref, _results;
-      this.options['autorefresh'] = this._normalize_autorefresh(this.options['autorefresh']);
-      _ref = this.options['autorefresh'];
+      var f, k, v, _ref, _results;
+      this._normalize_autorefresh();
+      _ref = this.options;
       _results = [];
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        l = _ref[_i];
-        _results.push(typeof l === "string" ? this.wListen(l, this.refresh) : l.listen(this.refresh));
+      for (k in _ref) {
+        v = _ref[k];
+        f = this._build_function(v);
+        _results.push(this[k] = f);
       }
       return _results;
     };
-    View.prototype._normalize_autorefresh = function(ar) {
+    View.prototype._build_function = function(v) {
+      var self;
+      if (typeof v === 'function') {
+        self = this;
+        return function() {
+          return v(self);
+        };
+      } else {
+        return function() {
+          return v;
+        };
+      }
+    };
+    View.prototype._normalize_autorefresh = function() {
+      var ar, l, _i, _len;
+      ar = this.options['autorefresh'];
       if (ar == null) {
         ar = [];
       }
       if (!(ar instanceof Array)) {
         ar = [ar];
       }
-      return ar;
+      for (_i = 0, _len = ar.length; _i < _len; _i++) {
+        l = ar[_i];
+        if (typeof l === "string") {
+          this.wListen(l, this.refresh);
+        } else {
+          l.listen(this.refresh);
+        }
+      }
+      return this.options['autorefresh'] = ar;
     };
     View.prototype._get_opt_value = function(optkey) {
       var optvalue;

@@ -1,0 +1,11 @@
+<ul id="thumbs">
+  {{#thumbs}}
+    <li><img class="thumb" src="{{url}}" thumb-id="{{id}}"/></li>
+  {{/thumbs}}
+  <script>
+    $('.thumb').mouseover(function(){
+      imageId = $(this).attr('thumb-id');
+      $.gallery.wSet('currentImg', imageId);
+    });
+  </script>
+</ul>

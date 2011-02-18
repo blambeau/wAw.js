@@ -16,8 +16,6 @@ ul#thumbs li {
 	width: 130px; height: 130px; 
 	border: 1px solid white;
 }
-#image-info {
-}
-#image-display img {
+#info img {
 	width: 100%;
 }
