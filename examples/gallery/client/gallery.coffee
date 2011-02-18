@@ -1,6 +1,8 @@
 class MustacheView extends View
   
   defaults:
+	  id: (v)-> 
+      "#{v.wName()}"
 	  url: (v)-> 
       "/#{v.id()}"
     selector: (v)->
@@ -26,33 +28,28 @@ class Gallery extends Brick
     @currentImg = new Cell
 
     # Rendering of the /see page
-    @seePage = new MustacheView
-      id: 'see'
+    @see = new MustacheView
       data: (v)=>
-        { thumbs: @thumbsPage, info: @infoPage }
+        { thumbs: @thumbs, info: @info }
 
     # Rendering of the thumbnails at left of /see
-    @thumbsPage = new MustacheView
-      id: 'thumbs'
+    @thumbs = new MustacheView
 
     # Rendering of the info at right of /see
-    @infoPage = new MustacheView
-      id: 'info'
+    @info = new MustacheView
       data: (v)=> 
-        {image: @currentImg}
+        { image: @currentImg }
       autorefresh: @currentImg
 
     # This is the main page, as a View. It will be explicitely
     # refreshed at startup (see wInit)
-    @mainPage = new View
-      id: "main"
-      selector: "#main"
+    @main = new MustacheView
       render: (v)=> 
-        @seePage.render()
+        @see.render()
 
   # This function is called when the application is started.
   wInit: ->
-    @mainPage.refresh()
+    @main.refresh()
 
 # When the document is ready, we build an app instance and start 
 # running it

@@ -11,6 +11,9 @@
   MustacheView = (function() {
     __extends(MustacheView, View);
     MustacheView.prototype.defaults = {
+      id: function(v) {
+        return "" + (v.wName());
+      },
       url: function(v) {
         return "/" + (v.id());
       },
@@ -44,20 +47,16 @@
     __extends(Gallery, Brick);
     function Gallery() {
       this.currentImg = new Cell;
-      this.seePage = new MustacheView({
-        id: 'see',
+      this.see = new MustacheView({
         data: __bind(function(v) {
           return {
-            thumbs: this.thumbsPage,
-            info: this.infoPage
+            thumbs: this.thumbs,
+            info: this.info
           };
         }, this)
       });
-      this.thumbsPage = new MustacheView({
-        id: 'thumbs'
-      });
-      this.infoPage = new MustacheView({
-        id: 'info',
+      this.thumbs = new MustacheView;
+      this.info = new MustacheView({
         data: __bind(function(v) {
           return {
             image: this.currentImg
@@ -65,16 +64,14 @@
         }, this),
         autorefresh: this.currentImg
       });
-      this.mainPage = new View({
-        id: "main",
-        selector: "#main",
+      this.main = new MustacheView({
         render: __bind(function(v) {
-          return this.seePage.render();
+          return this.see.render();
         }, this)
       });
     }
     Gallery.prototype.wInit = function() {
-      return this.mainPage.refresh();
+      return this.main.refresh();
     };
     return Gallery;
   })();
