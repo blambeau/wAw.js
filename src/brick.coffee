@@ -4,6 +4,13 @@ exports.Brick = class Brick
   
   ############################################################## wInit and wId
 
+  constructor: (opts = {})->
+    try
+      defs = this.__proto__.constructor.prototype.defaults
+      @options = $.extend({}, defs, opts)
+    catch err
+      @options = opts
+
   # 
   # Initializes the brick and all its children recursively. 
   #
@@ -49,35 +56,51 @@ exports.Brick = class Brick
     # User defined initialization
     this.wInit(parent, k) if this['wInit']?
 
+  ############################################################## Private API
+
+  wInit: (parent, name) ->
+    for k,v of @options
+      f = this._build_function(v)
+      this[k] = f
+
+  _build_function: (v) ->
+    if typeof(v) == 'function'
+      self = this
+      -> v(self)
+    else
+      -> v
+
+  ############################################################## Public API
+
   #
   # Returns brick unqualified name
   #
   wName: ->
-	  @_wName
+    @_wName
 
   #
   # Returns brick parent, null if the brick is root of the tree
   #
   wParent: ->
-	  @_wParent
+    @_wParent
 
   #
   # Returns root of the brick tree 
   #
   wRoot: ->
-	  @_wRoot
+    @_wRoot
 
   # 
   # Returns brick's qualified identifier. 
   #
   wQid: ->
-	  @_wQid
+    @_wQid
 
   #
   # Runs the brick. 
   #
   wRun: ->
-	  this._wInit(null, '/')
+    this._wInit(null, '/')
 
   ############################################################## wFetch
 

@@ -5,6 +5,8 @@
 #
 exports.View = class View extends Brick
   
+  ############################################################## wOptions
+
   defaults:
     url: (v)-> 
       v.wQid()
@@ -21,12 +23,14 @@ exports.View = class View extends Brick
         when 'mustache'
           Mustache.to_html(v.template(), v.renderData())
 
-  constructor: (opts) ->
-	  if $?
-      @options = $.extend({}, View.prototype.defaults, opts)
-    else
-      @options = opts
-    
+  ############################################################## wInit
+
+  wInit: (parent, name) ->
+    this._normalize_autorefresh()
+    super
+  
+  ############################################################## Public API
+
   refresh: =>
     sel = this.selector()
     $(sel).html(this.toString())
@@ -34,20 +38,7 @@ exports.View = class View extends Brick
   toString: =>
     this.render().toString()
 
-  #### Private functions
-
-  wInit: (parent, name) ->
-    this._normalize_autorefresh()
-    for k,v of @options
-      f = this._build_function(v)
-      this[k] = f
-  
-  _build_function: (v) ->
-    if typeof(v) == 'function'
-      self = this
-      -> v(self)
-    else
-      -> v
+  ############################################################## Private API
 
   _normalize_autorefresh: ->
     ar = @options['autorefresh']
