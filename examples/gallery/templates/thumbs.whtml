@@ -1,6 +1,6 @@
 <ul id="thumbs">
   {{#images}}
-    <li><img class="thumb" src="/thumb/{{album}}/{{.}}" thumb-id="{{.}}"/></li>
+    <li><img class="thumb" src="{{thumb}}" thumb-id="{{basename}}"/></li>
   {{/images}}
 </ul>
 <div id="thumb-hider" style="display:none;"></div>
@@ -14,8 +14,7 @@
 </div>
 <script>
   $('.thumb').mouseover(function(){
-    imageId = $(this).attr('thumb-id');
-    $.gallery.wSet('currentImg', imageId);
+    $.gallery.wSet('currentImg', $(this).attr('thumb-id'));
     $.gallery.follower.show();
   });
   $('#button-box').mouseleave(function(){

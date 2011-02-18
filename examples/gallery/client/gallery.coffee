@@ -5,23 +5,19 @@ class MustacheView extends View
       "#{v.wName()}"
     url: (v)-> 
       "/#{v.id()}"
-    ajaxData: (v)->
-      {}
     selector: (v)->
       "#" + v.id()
     template: (v)->
       v._template ?= $.ajax(url: "#{v.url()}.whtml", async: false).responseText
-    data: (v)->
-      $.parseJSON $.ajax(url: "#{v.url()}.json", async: false, dataType: 'json', data: v.ajaxData()).responseText
     render: (v)->
-      Mustache.to_html(v.template(), v.data())
+      Mustache.to_html(v.template(), v.renderData())
   
   constructor: (opts)->
     super $.extend({}, this.defaults, opts)
 
 class ThumbFollower extends Brick
-	
-	follow: (cell, oldvalue, newvalue)=>
+  
+  follow: (cell, oldvalue, newvalue)=>
     this.move $("img[thumb-id='#{newvalue}']").position()
 
   move: (pos)->
@@ -37,10 +33,29 @@ class ThumbFollower extends Brick
     $('#thumb-hider').hide()
     $('#button-box').hide()
 
+class Model
+  
+  defaults:
+    async: false,
+    dataType: 'json',
+  
+  albums: ->
+    params = { url: '/albums.json' }
+    params = $.extend({}, this.defaults, params)
+    $.parseJSON $.ajax(params).responseText
+
+  images: (alb)->
+    params = { url: '/images.json', data: {album: alb.toString()} }
+    params = $.extend({}, this.defaults, params)
+    $.parseJSON $.ajax(params).responseText
+
 class Gallery extends Brick
   
   # Builds the Gallery brick
   constructor: ->
+
+    # This encapsulates the data model
+    @model = new Model
   
     # This cell will keep the name of the current album displayed. 
     @currentAlbum = new Cell("Cars")
@@ -50,8 +65,8 @@ class Gallery extends Brick
 
     # Rendering of the /see page
     @see = new MustacheView
-      data: (v)=>
-        { albums: @albums, thumbs: @thumbs, currentImg: @currentImg }
+      renderData: =>
+        { albums: @albums, thumbs: @thumbs }
 
     # We listen to currentImg to update the big image at right
     @currentImg.listen (cell, oldvalue, newvalue) =>
@@ -63,11 +78,15 @@ class Gallery extends Brick
 
     # Rendering of the album selector
     @albums = new MustacheView
+      renderData: =>
+        { albums: @model.albums() }
 
     # Rendering of the thumbnails at left of /see
     @thumbs = new MustacheView
-      ajaxData: => { album: @currentAlbum.get() }
-      autorefresh: @currentAlbum
+      renderData: =>
+        { images: @model.images(@currentAlbum) }
+      autorefresh: 
+        @currentAlbum
 
     # This is the main page, as a View. It will be explicitely
     # refreshed at startup (see wInit)

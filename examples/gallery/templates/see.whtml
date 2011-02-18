@@ -6,6 +6,6 @@
     {{{thumbs}}}
   </div>
   <div id="right">
-    <img id="big-image" src="/img/{{currentImg}}">
+    <img id="big-image">
   </div>
 </div>

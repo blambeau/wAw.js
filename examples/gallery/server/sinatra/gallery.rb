@@ -67,15 +67,23 @@ get %r{/([\w]+).whtml} do
   send_file _("templates/#{params[:captures].first}.whtml")
 end
 
-# Returns thumbs info
-get '/thumbs.json' do
-  content_type :json
-  album = params[:album]
-  {'album' => album, 'images' => images(album)}.to_json
-end
-
-# Returns thumbs info
+# Returns info about albums
 get '/albums.json' do
   content_type :json
-  {'albums' => albums}.to_json
+  albums.collect{|alb|
+    { 'id'   => alb,
+      'name' => alb }
+  }.to_json
+end
+
+# Returns info about images
+get '/images.json' do
+  content_type :json
+  album = params[:album]
+  images(album).collect{|img|
+    { 'album'    => album,
+      'basename' => img, 
+      'url'      => "/image/#{album}/#{img}",
+      'thumb'    => "/thumb/#{album}/#{img}" }
+  }.to_json
 end

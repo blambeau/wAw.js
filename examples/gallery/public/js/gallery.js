@@ -1,5 +1,5 @@
 (function() {
-  var Gallery, MustacheView, ThumbFollower;
+  var Gallery, Model, MustacheView, ThumbFollower;
   var __hasProp = Object.prototype.hasOwnProperty, __extends = function(child, parent) {
     for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; }
     function ctor() { this.constructor = child; }
@@ -17,9 +17,6 @@
       url: function(v) {
         return "/" + (v.id());
       },
-      ajaxData: function(v) {
-        return {};
-      },
       selector: function(v) {
         return "#" + v.id();
       },
@@ -30,16 +27,8 @@
           async: false
         }).responseText;
       },
-      data: function(v) {
-        return $.parseJSON($.ajax({
-          url: "" + (v.url()) + ".json",
-          async: false,
-          dataType: 'json',
-          data: v.ajaxData()
-        }).responseText);
-      },
       render: function(v) {
-        return Mustache.to_html(v.template(), v.data());
+        return Mustache.to_html(v.template(), v.renderData());
       }
     };
     function MustacheView(opts) {
@@ -74,17 +63,44 @@
     };
     return ThumbFollower;
   })();
+  Model = (function() {
+    function Model() {}
+    Model.prototype.defaults = {
+      async: false,
+      dataType: 'json'
+    };
+    Model.prototype.albums = function() {
+      var params;
+      params = {
+        url: '/albums.json'
+      };
+      params = $.extend({}, this.defaults, params);
+      return $.parseJSON($.ajax(params).responseText);
+    };
+    Model.prototype.images = function(alb) {
+      var params;
+      params = {
+        url: '/images.json',
+        data: {
+          album: alb.toString()
+        }
+      };
+      params = $.extend({}, this.defaults, params);
+      return $.parseJSON($.ajax(params).responseText);
+    };
+    return Model;
+  })();
   Gallery = (function() {
     __extends(Gallery, Brick);
     function Gallery() {
+      this.model = new Model;
       this.currentAlbum = new Cell("Cars");
       this.currentImg = new Cell;
       this.see = new MustacheView({
-        data: __bind(function(v) {
+        renderData: __bind(function() {
           return {
             albums: this.albums,
-            thumbs: this.thumbs,
-            currentImg: this.currentImg
+            thumbs: this.thumbs
           };
         }, this)
       });
@@ -93,11 +109,17 @@
       }, this));
       this.follower = new ThumbFollower;
       this.currentImg.listen(this.follower.follow);
-      this.albums = new MustacheView;
-      this.thumbs = new MustacheView({
-        ajaxData: __bind(function() {
+      this.albums = new MustacheView({
+        renderData: __bind(function() {
           return {
-            album: this.currentAlbum.get()
+            albums: this.model.albums()
+          };
+        }, this)
+      });
+      this.thumbs = new MustacheView({
+        renderData: __bind(function() {
+          return {
+            images: this.model.images(this.currentAlbum)
           };
         }, this),
         autorefresh: this.currentAlbum

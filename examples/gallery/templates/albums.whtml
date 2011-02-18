@@ -2,7 +2,7 @@
   <label for="album-selector">Your albums:</label>
   <select id="album-selector" name="album-selector">
     {{#albums}}
-      <option value="{{.}}">{{.}}</option>
+      <option value="{{id}}">{{name}}</option>
     {{/albums}}
   </select>
 </div>
