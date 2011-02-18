@@ -41,7 +41,18 @@ function require(x) { return exports; };
   })();
   Signal = require('./signal').Signal;
   exports.Brick = Brick = (function() {
-    function Brick() {}
+    function Brick(opts) {
+      var defs;
+      if (opts == null) {
+        opts = {};
+      }
+      try {
+        defs = this.__proto__.constructor.prototype.defaults;
+        this.options = $.extend({}, defs, opts);
+      } catch (err) {
+        this.options = opts;
+      }
+    }
     Brick.prototype._wInit = function(parent, name) {
       var k, pwQid, v;
       if (parent != null) {
@@ -65,6 +76,30 @@ function require(x) { return exports; };
       }
       if (this['wInit'] != null) {
         return this.wInit(parent, k);
+      }
+    };
+    Brick.prototype.wInit = function(parent, name) {
+      var f, k, v, _ref, _results;
+      _ref = this.options;
+      _results = [];
+      for (k in _ref) {
+        v = _ref[k];
+        f = this._build_function(v);
+        _results.push(this[k] = f);
+      }
+      return _results;
+    };
+    Brick.prototype._build_function = function(v) {
+      var self;
+      if (typeof v === 'function') {
+        self = this;
+        return function() {
+          return v(self);
+        };
+      } else {
+        return function() {
+          return v;
+        };
       }
     };
     Brick.prototype.wName = function() {
@@ -236,6 +271,10 @@ function require(x) { return exports; };
   })();
   Brick = require('./brick').Brick;
   exports.View = View = (function() {
+    function View() {
+      this.toString = __bind(this.toString, this);;
+      this.refresh = __bind(this.refresh, this);;      View.__super__.constructor.apply(this, arguments);
+    }
     __extends(View, Brick);
     View.prototype.defaults = {
       url: function(v) {
@@ -264,14 +303,10 @@ function require(x) { return exports; };
         }
       }
     };
-    function View(opts) {
-      this.toString = __bind(this.toString, this);;
-      this.refresh = __bind(this.refresh, this);;      if (typeof $ != "undefined" && $ !== null) {
-        this.options = $.extend({}, View.prototype.defaults, opts);
-      } else {
-        this.options = opts;
-      }
-    }
+    View.prototype.wInit = function(parent, name) {
+      this._normalize_autorefresh();
+      return View.__super__.wInit.apply(this, arguments);
+    };
     View.prototype.refresh = function() {
       var sel;
       sel = this.selector();
@@ -279,31 +314,6 @@ function require(x) { return exports; };
     };
     View.prototype.toString = function() {
       return this.render().toString();
-    };
-    View.prototype.wInit = function(parent, name) {
-      var f, k, v, _ref, _results;
-      this._normalize_autorefresh();
-      _ref = this.options;
-      _results = [];
-      for (k in _ref) {
-        v = _ref[k];
-        f = this._build_function(v);
-        _results.push(this[k] = f);
-      }
-      return _results;
-    };
-    View.prototype._build_function = function(v) {
-      var self;
-      if (typeof v === 'function') {
-        self = this;
-        return function() {
-          return v(self);
-        };
-      } else {
-        return function() {
-          return v;
-        };
-      }
     };
     View.prototype._normalize_autorefresh = function() {
       var ar, l, _i, _len;

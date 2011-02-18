@@ -16,7 +16,7 @@ class ThumbFollower extends Brick
     $('#thumb-hider').hide()
     $('#button-box').hide()
 
-class Model
+class Model extends Brick
   
   defaults:
     async: false,

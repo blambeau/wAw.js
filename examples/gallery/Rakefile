@@ -9,20 +9,24 @@ end
 
 desc "Build the thumbnails for all images"
 task :thumbs do
-  FileUtils.mkdir_p _('albums/Cars/thumbs')
-  Dir[_('albums/Cars/*.jpg')].each{|source|
-    target = "albums/Cars/thumbs/#{File.basename(source)}"
-    cmd = "convert -define jpeg:size=200x200 "\
-          "-thumbnail 130x130^ "\
-          "-gravity center -extent 130x130 "\
-          "-quality 80 "\
-          "\"#{source}\" \"#{target}\""
-    puts "#{cmd}: " + `#{cmd}`
+  Dir[_('albums/*')].each{|alb|
+    FileUtils.mkdir_p File.join(alb, "thumbs")
+    Dir[File.join(alb, '*.jpg')].each{|source|
+      target = File.join(alb, "thumbs", File.basename(source))
+      unless File.exists?(target)
+        cmd = "convert -define jpeg:size=200x200 "\
+              "-thumbnail 130x130^ "\
+              "-gravity center -extent 130x130 "\
+              "-quality 80 "\
+              "\"#{source}\" \"#{target}\""
+        puts "#{cmd}: " + `#{cmd}`
+      end
+    }
   }
 end
 
 desc "Builds the application (gallery.coffee -> gallery.js)"
-task :build do
+task :build => :thumbs do
   # Copy the last waw.js version 
   `cd #{WAWJS_ROOT} && cake dist`
   FileUtils.cp WAWJS, _("public/js")

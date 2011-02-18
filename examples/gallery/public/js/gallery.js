@@ -36,7 +36,10 @@
     return ThumbFollower;
   })();
   Model = (function() {
-    function Model() {}
+    function Model() {
+      Model.__super__.constructor.apply(this, arguments);
+    }
+    __extends(Model, Brick);
     Model.prototype.defaults = {
       async: false,
       dataType: 'json'
