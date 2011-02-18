@@ -1,4 +1,0 @@
-<div id="info">
-  <p>{{image}}</p>
-  <img src="/img/{{image}}">
-</div>

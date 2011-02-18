@@ -1,8 +1,11 @@
 <div id="see">
+  <div id="header">
+    {{{albums}}}
+  </div>
   <div id="left">
     {{{thumbs}}}
   </div>
   <div id="right">
-    {{{info}}}
+    <img id="big-image" src="/img/{{currentImg}}">
   </div>
 </div>

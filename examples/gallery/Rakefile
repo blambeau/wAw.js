@@ -9,9 +9,9 @@ end
 
 desc "Build the thumbnails for all images"
 task :thumbs do
-  FileUtils.mkdir_p _('public/thumbs')
-  Dir[_('public/images/*.jpg')].each{|source|
-    target = "public/thumbs/#{File.basename(source)}"
+  FileUtils.mkdir_p _('albums/Cars/thumbs')
+  Dir[_('albums/Cars/*.jpg')].each{|source|
+    target = "albums/Cars/thumbs/#{File.basename(source)}"
     cmd = "convert -define jpeg:size=200x200 "\
           "-thumbnail 130x130^ "\
           "-gravity center -extent 130x130 "\

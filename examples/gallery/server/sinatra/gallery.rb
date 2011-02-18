@@ -22,10 +22,15 @@ end
 
 ################################################# MODEL
 
+# Returns albums names
+def albums 
+  Dir[_('albums/*')].collect{|f| File.basename(f)}
+end
+
 # Returns image file names
-def images(prefix = '') 
-  Dir[_('public/images/*.jpg')].collect{|f| 
-    prefix + File.basename(f)
+def images(album = '') 
+  Dir[_("albums/#{album}/*.jpg")].collect{|f| 
+    File.basename(f)
   }
 end
 
@@ -48,9 +53,13 @@ end
 
 # We force NO CACHE in headers to avoid a known bug in google Chrome 
 # (http://www.google.com/support/forum/p/Chrome/thread?tid=4f4114448b03b409&hl=en&start=120)
-get '/img/:image' do
+get '/image/:album/:image' do
   headers NO_CACHE_HEADERS
-  send_file _("public/images/#{params[:image]}")
+  send_file _("albums/#{params[:album]}/#{params[:image]}")
+end
+get '/thumb/:album/:image' do
+  headers NO_CACHE_HEADERS
+  send_file _("albums/#{params[:album]}/thumbs/#{params[:image]}")
 end
 
 # Returns uninstantiated templates to the client part
@@ -61,5 +70,12 @@ end
 # Returns thumbs info
 get '/thumbs.json' do
   content_type :json
-  {'thumbs' => images.collect{|img| {'url' => "/thumbs/#{img}", 'id' => img}}}.to_json
+  album = params[:album]
+  {'album' => album, 'images' => images(album)}.to_json
+end
+
+# Returns thumbs info
+get '/albums.json' do
+  content_type :json
+  {'albums' => albums}.to_json
 end

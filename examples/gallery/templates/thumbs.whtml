@@ -1,11 +1,24 @@
 <ul id="thumbs">
-  {{#thumbs}}
-    <li><img class="thumb" src="{{url}}" thumb-id="{{id}}"/></li>
-  {{/thumbs}}
-  <script>
-    $('.thumb').mouseover(function(){
-      imageId = $(this).attr('thumb-id');
-      $.gallery.wSet('currentImg', imageId);
-    });
-  </script>
+  {{#images}}
+    <li><img class="thumb" src="/thumb/{{album}}/{{.}}" thumb-id="{{.}}"/></li>
+  {{/images}}
 </ul>
+<div id="thumb-hider" style="display:none;"></div>
+<div id="button-box" style="display:none;">
+  <div class="container">
+    <a id="button-v" onclick=""></a>
+    <a id="button-d" onclick=""></a>
+    <a id="button-rleft" onclick=""></a>
+    <a id="button-rright" onclick=""></a>
+  </div>
+</div>
+<script>
+  $('.thumb').mouseover(function(){
+    imageId = $(this).attr('thumb-id');
+    $.gallery.wSet('currentImg', imageId);
+    $.gallery.follower.show();
+  });
+  $('#button-box').mouseleave(function(){
+    $.gallery.follower.hide();
+  });
+</script>

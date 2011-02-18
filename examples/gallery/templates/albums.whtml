@@ -1,0 +1,13 @@
+<div id="albums">
+  <label for="album-selector">Your albums:</label>
+  <select id="album-selector" name="album-selector">
+    {{#albums}}
+      <option value="{{.}}">{{.}}</option>
+    {{/albums}}
+  </select>
+</div>
+<script>
+  $('#album-selector').change(function(){
+    $.gallery.wSet('currentAlbum', $('#album-selector').val());
+  });
+</script>

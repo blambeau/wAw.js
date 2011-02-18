@@ -1,5 +1,5 @@
 (function() {
-  var Gallery, MustacheView;
+  var Gallery, MustacheView, ThumbFollower;
   var __hasProp = Object.prototype.hasOwnProperty, __extends = function(child, parent) {
     for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; }
     function ctor() { this.constructor = child; }
@@ -17,6 +17,9 @@
       url: function(v) {
         return "/" + (v.id());
       },
+      ajaxData: function(v) {
+        return {};
+      },
       selector: function(v) {
         return "#" + v.id();
       },
@@ -31,7 +34,8 @@
         return $.parseJSON($.ajax({
           url: "" + (v.url()) + ".json",
           async: false,
-          dataType: 'json'
+          dataType: 'json',
+          data: v.ajaxData()
         }).responseText);
       },
       render: function(v) {
@@ -43,26 +47,60 @@
     }
     return MustacheView;
   })();
+  ThumbFollower = (function() {
+    function ThumbFollower() {
+      this.follow = __bind(this.follow, this);;      ThumbFollower.__super__.constructor.apply(this, arguments);
+    }
+    __extends(ThumbFollower, Brick);
+    ThumbFollower.prototype.follow = function(cell, oldvalue, newvalue) {
+      return this.move($("img[thumb-id='" + newvalue + "']").position());
+    };
+    ThumbFollower.prototype.move = function(pos) {
+      var css;
+      css = {
+        "left": pos.left + "px",
+        "top": pos.top + "px"
+      };
+      $('#thumb-hider').css(css);
+      return $('#button-box').css(css);
+    };
+    ThumbFollower.prototype.show = function() {
+      $('#thumb-hider').show();
+      return $('#button-box').show();
+    };
+    ThumbFollower.prototype.hide = function() {
+      $('#thumb-hider').hide();
+      return $('#button-box').hide();
+    };
+    return ThumbFollower;
+  })();
   Gallery = (function() {
     __extends(Gallery, Brick);
     function Gallery() {
+      this.currentAlbum = new Cell("Cars");
       this.currentImg = new Cell;
       this.see = new MustacheView({
         data: __bind(function(v) {
           return {
+            albums: this.albums,
             thumbs: this.thumbs,
-            info: this.info
+            currentImg: this.currentImg
           };
         }, this)
       });
-      this.thumbs = new MustacheView;
-      this.info = new MustacheView({
-        data: __bind(function(v) {
+      this.currentImg.listen(__bind(function(cell, oldvalue, newvalue) {
+        return $('#big-image').attr('src', "/image/" + this.currentAlbum + "/" + newvalue);
+      }, this));
+      this.follower = new ThumbFollower;
+      this.currentImg.listen(this.follower.follow);
+      this.albums = new MustacheView;
+      this.thumbs = new MustacheView({
+        ajaxData: __bind(function() {
           return {
-            image: this.currentImg
+            album: this.currentAlbum.get()
           };
         }, this),
-        autorefresh: this.currentImg
+        autorefresh: this.currentAlbum
       });
       this.main = new MustacheView({
         render: __bind(function(v) {

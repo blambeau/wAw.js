@@ -1,9 +1,27 @@
+body{
+	margin: 10px 25px;
+	font-size:12px;
+	line-height:1.5;
+	font-family: corbel, 'lucida grande', helvetica, sans-serif;
+	color:#212122;
+	background-color:#fff;
+}
+a, a:visited{
+	color:#212122;
+	text-decoration: none;
+}
+a:hover{
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+
 #left {
-	width: 50%;
+	width: 55%;
 	float: left;
 }
 #right {
-	width: 50%;
+	width: 45%;
 	float: right;
 }
 ul#thumbs {
@@ -16,6 +34,63 @@ ul#thumbs li {
 	width: 130px; height: 130px; 
 	border: 1px solid white;
 }
-#info img {
+#big-image {
 	width: 100%;
+}
+
+#albums select {
+	width: 200px;
+}
+
+#thumb-hider, #button-box {
+  position: absolute;
+	width: 130px; 
+	height: 130px; 
+	line-height: 130px;
+	z-index: 2000;
+}
+#thumb-hider {
+  border: 1px dashed black;
+  background: white;
+  opacity: 0.6;
+}
+#button-box {
+	text-align: center;
+}
+#button-box .container {
+	padding: 25px 0px;
+	width: 84px;
+	margin:auto;
+}
+#button-box a {
+	opacity: 1.0;
+	display: block;
+	float: left;
+	width: 32px;
+	height: 32px;
+	margin: 5px;
+}
+#button-d {
+	background: url(images/delete_grey_32.png) no-repeat;
+}
+#button-d:hover {
+	background: url(images/delete_32.png) no-repeat;
+}
+#button-v {
+	background: url(images/view_grey_32.png) no-repeat;
+}
+#button-v:hover {
+	background: url(images/view_32.png) no-repeat;
+}
+#button-rleft {
+	background: url(images/rleft_grey_32.png) no-repeat;
+}
+#button-rleft:hover {
+	background: url(images/rleft_32.png) no-repeat;
+}
+#button-rright {
+	background: url(images/rright_grey_32.png) no-repeat;
+}
+#button-rright:hover {
+	background: url(images/rright_32.png) no-repeat;
 }
