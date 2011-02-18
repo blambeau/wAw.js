@@ -68,7 +68,7 @@
   Gallery = (function() {
     __extends(Gallery, Brick);
     function Gallery() {
-      this.model = new Model;
+      this.deletePicture = __bind(this.deletePicture, this);;      this.model = new Model;
       this.currentAlbum = new Cell("Cars");
       this.currentImg = new Cell;
       this.see = new View({
@@ -110,6 +110,9 @@
     }
     Gallery.prototype.wInit = function() {
       return this.main.refresh();
+    };
+    Gallery.prototype.deletePicture = function() {
+      return $("#thumbs > li > img[thumb-id='" + this.currentImg + "']").parent().remove();
     };
     return Gallery;
   })();

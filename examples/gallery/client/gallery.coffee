@@ -84,6 +84,9 @@ class Gallery extends Brick
   wInit: ->
     @main.refresh()
 
+  deletePicture: =>
+	  $("#thumbs > li > img[thumb-id='#{@currentImg}']").parent().remove()
+
 # When the document is ready, we build an app instance and start 
 # running it
 $(document).ready ->

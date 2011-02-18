@@ -7,7 +7,7 @@
 <div id="button-box" style="display:none;">
   <div class="container">
     <a id="button-v" onclick=""></a>
-    <a id="button-d" onclick=""></a>
+    <a id="button-d" onclick="$.gallery.deletePicture()"></a>
     <a id="button-rleft" onclick=""></a>
     <a id="button-rright" onclick=""></a>
   </div>
