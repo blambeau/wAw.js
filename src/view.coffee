@@ -12,8 +12,14 @@ exports.View = class View extends Brick
       "#" + v.wName()
     template: (v)->
       v._template ?= $.ajax(url: v.url(), async: false).responseText
+    handler:
+      'server'
     render: (v)->
-      $.ajax(url: v.url(), async: false).responseText
+      switch v.handler()
+        when 'server'
+          $.ajax(url: v.url(), async: false).responseText
+        when 'mustache'
+          Mustache.to_html(v.template(), v.renderData())
 
   constructor: (opts) ->
 	  if $?

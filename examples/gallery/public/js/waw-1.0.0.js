@@ -251,11 +251,17 @@ function require(x) { return exports; };
           async: false
         }).responseText;
       },
+      handler: 'server',
       render: function(v) {
-        return $.ajax({
-          url: v.url(),
-          async: false
-        }).responseText;
+        switch (v.handler()) {
+          case 'server':
+            return $.ajax({
+              url: v.url(),
+              async: false
+            }).responseText;
+          case 'mustache':
+            return Mustache.to_html(v.template(), v.renderData());
+        }
       }
     };
     function View(opts) {

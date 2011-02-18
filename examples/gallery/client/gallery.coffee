@@ -1,12 +1,3 @@
-class MustacheView extends View
-  
-  defaults:
-    render: (v)->
-      Mustache.to_html(v.template(), v.renderData())
-  
-  constructor: (opts)->
-    super $.extend({}, this.defaults, opts)
-
 class ThumbFollower extends Brick
   
   follow: (cell, oldvalue, newvalue)=>
@@ -56,7 +47,8 @@ class Gallery extends Brick
     @currentImg = new Cell
 
     # Rendering of the /see page
-    @see = new MustacheView
+    @see = new View
+      handler: 'mustache'
       renderData: =>
         { albums: @albums, thumbs: @thumbs }
 
@@ -69,12 +61,14 @@ class Gallery extends Brick
     @currentImg.listen @follower.follow
 
     # Rendering of the album selector
-    @albums = new MustacheView
+    @albums = new View
+      handler: 'mustache'
       renderData: =>
         { albums: @model.albums() }
 
     # Rendering of the thumbnails at left of /see
-    @thumbs = new MustacheView
+    @thumbs = new View
+      handler: 'mustache'
       renderData: =>
         { images: @model.images(@currentAlbum) }
       autorefresh: 
@@ -82,7 +76,7 @@ class Gallery extends Brick
 
     # This is the main page, as a View. It will be explicitely
     # refreshed at startup (see wInit)
-    @main = new MustacheView
+    @main = new View
       render: (v)=> 
         @see.render()
 
