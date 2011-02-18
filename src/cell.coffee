@@ -21,3 +21,6 @@ exports.Cell = class Cell extends Brick
 
   listen: (fn) -> 
     this.wListen('changed', fn)
+
+  toString: ->
+	  this.get().toString()
