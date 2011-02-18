@@ -43,7 +43,7 @@
   Gallery = (function() {
     __extends(Gallery, Brick);
     function Gallery() {
-      this.currentImg = new Cell("Coucou");
+      this.currentImg = new Cell;
       this.seePage = new MustacheView({
         id: 'see',
         data: __bind(function(v) {

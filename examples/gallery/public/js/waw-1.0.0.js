@@ -186,7 +186,13 @@ function require(x) { return exports; };
       return this.wListen('changed', fn);
     };
     Cell.prototype.toString = function() {
-      return this.get().toString();
+      var v;
+      v = this.get();
+      if (v != null) {
+        return v.toString();
+      } else {
+        return null;
+      }
     };
     return Cell;
   })();

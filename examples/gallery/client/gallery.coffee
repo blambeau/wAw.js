@@ -23,7 +23,7 @@ class Gallery extends Brick
     # This cell will keep the name of the current image displayed. 
     # Views that depend on the current image automatically refresh 
     # thanks to the listen support.
-    @currentImg = new Cell("Coucou")
+    @currentImg = new Cell
 
     # Rendering of the /see page
     @seePage = new MustacheView
