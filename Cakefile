@@ -26,32 +26,30 @@ onerror = (err)->
 
 build = (callback)->
   log "Compiling CoffeeScript to JavaScript ...", green
-  exec "rm -rf lib && coffee -c -l -o lib src", (err, stdout)->
+  exec "mkdir dist/compile"
+  exec "rm -rf lib && coffee -c -b -l -o dist/compile src", (err, stdout)->
     callback err
 task "build", "Compile CoffeeScript to JavaScript", -> build onerror
 
 dist = (callback)->
   target = "dist/waw-#{VERSION}.js"
   log "Compiling #{target}", green
-
-  # compile .coffee files in order
-  order = fs.readFileSync("src/dependencies").toString().split("\n")
-  exec "coffee -p -c -l -j src/#{order.join(' src/')}", (err, stdout)->
-    callback err
-
-    code = ""
-    code += fs.readFileSync("dist/browser.pre.js")
-    code += stdout.toString()
-    code += fs.readFileSync("dist/browser.post.js")
-
-    fs.writeFileSync target, code
+  build(callback)
+  code = ""
+  code += fs.readFileSync("dist/browser.pre.js")
+  for file in fs.readdirSync('dist/compile')
+    code += "builder['./Child'] = function(exports){\n"
+    code += fs.readFileSync("dist/compile/#{file}")
+    code += "};"
+  code += fs.readFileSync("dist/browser.post.js")
+  # {parser, uglify} = require 'uglify-js'
+  # code = uglify.gen_code uglify.ast_squeeze uglify.ast_mangle parser.parse code
+  fs.writeFileSync target, code
 task "dist", "Building waw.js distribution", -> dist onerror
 
 clean = (callback)->
   exec "rm -rf lib", callback
 task "clean", "Remove temporary files and such", -> clean onerror
-
-
 
 # Tests
 
