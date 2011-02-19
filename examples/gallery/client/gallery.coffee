@@ -1,7 +1,7 @@
 class ThumbFollower extends Brick
   
   follow: (cell, oldvalue, newvalue)=>
-    this.move $("img[thumb-id='#{newvalue}']").position()
+    this.move $("img[imgid='#{newvalue}']").position()
 
   move: (pos)->
     css = {"left": (pos.left) + "px", "top": (pos.top) + "px"}
@@ -84,15 +84,20 @@ class Gallery extends Brick
   wInit: ->
     @main.refresh()
 
-  deletePicture: =>
+  toggleDelete: =>
     img = @currentImg.get()
+    success = ->
+      li = $(".thumbs > li > img[imgid='#{img}']").parent()
+      if li.parent().attr('id') == "kept-thumbs"
+        li.appendTo $('#deleted-thumbs')
+      else
+        li.appendTo $('#kept-thumbs')
     $.ajax
-      url: '/delpict'
+      url: '/toggle-delete'
       type: 'POST'
       data: { album: @currentAlbum.get(), image: img }
-      success: ->
-        $("#thumbs > li > img[thumb-id='#{img}']").parent().remove()
-
+      success: success
+    
 # When the document is ready, we build an app instance and start 
 # running it
 $(document).ready ->

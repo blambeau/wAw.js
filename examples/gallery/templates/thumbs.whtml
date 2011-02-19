@@ -1,23 +1,32 @@
-<ul id="thumbs">
-  {{#images}}
-    <li><img class="thumb" src="thumb/{{albid}}/{{imgid}}" thumb-id="{{imgid}}"/></li>
-  {{/images}}
-</ul>
-<div id="thumb-hider" style="display:none;"></div>
-<div id="button-box" style="display:none;">
-  <div class="container">
-    <a id="button-v" onclick=""></a>
-    <a id="button-d" onclick="$.gallery.deletePicture()"></a>
-    <a id="button-rleft" onclick=""></a>
-    <a id="button-rright" onclick=""></a>
+<div id="thumbs">
+  <ul id="kept-thumbs" class="thumbs">
+    {{#images}}
+      {{^deleted}}<li><img class="thumb" src="thumb/{{albid}}/{{imgid}}" imgid="{{imgid}}"/></li>{{/deleted}}
+    {{/images}}
+  </ul>
+  <div style="clear:both;"></div>
+  <hr/>
+  <ul id="deleted-thumbs" class="thumbs">
+    {{#images}}
+      {{#deleted}}<li><img class="thumb" src="thumb/{{albid}}/{{imgid}}" imgid="{{imgid}}"/></li>{{/deleted}}
+    {{/images}}
+  </ul>
+  <div id="thumb-hider" style="display:none;"></div>
+  <div id="button-box" style="display:none;">
+    <div class="container">
+      <a id="button-v" onclick=""></a>
+      <a id="button-d" onclick="$.gallery.toggleDelete()"></a>
+      <a id="button-rleft" onclick=""></a>
+      <a id="button-rright" onclick=""></a>
+    </div>
   </div>
+  <script>
+    $('.thumb').mouseover(function(){
+      $.gallery.wSet('currentImg', $(this).attr('imgid'));
+      $.gallery.follower.show();
+    });
+    $('#button-box').mouseleave(function(){
+      $.gallery.follower.hide();
+    });
+  </script>
 </div>
-<script>
-  $('.thumb').mouseover(function(){
-    $.gallery.wSet('currentImg', $(this).attr('thumb-id'));
-    $.gallery.follower.show();
-  });
-  $('#button-box').mouseleave(function(){
-    $.gallery.follower.hide();
-  });
-</script>

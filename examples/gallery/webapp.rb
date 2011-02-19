@@ -15,6 +15,7 @@ end
 ################################################# SINATRA RULES START HERE
 require 'rubygems'
 require 'sinatra'
+require 'less'
 require 'json'
 
 NO_CACHE_HEADERS = {'Cache-control' => "no-store, no-cache, must-revalidate", 
@@ -47,9 +48,9 @@ get %r{^/([\w]+)$} do
   send_file _("templates/#{params[:captures].first}.whtml")
 end
 
-post '/delpict' do
-  puts "Deleting #{params.inspect}"
-  "ok"
+post '/toggle-delete' do
+  content_type :json
+  GALLERY.toggle_delete_image!(params[:album], params[:image])
 end
 
 # Returns info about albums

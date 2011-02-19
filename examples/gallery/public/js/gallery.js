@@ -14,7 +14,7 @@
     }
     __extends(ThumbFollower, Brick);
     ThumbFollower.prototype.follow = function(cell, oldvalue, newvalue) {
-      return this.move($("img[thumb-id='" + newvalue + "']").position());
+      return this.move($("img[imgid='" + newvalue + "']").position());
     };
     ThumbFollower.prototype.move = function(pos) {
       var css;
@@ -68,7 +68,7 @@
   Gallery = (function() {
     __extends(Gallery, Brick);
     function Gallery() {
-      this.deletePicture = __bind(this.deletePicture, this);;      this.model = new Model;
+      this.toggleDelete = __bind(this.toggleDelete, this);;      this.model = new Model;
       this.currentAlbum = new Cell("Cars");
       this.currentImg = new Cell;
       this.see = new View({
@@ -111,19 +111,26 @@
     Gallery.prototype.wInit = function() {
       return this.main.refresh();
     };
-    Gallery.prototype.deletePicture = function() {
-      var img;
+    Gallery.prototype.toggleDelete = function() {
+      var img, success;
       img = this.currentImg.get();
+      success = function() {
+        var li;
+        li = $(".thumbs > li > img[imgid='" + img + "']").parent();
+        if (li.parent().attr('id') === "kept-thumbs") {
+          return li.appendTo($('#deleted-thumbs'));
+        } else {
+          return li.appendTo($('#kept-thumbs'));
+        }
+      };
       return $.ajax({
-        url: '/delpict',
+        url: '/toggle-delete',
         type: 'POST',
         data: {
           album: this.currentAlbum.get(),
           image: img
         },
-        success: function() {
-          return $("#thumbs > li > img[thumb-id='" + img + "']").parent().remove();
-        }
+        success: success
       });
     };
     return Gallery;

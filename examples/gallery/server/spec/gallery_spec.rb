@@ -106,14 +106,16 @@ describe Gallery do
       gallery.image('Cars', 'Morgan.jpg').should == {
         :albid => 'Cars', :imgid => 'Morgan.jpg',
         :path  => File.join('Cars', 'Morgan.jpg'),
-        :thumb => File.join('Cars', 'thumbs', 'Morgan.jpg') }
+        :thumb => File.join('Cars', 'thumbs', 'Morgan.jpg'),
+        :deleted => false }
     end
     
     it "should work when called on a deleted image" do
       gallery.image('Cars', 'Opel.jpg').should == {
         :albid => 'Cars', :imgid => 'Opel.jpg',
         :path  => File.join('Cars', 'trash', 'Opel.jpg'),
-        :thumb => File.join('Cars', 'thumbs', 'Opel.jpg') }
+        :thumb => File.join('Cars', 'thumbs', 'Opel.jpg'),
+        :deleted => true }
     end
     
     it 'should raise an error on non-existing album/image' do
@@ -133,7 +135,8 @@ describe Gallery do
       gallery.kept_images('Cars').should == [
         {:albid => 'Cars', :imgid => 'Morgan.jpg',
          :path  => File.join('Cars', 'Morgan.jpg'),
-         :thumb => File.join('Cars', 'thumbs', 'Morgan.jpg') }
+         :thumb => File.join('Cars', 'thumbs', 'Morgan.jpg'),
+         :deleted => false }
       ]
     end
 
@@ -149,7 +152,8 @@ describe Gallery do
       gallery.deleted_images('Cars').should == [
         {:albid => 'Cars', :imgid => 'Opel.jpg',
          :path  => File.join('Cars', 'trash', 'Opel.jpg'),
-         :thumb => File.join('Cars', 'thumbs', 'Opel.jpg') }
+         :thumb => File.join('Cars', 'thumbs', 'Opel.jpg'),
+         :deleted => true }
       ]
     end
 
@@ -159,4 +163,94 @@ describe Gallery do
     
   end # albums
   
-end
+  context "delete_image!" do
+    
+    context "when called on a kept image" do
+      let(:source){ gallery._('Cars/Test.jpg') }
+      let(:target){ gallery._('Cars/trash/Test.jpg') }
+      before{ FileUtils.cp gallery._('Cars/Morgan.jpg'), source }
+      after { FileUtils.rm_rf(source); FileUtils.rm_rf(target); }
+
+      it 'should move the image to trash and return true' do
+        gallery.delete_image!('Cars', 'Test.jpg').should be_true
+        File.exists?(source).should be_false
+        File.exists?(target).should be_true
+      end
+
+    end # on kept
+    
+    context "when called on a deleted image" do
+      let(:source){ gallery._('Cars/Opel.jpg') }
+      let(:target){ gallery._('Cars/trash/Opel.jpg') }
+
+      it 'should do nothing and return false' do
+        gallery.delete_image!('Cars', 'Opel.jpg').should be_false
+        File.exists?(source).should be_false
+        File.exists?(target).should be_true
+      end
+
+    end # on deleted
+    
+  end # delete_image!
+
+  context "undelete_image!" do
+    
+    context "when called on a deleted image" do
+      let(:source){ gallery._('Cars/trash/Test.jpg') }
+      let(:target){ gallery._('Cars/Test.jpg') }
+      before{ FileUtils.cp gallery._('Cars/Morgan.jpg'), source }
+      after { FileUtils.rm_rf(source); FileUtils.rm_rf(target); }
+
+      it 'should move the image to main and return true' do
+        gallery.undelete_image!('Cars', 'Test.jpg').should be_true
+        File.exists?(source).should be_false
+        File.exists?(target).should be_true
+      end
+
+    end # on deleted
+    
+    context "when called on a kept image" do
+      let(:source){ gallery._('Cars/Morgan.jpg') }
+      let(:target){ gallery._('Cars/trash/Margan.jpg') }
+    
+      it 'should do nothing and return false' do
+        gallery.undelete_image!('Cars', 'Morgan.jpg').should be_false
+        File.exists?(source).should be_true
+        File.exists?(target).should be_false
+      end
+    
+    end # on deleted
+    
+  end # delete_image!
+  
+  context "toggle_delete_image!" do
+
+    context "when called on a kept image" do
+      let(:source){ gallery._('Cars/Test.jpg') }
+      let(:target){ gallery._('Cars/trash/Test.jpg') }
+      before{ FileUtils.cp gallery._('Cars/Morgan.jpg'), source }
+      after { FileUtils.rm_rf(source); FileUtils.rm_rf(target); }
+
+      it 'should move the image to trash and return :deleted' do
+        gallery.toggle_delete_image!('Cars', 'Test.jpg').should == :deleted
+        File.exists?(source).should be_false
+        File.exists?(target).should be_true
+      end
+    end # on kept
+    
+    context "when called on a deleted image" do
+      let(:source){ gallery._('Cars/trash/Test.jpg') }
+      let(:target){ gallery._('Cars/Test.jpg') }
+      before{ FileUtils.cp gallery._('Cars/Morgan.jpg'), source }
+      after { FileUtils.rm_rf(source); FileUtils.rm_rf(target); }
+
+      it 'should move the image to main and return true' do
+        gallery.toggle_delete_image!('Cars', 'Test.jpg').should == :undeleted
+        File.exists?(source).should be_false
+        File.exists?(target).should be_true
+      end
+    end # on deleted
+    
+  end
+  
+end # describe Gallery

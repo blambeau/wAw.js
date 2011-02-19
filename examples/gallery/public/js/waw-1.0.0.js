@@ -310,7 +310,7 @@ function require(x) { return exports; };
     View.prototype.refresh = function() {
       var sel;
       sel = this.selector();
-      return $(sel).html(this.toString());
+      return $(sel).replaceWith(this.toString());
     };
     View.prototype.toString = function() {
       return this.render().toString();
