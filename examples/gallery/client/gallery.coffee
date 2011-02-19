@@ -1,37 +1,3 @@
-class ThumbFollower extends Brick
-  
-  follow: (cell, oldvalue, newvalue)=>
-    this.move $("img[imgid='#{newvalue}']").position()
-
-  move: (pos)->
-    css = {"left": (pos.left) + "px", "top": (pos.top) + "px"}
-    $('#thumb-hider').css(css)
-    $('#button-box').css(css)
-
-  show: ->
-    $('#thumb-hider').show()
-    $('#button-box').show()
-
-  hide: ->
-    $('#thumb-hider').hide()
-    $('#button-box').hide()
-
-class Model extends Brick
-  
-  defaults:
-    async: false,
-    dataType: 'json',
-  
-  albums: ->
-    params = { url: '/albums.json' }
-    params = $.extend({}, this.defaults, params)
-    $.parseJSON $.ajax(params).responseText
-
-  images: (alb)->
-    params = { url: '/images.json', data: {album: alb.toString()} }
-    params = $.extend({}, this.defaults, params)
-    $.parseJSON $.ajax(params).responseText
-
 class Gallery extends Brick
   
   # Builds the Gallery brick
@@ -56,8 +22,8 @@ class Gallery extends Brick
     @currentImg.listen (cell, oldvalue, newvalue) =>
       $('#big-image').attr('src', "/image/#{@currentAlbum}/#{newvalue}")
 
-    # We also listen to update a ThumbFollower instance
-    @follower = new ThumbFollower
+    # We also listen to update a Follower instance
+    @follower = new Follower
     @currentImg.listen @follower.follow
 
     # Rendering of the album selector

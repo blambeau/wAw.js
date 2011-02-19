@@ -1,40 +1,13 @@
 (function() {
-  var Gallery, Model, ThumbFollower;
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; }, __hasProp = Object.prototype.hasOwnProperty, __extends = function(child, parent) {
+  var Follower, Gallery, Model;
+  var __hasProp = Object.prototype.hasOwnProperty, __extends = function(child, parent) {
     for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; }
     function ctor() { this.constructor = child; }
     ctor.prototype = parent.prototype;
     child.prototype = new ctor;
     child.__super__ = parent.prototype;
     return child;
-  };
-  ThumbFollower = (function() {
-    function ThumbFollower() {
-      this.follow = __bind(this.follow, this);;      ThumbFollower.__super__.constructor.apply(this, arguments);
-    }
-    __extends(ThumbFollower, Brick);
-    ThumbFollower.prototype.follow = function(cell, oldvalue, newvalue) {
-      return this.move($("img[imgid='" + newvalue + "']").position());
-    };
-    ThumbFollower.prototype.move = function(pos) {
-      var css;
-      css = {
-        "left": pos.left + "px",
-        "top": pos.top + "px"
-      };
-      $('#thumb-hider').css(css);
-      return $('#button-box').css(css);
-    };
-    ThumbFollower.prototype.show = function() {
-      $('#thumb-hider').show();
-      return $('#button-box').show();
-    };
-    ThumbFollower.prototype.hide = function() {
-      $('#thumb-hider').hide();
-      return $('#button-box').hide();
-    };
-    return ThumbFollower;
-  })();
+  }, __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
   Model = (function() {
     function Model() {
       Model.__super__.constructor.apply(this, arguments);
@@ -65,6 +38,33 @@
     };
     return Model;
   })();
+  Follower = (function() {
+    function Follower() {
+      this.follow = __bind(this.follow, this);;      Follower.__super__.constructor.apply(this, arguments);
+    }
+    __extends(Follower, Brick);
+    Follower.prototype.follow = function(cell, oldvalue, newvalue) {
+      return this.move($("img[imgid='" + newvalue + "']").position());
+    };
+    Follower.prototype.move = function(pos) {
+      var css;
+      css = {
+        "left": pos.left + "px",
+        "top": pos.top + "px"
+      };
+      $('#thumb-hider').css(css);
+      return $('#button-box').css(css);
+    };
+    Follower.prototype.show = function() {
+      $('#thumb-hider').show();
+      return $('#button-box').show();
+    };
+    Follower.prototype.hide = function() {
+      $('#thumb-hider').hide();
+      return $('#button-box').hide();
+    };
+    return Follower;
+  })();
   Gallery = (function() {
     __extends(Gallery, Brick);
     function Gallery() {
@@ -87,7 +87,7 @@
       this.currentImg.listen(__bind(function(cell, oldvalue, newvalue) {
         return $('#big-image').attr('src', "/image/" + this.currentAlbum + "/" + newvalue);
       }, this));
-      this.follower = new ThumbFollower;
+      this.follower = new Follower;
       this.currentImg.listen(this.follower.follow);
       this.albums = new View({
         handler: 'mustache',

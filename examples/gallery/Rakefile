@@ -9,15 +9,24 @@ end
 
 desc "Builds the application (gallery.coffee -> gallery.js)"
 task :build do
+  
   # Copy the last waw.js version 
   `cd #{WAWJS_ROOT} && cake dist`
   FileUtils.cp WAWJS, _("public/js")
 
   # Compile the client application
-  puts "Building gallery.js"
-  client_coffee = _('client/gallery.coffee')
-  client_js     = _('public/js/gallery.js')
-  puts `coffee -c -o #{File.dirname(client_js)} #{client_coffee}`
+  files = ['model', 'follower', 'gallery'].collect{|name|
+    _("client/#{name}.coffee")
+  }
+  target = _('public/js/gallery.js')
+  
+  cmd = "coffee -c -j -o #{File.dirname(target)} #{files.join(' ')}"
+  puts "Build .js cient: #{cmd}"
+  if Kernel.system(cmd)
+    FileUtils.mv File.join(File.dirname(target), "concatenation.js"), target
+  else
+    raise "An error occured when building .js client"
+  end
 end
 
 desc "Runs the application"
