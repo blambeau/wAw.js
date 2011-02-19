@@ -84,3 +84,15 @@ test "Brick#wSet with relative", ->
 test "Brick#wGet with absolute", ->
   b1.wSet('/b2/c1', 15)
   ok b1.wGet('/b2/c1') is 15
+
+# wCall
+
+test "Brick#wCall with relative", ->
+  got = b1.wCall 'b2', ->
+    this.wQid()
+  ok got is '/b2'
+
+test "Brick#wCall with absolute", ->
+  got = b1.wCall '/b2/b3', ->
+    this.wQid()
+  ok got is '/b2/b3'

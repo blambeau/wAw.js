@@ -211,3 +211,18 @@ exports.Brick = class Brick
     else
       throw "Not an emittable #{fetched}"
     this
+
+  ############################################################## Calling
+
+  # 
+  # Executes fn in the context of the object fetched with wFetch(sel)
+  #
+  # Throws when:
+  #   - wFetch(sel) throws an error itself
+  #
+  wCall: (sel, fn) ->
+    fetched = this.wFetch(sel)
+    if fetched?
+      return fn.apply(fetched)
+    else
+      throw "Not found #{sel}"
