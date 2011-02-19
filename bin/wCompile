@@ -19,12 +19,16 @@ class Compile < Quickl::Command(__FILE__, __LINE__)
   # Command's version
   VERSION = "1.0.0"
   
-  # Header file?
+  # Which header file to use
   attr_reader :header
+  
+  # Uglify result?
+  attr_reader :uglify
   
   # Install command options
   options do |opt|
     opt.on('--header=FILE'){|value| @header = value}
+    opt.on('-u', '--[no-]uglify'){|value| @uglify = value}
     opt.on_tail("--help", "Show help"){ raise Quickl::Help }
     opt.on_tail("--version", "Show version") do
       raise Quickl::Exit, "#{program_name} #{VERSION} (c) 2010, Bernard Lambeau"
@@ -33,6 +37,17 @@ class Compile < Quickl::Command(__FILE__, __LINE__)
   
   def _(file)
     File.expand_path("../../#{file}", __FILE__)
+  end
+  
+  def do_uglify(code)
+    require "tempfile"
+    file = Tempfile.new('waw.js.code')
+    file << code
+    file.close
+    command = "uglifyjs #{file.path}"
+    code = `#{command}`
+    file.unlink
+    code
   end
 
   def compile(srcfolder)
@@ -47,8 +62,7 @@ class Compile < Quickl::Command(__FILE__, __LINE__)
       code += "  };\n"
     end
     code += File.read _("dist/browser.post.js")
-    # {parser, uglify} = require 'uglify-js'
-    # code = uglify.gen_code uglify.ast_squeeze uglify.ast_mangle parser.parse code
+    code = do_uglify(code) if uglify
     code
   end
   
