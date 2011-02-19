@@ -7,6 +7,25 @@ def _(relative)
   File.expand_path("../#{relative}", __FILE__)
 end
 
+begin
+  require 'rake/testtask'
+  desc "Run unit tests"
+  Rake::TestTask.new(:unit_test) do |t|
+    t.libs = ["src"]
+    t.verbose = false
+    # Glob pattern to match test files. (default is 'test/test*.rb')
+    t.pattern = "test/*_test.rb"
+  end
+rescue LoadError => ex
+  task :unit_test do
+    abort 'rspec is not available. In order to run spec, you must: gem install rspec'
+  end
+ensure
+  desc "Run all tests"
+  task :test => [:unit_test]
+end
+
+
 desc "Builds the application (gallery.coffee -> gallery.js)"
 task :build do
   

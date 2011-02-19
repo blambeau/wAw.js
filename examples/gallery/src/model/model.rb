@@ -1,15 +1,21 @@
-class Model
+class Model < Waw::Brick
   
-  def initialize(gallery)
-    @gallery = gallery
+  def initialize(igallery)
+    super
+    @igallery = igallery
   end
   
   def albums(*args)
-    @gallery.albums
+    @igallery.albums
   end
   
   def images(albid, *args)
-    @gallery.all_images(albid)
+    @igallery.all_images(albid)
   end
   
+  get '/:what' do
+    content_type :json
+    send(params[:what], params[:albid]).to_json
+  end
+
 end # class Model

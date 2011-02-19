@@ -1,6 +1,7 @@
-class See
+class See < Waw::Brick
   
   def initialize(gallery)
+    super
     @gallery = gallery
   end
   
@@ -16,4 +17,11 @@ class See
     @gallery.toggle_delete_image!(albid, imgid)
   end
   
+  set :public, File.expand_path("../public", __FILE__)
+
+  post '/:what' do
+    content_type :json
+    send(params[:what], params[:albid], params[:imgid]).to_json
+  end
+
 end
