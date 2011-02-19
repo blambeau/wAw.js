@@ -51,12 +51,10 @@ describe IMagick do
     
   end # command_for
   
-  context "create_thumnail" do
+  context "create_thumbnail" do
     let(:source){ File.expand_path('../fixtures/Cars/Morgan.jpg', __FILE__) }
     let(:target){ File.expand_path('../fixtures/Cars/thumbs/Morgan.jpg', __FILE__) }
-    
     before{ FileUtils.rm_rf(target) }
-    after { FileUtils.rm_rf(target) }
       
     it 'should create the thumbnail file' do
       IMagick.create_thumbnail(source, target)
@@ -64,5 +62,27 @@ describe IMagick do
     end
     
   end # command_for
+  
+  context "rotate_left" do
+    let(:source){ File.expand_path('../fixtures/Cars/Morgan.jpg', __FILE__)       }
+    let(:target){ File.expand_path('../fixtures/Cars/check/left.jpg', __FILE__)   }
+    before{ FileUtils.mkdir_p(File.dirname(target)) }
+
+    it 'should create the target file' do
+      IMagick.rotate_left(source, target)
+      File.exists?(target).should be_true
+    end
+  end # rotate_left
+  
+  context "rotate_right" do
+    let(:source){ File.expand_path('../fixtures/Cars/Morgan.jpg', __FILE__)       }
+    let(:target){ File.expand_path('../fixtures/Cars/check/right.jpg', __FILE__)   }
+    before{ FileUtils.mkdir_p(File.dirname(target)) }
+
+    it 'should create the target file' do
+      IMagick.rotate_right(source, target)
+      File.exists?(target).should be_true
+    end
+  end # rotate_right
   
 end

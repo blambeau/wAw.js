@@ -68,6 +68,8 @@
   Gallery = (function() {
     __extends(Gallery, Brick);
     function Gallery() {
+      this.rotateRight = __bind(this.rotateRight, this);;
+      this.rotateLeft = __bind(this.rotateLeft, this);;
       this.toggleDelete = __bind(this.toggleDelete, this);;      this.model = new Model;
       this.currentAlbum = new Cell("Cars");
       this.currentImg = new Cell;
@@ -131,6 +133,42 @@
           image: img
         },
         success: success
+      });
+    };
+    Gallery.prototype.rotateLeft = function() {
+      var img;
+      img = this.currentImg.get();
+      return $.ajax({
+        url: '/rotate-left',
+        type: 'POST',
+        data: {
+          album: this.currentAlbum.get(),
+          image: img
+        },
+        success: function() {
+          img = $(".thumbs > li > img[imgid='" + img + "']");
+          img.attr('src', img.attr('src'));
+          img = $("#big-image}");
+          return img.attr('src', img.attr('src'));
+        }
+      });
+    };
+    Gallery.prototype.rotateRight = function() {
+      var img;
+      img = this.currentImg.get();
+      return $.ajax({
+        url: '/rotate-right',
+        type: 'POST',
+        data: {
+          album: this.currentAlbum.get(),
+          image: img
+        },
+        success: function() {
+          img = $(".thumbs > li > img[imgid='" + img + "']");
+          img.attr('src', img.attr('src'));
+          img = $("#big-image}");
+          return img.attr('src', img.attr('src'));
+        }
       });
     };
     return Gallery;

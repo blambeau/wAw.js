@@ -16,8 +16,8 @@
     <div class="container">
       <a id="button-v" onclick=""></a>
       <a id="button-d" onclick="$.gallery.toggleDelete()"></a>
-      <a id="button-rleft" onclick=""></a>
-      <a id="button-rright" onclick=""></a>
+      <a id="button-rleft" onclick="$.gallery.rotateLeft()"></a>
+      <a id="button-rright" onclick="$.gallery.rotateRight()"></a>
     </div>
   </div>
   <script>

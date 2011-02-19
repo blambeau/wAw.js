@@ -63,12 +63,12 @@ describe Gallery do
     context "on the Cars album" do
       let(:thumb){ gallery._("Cars/thumbs/Morgan.jpg") }
       before{ FileUtils.rm_rf thumb }
-      after{ FileUtils.rm_rf thumb }
       
       it 'should create thumbnails' do
         gallery.normalize_all_albums
         File.exists?(thumb).should be_true
       end
+      
     end
     
   end # normalize_all_albums
@@ -251,6 +251,58 @@ describe Gallery do
       end
     end # on deleted
     
+  end # toggle_delete_image!
+  
+  context "rotate_image_left!" do
+    
+    let(:source){ gallery._('Cars/Test.jpg') }
+    let(:thumb) { gallery._('Cars/thumbs/Test.jpg') }
+    before{ 
+      FileUtils.cp gallery._('Cars/Morgan.jpg'), source 
+      FileUtils.cp gallery._('Cars/thumbs/Morgan.jpg'), thumb 
+    }
+    after { 
+      FileUtils.rm_rf(source)
+      FileUtils.rm_rf(thumb)
+    }
+    
+    it 'should have modified the file and the thumb' do
+      require 'digest/md5'
+      bef = [ Digest::MD5.hexdigest(File.read(source)),
+              Digest::MD5.hexdigest(File.read(thumb)) ]
+      gallery.rotate_image_left!('Cars', 'Test.jpg').should be_true
+      aft = [ Digest::MD5.hexdigest(File.read(source)),
+              Digest::MD5.hexdigest(File.read(thumb)) ]
+      bef[0].should_not == aft[0]
+      bef[1].should_not == aft[1]
+    end
+    
   end
+
+  context "rotate_image_right!" do
+    
+    let(:source){ gallery._('Cars/Test.jpg') }
+    let(:thumb) { gallery._('Cars/thumbs/Test.jpg') }
+    before{ 
+      FileUtils.cp gallery._('Cars/Morgan.jpg'), source 
+      FileUtils.cp gallery._('Cars/thumbs/Morgan.jpg'), thumb 
+    }
+    after { 
+      FileUtils.rm_rf(source)
+      FileUtils.rm_rf(thumb)
+    }
+    
+    it 'should have modified the file and the thumb' do
+      require 'digest/md5'
+      bef = [ Digest::MD5.hexdigest(File.read(source)),
+              Digest::MD5.hexdigest(File.read(thumb)) ]
+      gallery.rotate_image_right!('Cars', 'Test.jpg').should be_true
+      aft = [ Digest::MD5.hexdigest(File.read(source)),
+              Digest::MD5.hexdigest(File.read(thumb)) ]
+      bef[0].should_not == aft[0]
+      bef[1].should_not == aft[1]
+    end
+    
+  end # rotate_image_right!
   
 end # describe Gallery

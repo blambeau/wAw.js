@@ -53,6 +53,16 @@ post '/toggle-delete' do
   GALLERY.toggle_delete_image!(params[:album], params[:image])
 end
 
+post '/rotate-right' do
+  content_type :json
+  GALLERY.rotate_image_right!(params[:album], params[:image])
+end
+
+post '/rotate-left' do
+  content_type :json
+  GALLERY.rotate_image_left!(params[:album], params[:image])
+end
+
 # Returns info about albums
 get '/albums.json' do
   content_type :json

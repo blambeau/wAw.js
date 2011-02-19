@@ -97,6 +97,30 @@ class Gallery extends Brick
       type: 'POST'
       data: { album: @currentAlbum.get(), image: img }
       success: success
+
+  rotateLeft: =>
+    img = @currentImg.get()
+    $.ajax
+      url: '/rotate-left'
+      type: 'POST'
+      data: { album: @currentAlbum.get(), image: img }
+      success: ->
+        img = $(".thumbs > li > img[imgid='#{img}']")
+        img.attr('src', img.attr('src'))
+        img = $("#big-image}")
+        img.attr('src', img.attr('src'))
+    
+  rotateRight: =>
+    img = @currentImg.get()
+    $.ajax
+      url: '/rotate-right'
+      type: 'POST'
+      data: { album: @currentAlbum.get(), image: img }
+      success: ->
+        img = $(".thumbs > li > img[imgid='#{img}']")
+        img.attr('src', img.attr('src'))
+        img = $("#big-image}")
+        img.attr('src', img.attr('src'))
     
 # When the document is ready, we build an app instance and start 
 # running it
