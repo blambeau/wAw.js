@@ -8,6 +8,7 @@
 </div>
 <script>
   $('#album-selector').change(function(){
-    $.gallery.wSet('/see/currentAlbum', $('#album-selector').val());
+    albid = $('#album-selector').val();
+    {{#wCall}}currentAlbum.set(albid){{/wCall}}
   });
 </script>

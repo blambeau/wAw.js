@@ -68,6 +68,7 @@
   See = (function() {
     __extends(See, Brick);
     function See(model) {
+      var wCallRender;
       this.model = model;
       this.toggleDelete = __bind(this.toggleDelete, this);;
       this.rotateRight = __bind(this.rotateRight, this);;
@@ -91,11 +92,24 @@
       }, this));
       this.follower = new Follower;
       this.currentImg.listen(this.follower.follow);
+      wCallRender = function(text, render) {
+        var x;
+        x = "$.gallery.see." + (render(text));
+        if (x[x.length - 1] !== ')') {
+          x += "()";
+        }
+        x += ";";
+        console.log("Rendering |" + x + "|");
+        return x;
+      };
       this.albums = new View({
         handler: 'mustache',
         renderData: __bind(function() {
           return {
-            albums: this.model.albums()
+            albums: this.model.albums(),
+            wCall: function() {
+              return wCallRender;
+            }
           };
         }, this)
       });
@@ -103,7 +117,10 @@
         handler: 'mustache',
         renderData: __bind(function() {
           return {
-            images: this.model.images(this.currentAlbum)
+            images: this.model.images(this.currentAlbum),
+            wCall: function() {
+              return wCallRender;
+            }
           };
         }, this),
         autorefresh: this.currentAlbum

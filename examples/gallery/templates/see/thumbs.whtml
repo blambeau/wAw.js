@@ -14,19 +14,20 @@
   <div id="thumb-hider" style="display:none;"></div>
   <div id="button-box" style="display:none;">
     <div class="container">
-      <a id="button-v" onclick=""></a>
-      <a id="button-d" onclick="$.gallery.see.toggleDelete()"></a>
-      <a id="button-rleft" onclick="$.gallery.see.rotateLeft()"></a>
-      <a id="button-rright" onclick="$.gallery.see.rotateRight()"></a>
+      <a id="button-v"      onclick=""></a>
+      <a id="button-d"      onclick="{{#wCall}}toggleDelete{{/wCall}}"></a>
+      <a id="button-rleft"  onclick="{{#wCall}}rotateLeft{{/wCall}}"></a>
+      <a id="button-rright" onclick="{{#wCall}}rotateRight{{/wCall}}"></a>
     </div>
   </div>
   <script>
     $('.thumb').mouseover(function(){
-      $.gallery.wSet('/see/currentImg', $(this).attr('imgid'));
-      $.gallery.see.follower.show();
+      img = $(this).attr('imgid');
+      {{#wCall}}currentImg.set(img){{/wCall}}
+      {{#wCall}}follower.show{{/wCall}}
     });
     $('#button-box').mouseleave(function(){
-      $.gallery.see.follower.hide();
+      {{#wCall}}follower.hide{{/wCall}}
     });
   </script>
 </div>
