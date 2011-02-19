@@ -20,7 +20,7 @@
     Model.prototype.albums = function() {
       var params;
       params = {
-        url: '/albums.json'
+        url: '/model/albums'
       };
       params = $.extend({}, this.defaults, params);
       return $.parseJSON($.ajax(params).responseText);
@@ -28,9 +28,9 @@
     Model.prototype.images = function(alb) {
       var params;
       params = {
-        url: '/images.json',
+        url: '/model/images',
         data: {
-          album: alb.toString()
+          albid: alb.toString()
         }
       };
       params = $.extend({}, this.defaults, params);

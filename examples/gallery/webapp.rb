@@ -1,11 +1,14 @@
 ################################################# SOME TOOLS
 $LOAD_PATH.unshift File.expand_path('../server/lib', __FILE__)
+$LOAD_PATH.unshift File.expand_path('../src', __FILE__)
 require 'gallery'
+require 'model'
 
 # Root folder of the gallery example
 EXAMPLE_ROOT = File.expand_path('..', __FILE__)
 GALLERY_ROOT = File.join(EXAMPLE_ROOT, "albums")
 GALLERY      = Gallery.open(GALLERY_ROOT)
+MODEL        = Model.new(GALLERY)
 
 # Absolutizes a path from the gallery root (i.e. __DIR__)
 def _(relative) 
@@ -68,14 +71,7 @@ post '/rotate-left' do
   GALLERY.rotate_image_left!(params[:album], params[:image])
 end
 
-# Returns info about albums
-get '/albums.json' do
+get '/model/:what' do
   content_type :json
-  GALLERY.albums.to_json
-end
-
-# Returns info about images
-get '/images.json' do
-  content_type :json
-  GALLERY.all_images(params[:album]).to_json
+  MODEL.send(params[:what], params[:albid]).to_json
 end

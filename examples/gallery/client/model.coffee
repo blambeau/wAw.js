@@ -5,12 +5,12 @@ class Model extends Brick
     dataType: 'json',
   
   albums: ->
-    params = { url: '/albums.json' }
+    params = { url: '/model/albums' }
     params = $.extend({}, this.defaults, params)
     $.parseJSON $.ajax(params).responseText
 
   images: (alb)->
-    params = { url: '/images.json', data: {album: alb.toString()} }
+    params = { url: '/model/images', data: {albid: alb.toString()} }
     params = $.extend({}, this.defaults, params)
     $.parseJSON $.ajax(params).responseText
 
