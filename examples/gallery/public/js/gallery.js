@@ -75,7 +75,6 @@
       this.thumbServerCall = __bind(this.thumbServerCall, this);;
       this.withThumbWait = __bind(this.withThumbWait, this);;
       this.render = __bind(this.render, this);;
-      this.wCallRender = __bind(this.wCallRender, this);;
       this.currentAlbum = new Cell("Cars");
       this.currentImg = new Cell;
       this.index = new View({
@@ -95,42 +94,21 @@
       this.albums = new View({
         handler: 'mustache',
         renderData: __bind(function() {
-          var renderer;
-          renderer = this.wCallRender;
           return {
-            albums: this.model.albums(),
-            wCall: function() {
-              return renderer;
-            }
+            albums: this.model.albums()
           };
         }, this)
       });
       this.thumbs = new View({
         handler: 'mustache',
         renderData: __bind(function() {
-          var renderer;
-          renderer = this.wCallRender;
           return {
-            images: this.model.images(this.currentAlbum),
-            wCall: function() {
-              return renderer;
-            }
+            images: this.model.images(this.currentAlbum)
           };
         }, this),
         autorefresh: this.currentAlbum
       });
     }
-    See.prototype.wCallRender = function(text, render) {
-      var call;
-      call = render(text);
-      if (call[call.length - 1] !== ')') {
-        call += "()";
-      }
-      call = "function(callee){ callee." + call + "; }";
-      call = "$.wCall('" + (this.wQid()) + "', " + call + ");";
-      console.log("Rendering |" + call + "|");
-      return call;
-    };
     See.prototype.render = function() {
       return this.index.render();
     };
@@ -204,10 +182,6 @@
     return Gallery;
   })();
   $(document).ready(function() {
-    $.wCall = function(qid, fn) {
-      return fn($.gallery.wFetch(qid));
-    };
-    $.gallery = new Gallery;
-    return $.gallery.wRun();
+    return $.wRun(new Gallery);
   });
 }).call(this);

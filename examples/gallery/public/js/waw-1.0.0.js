@@ -9,7 +9,7 @@ var exports = this;
 function require(x) { return exports; };
 
 (function() {
-  var Brick, Cell, SM, Signal, View;
+  var Brick, Cell, Helpers, SM, Signal, View;
   var __slice = Array.prototype.slice, __hasProp = Object.prototype.hasOwnProperty, __extends = function(child, parent) {
     for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; }
     function ctor() { this.constructor = child; }
@@ -196,6 +196,15 @@ function require(x) { return exports; };
       }
       return this;
     };
+    Brick.prototype.wCall = function(sel, fn) {
+      var fetched;
+      fetched = this.wFetch(sel);
+      if (fetched != null) {
+        return fn.apply(fetched);
+      } else {
+        throw "Not found " + sel;
+      }
+    };
     return Brick;
   })();
   Brick = require('./brick').Brick;
@@ -272,6 +281,8 @@ function require(x) { return exports; };
   Brick = require('./brick').Brick;
   exports.View = View = (function() {
     function View() {
+      this.mustacheRender = __bind(this.mustacheRender, this);;
+      this.wCallRenderer = __bind(this.wCallRenderer, this);;
       this.toString = __bind(this.toString, this);;
       this.refresh = __bind(this.refresh, this);;      View.__super__.constructor.apply(this, arguments);
     }
@@ -291,6 +302,7 @@ function require(x) { return exports; };
         }).responseText;
       },
       handler: 'server',
+      renderData: {},
       render: function(v) {
         switch (v.handler()) {
           case 'server':
@@ -299,7 +311,7 @@ function require(x) { return exports; };
               async: false
             }).responseText;
           case 'mustache':
-            return Mustache.to_html(v.template(), v.renderData());
+            return v.mustacheRender();
         }
       }
     };
@@ -314,6 +326,27 @@ function require(x) { return exports; };
     };
     View.prototype.toString = function() {
       return this.render().toString();
+    };
+    View.prototype.wCallRenderer = function(text, render) {
+      var call;
+      call = render(text);
+      if (call[call.length - 1] !== ')') {
+        call += "()";
+      }
+      call = "function(){ this." + call + "; }";
+      call = "$.wCall('" + (this.wQid()) + "/..', " + call + ");";
+      console.log("Rendering |" + call + "|");
+      return call;
+    };
+    View.prototype.mustacheRender = function() {
+      var callRenderer, data, tpl;
+      tpl = this.template();
+      data = this.renderData();
+      callRenderer = this.wCallRenderer;
+      data.wCall = function() {
+        return callRenderer;
+      };
+      return Mustache.to_html(tpl, data);
     };
     View.prototype._normalize_autorefresh = function() {
       var ar, l, _i, _len;
@@ -336,4 +369,35 @@ function require(x) { return exports; };
     };
     return View;
   })();
+  exports.Helpers = Helpers = (function() {
+    function Helpers() {}
+    Helpers.prototype.wRun = function(app) {
+      app.wRun();
+      return $.wApp = app;
+    };
+    Helpers.prototype.wFetch = function(qid) {
+      return $.wApp.wFetch(qid);
+    };
+    Helpers.prototype.wGet = function(qid) {
+      return $.wApp.wGet(qid);
+    };
+    Helpers.prototype.wSet = function(qid, value) {
+      return $.wApp.wSet(qid, fn);
+    };
+    Helpers.prototype.wListen = function(sel, fn) {
+      return $.wApp.wListen(sel, fn);
+    };
+    Helpers.prototype.wEmit = function() {
+      var args, sel, _ref;
+      sel = arguments[0], args = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
+      return (_ref = $.wApp).wEmit.apply(_ref, [sel].concat(__slice.call(args)));
+    };
+    Helpers.prototype.wCall = function(qid, fn) {
+      return $.wApp.wCall(qid, fn);
+    };
+    return Helpers;
+  })();
 }).call(this);
+$(document).ready(function(){
+  $.extend($, new Helpers)
+});

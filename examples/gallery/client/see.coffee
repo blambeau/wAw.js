@@ -27,24 +27,14 @@ class See extends Brick
     @albums = new View
       handler: 'mustache'
       renderData: =>
-        renderer = this.wCallRender
-        { albums: @model.albums(), wCall: -> renderer }
+        { albums: @model.albums() }
 
     @thumbs = new View
       handler: 'mustache'
       renderData: => 
-        renderer = this.wCallRender
-        { images: @model.images(@currentAlbum), wCall: -> renderer }
+        { images: @model.images(@currentAlbum) }
       autorefresh: 
         @currentAlbum
-
-   wCallRender: (text, render)=>
-     call = render(text)
-     call += "()" unless call[call.length - 1] == ')'
-     call = "function(callee){ callee.#{call}; }"
-     call = "$.wCall('#{this.wQid()}', #{call});"
-     console.log "Rendering |#{call}|"
-     call
 
   render: => 
     @index.render()
