@@ -1,6 +1,6 @@
 <ul id="thumbs">
   {{#images}}
-    <li><img class="thumb" src="{{thumb}}" thumb-id="{{basename}}"/></li>
+    <li><img class="thumb" src="thumb/{{albid}}/{{imgid}}" thumb-id="{{imgid}}"/></li>
   {{/images}}
 </ul>
 <div id="thumb-hider" style="display:none;"></div>

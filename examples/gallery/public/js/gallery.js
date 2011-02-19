@@ -112,7 +112,19 @@
       return this.main.refresh();
     };
     Gallery.prototype.deletePicture = function() {
-      return $("#thumbs > li > img[thumb-id='" + this.currentImg + "']").parent().remove();
+      var img;
+      img = this.currentImg.get();
+      return $.ajax({
+        url: '/delpict',
+        type: 'POST',
+        data: {
+          album: this.currentAlbum.get(),
+          image: img
+        },
+        success: function() {
+          return $("#thumbs > li > img[thumb-id='" + img + "']").parent().remove();
+        }
+      });
     };
     return Gallery;
   })();

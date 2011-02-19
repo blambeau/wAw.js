@@ -7,26 +7,8 @@ def _(relative)
   File.expand_path("../#{relative}", __FILE__)
 end
 
-desc "Build the thumbnails for all images"
-task :thumbs do
-  Dir[_('albums/*')].each{|alb|
-    FileUtils.mkdir_p File.join(alb, "thumbs")
-    Dir[File.join(alb, '*.jpg')].each{|source|
-      target = File.join(alb, "thumbs", File.basename(source))
-      unless File.exists?(target)
-        cmd = "convert -define jpeg:size=200x200 "\
-              "-thumbnail 130x130^ "\
-              "-gravity center -extent 130x130 "\
-              "-quality 80 "\
-              "\"#{source}\" \"#{target}\""
-        puts "#{cmd}: " + `#{cmd}`
-      end
-    }
-  }
-end
-
 desc "Builds the application (gallery.coffee -> gallery.js)"
-task :build => :thumbs do
+task :build do
   # Copy the last waw.js version 
   `cd #{WAWJS_ROOT} && cake dist`
   FileUtils.cp WAWJS, _("public/js")
@@ -40,7 +22,7 @@ end
 
 desc "Runs the application"
 task :"run:sinatra" => :build do
-  Kernel.exec "ruby #{_('server/sinatra/gallery.rb')}"
+  Kernel.exec "ruby #{_('webapp.rb')}"
 end
 
 task :default => :"run:sinatra"

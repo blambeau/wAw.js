@@ -85,7 +85,13 @@ class Gallery extends Brick
     @main.refresh()
 
   deletePicture: =>
-	  $("#thumbs > li > img[thumb-id='#{@currentImg}']").parent().remove()
+    img = @currentImg.get()
+    $.ajax
+      url: '/delpict'
+      type: 'POST'
+      data: { album: @currentAlbum.get(), image: img }
+      success: ->
+        $("#thumbs > li > img[thumb-id='#{img}']").parent().remove()
 
 # When the document is ready, we build an app instance and start 
 # running it
