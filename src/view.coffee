@@ -9,7 +9,7 @@ exports.View = class View extends Brick
 
   defaults:
     url: (v)-> 
-      v.renderScope().wQid() + '/' + v.wName()
+      v.renderScope().wQid() + '/' + v.wName() + ".whtml"
     selector: (v)->
       "#" + v.wName()
     template: (v)->
