@@ -9,14 +9,17 @@ exports.View = class View extends Brick
 
   defaults:
     url: (v)-> 
-      v.wQid()
+      v.renderScope().wQid() + '/' + v.wName()
     selector: (v)->
       "#" + v.wName()
     template: (v)->
       v._template ?= $.ajax(url: v.url(), async: false).responseText
     handler:
       'server'
+    renderScope: (v)->
+	    v.wParent()
     renderData: {}
+    partials: []
     render: (v)->
       switch v.handler()
         when 'server'
@@ -26,8 +29,11 @@ exports.View = class View extends Brick
 
   ############################################################## wInit
 
+  constructor: (opts)->
+    super
+    this._normalizePartials(opts)
+
   wInit: (parent, name) ->
-    this._normalize_autorefresh()
     super
   
   ############################################################## Public API
@@ -45,24 +51,41 @@ exports.View = class View extends Brick
     call = render(text)
     call += "()" unless call[call.length - 1] == ')'
     call = "function(){ this.#{call}; }"
-    call = "$.wCall('#{this.wQid()}/..', #{call});"
+    call = "$.wCall('#{this.renderScope().wQid()}', #{call});"
     call
 
   mustacheRender: =>
-	  tpl = this.template()
-	  callRenderer = this.wCallRenderer      
-	  data = $.extend({}, this.wParent(), {wCall: -> callRenderer}, this.renderData())
-	  Mustache.to_html(tpl, data)
+    # Resolve the template
+    tpl = this.template()
+  
+    # Resolve data
+    callRenderer = this.wCallRenderer      
+    data = $.extend({}, this.renderScope(), {wCall: -> callRenderer}, this.renderData())
+  
+    # Resolve partials
+    partials = {}
+    for l in this.partials()
+      data[l.wName()] = l.render()
+      partials[l.wName()] = "{{{#{l.wName()}}}}"
+  
+    Mustache.to_html(tpl, data, partials)
 
   ############################################################## Private API
 
-  _normalize_autorefresh: ->
-    ar = @options['autorefresh']
-    ar = [] unless ar?
-    ar = [ ar ] if !(ar instanceof Array)
-    for l in ar
-      if (typeof(l) == "string")
-        this.wListen(l, this.refresh) 
+  _normalizePartials: (opts)=>
+    @options['partials'] ?= []
+    normalized = []
+    for p in @options['partials']
+      if (typeof(p) == "string")
+        this[p] = this._buildPartial(p, opts)
+        normalized.push(this[p])
       else
-        l.listen(this.refresh)
-    @options['autorefresh'] = ar
+        normalized.push(p)
+    @options['partials'] = normalized
+    
+  _buildPartial: (name, opts)=>
+    override = 
+      partials: []
+      renderScope: (v)->
+	      v.wParent().wParent()
+    new View $.extend({}, opts, override)
