@@ -25,15 +25,13 @@ NO_CACHE_HEADERS = {'Cache-control' => "no-store, no-cache, must-revalidate",
                     'Expires'       => "Thu, 01 Dec 1994 16:00:00 GMT"}
 
 # This serves the application
-set :public, _('public')
+set :public, _('src/public')
 
+### Main /
 get '/' do
   puts `cd #{_('')} && rake build`
-  send_file _('public/index.html')
+  send_file _('src/public/index.html')
 end
-
-# We force NO CACHE in headers to avoid a known bug in google Chrome 
-# (http://www.google.com/support/forum/p/Chrome/thread?tid=4f4114448b03b409&hl=en&start=120)
 get '/image/:album/:image' do
   headers NO_CACHE_HEADERS
   image = GALLERY.image(params[:album], params[:image])
