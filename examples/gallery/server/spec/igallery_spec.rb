@@ -1,5 +1,5 @@
 require File.expand_path('../spec_helper', __FILE__)
-describe Gallery do
+describe IGallery do
   
   let(:fixtures){ 
     File.expand_path('../fixtures', __FILE__) 
@@ -8,7 +8,7 @@ describe Gallery do
     File.join(fixtures, 'Nature') 
   }
   let(:gallery){ 
-    Gallery.new fixtures
+    IGallery.new fixtures
   }
   
   context "_" do
@@ -95,7 +95,7 @@ describe Gallery do
     it 'should raise an error on non-existing album' do
       lambda{ 
         gallery.album('NonExisting') 
-      }.should raise_error(Gallery::Error)
+      }.should raise_error(IGallery::Error)
     end
     
   end # album 
@@ -121,10 +121,10 @@ describe Gallery do
     it 'should raise an error on non-existing album/image' do
       lambda{ 
         gallery.image('NonExisting', "Opel.jpg") 
-      }.should raise_error(Gallery::Error)
+      }.should raise_error(IGallery::Error)
       lambda{ 
         gallery.image('Cars', 'NoSuch.jpg') 
-      }.should raise_error(Gallery::Error)
+      }.should raise_error(IGallery::Error)
     end
     
   end
@@ -305,4 +305,4 @@ describe Gallery do
     
   end # rotate_image_right!
   
-end # describe Gallery
+end # describe IGallery

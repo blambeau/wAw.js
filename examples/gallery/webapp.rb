@@ -1,11 +1,14 @@
 ################################################# SOME TOOLS
+# $LOAD_PATH.unshift File.expand_path('../../lib')
+# require 'waw/brick'
+
 $LOAD_PATH.unshift File.expand_path('../src', __FILE__)
 require 'gallery'
 
 # Root folder of the gallery example
 EXAMPLE_ROOT = File.expand_path('..', __FILE__)
 GALLERY_ROOT = File.join(EXAMPLE_ROOT, "albums")
-GALLERY      = Gallery.open(GALLERY_ROOT)
+GALLERY      = IGallery.open(GALLERY_ROOT)
 MODEL        = Model.new(GALLERY)
 SEE          = See.new(GALLERY)
 
