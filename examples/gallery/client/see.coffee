@@ -35,8 +35,9 @@ class See extends Brick
     imgTag.attr('src', '/css/images/wait.gif')
 
     unfreeze = ->
-      imgTag.attr('src', oldSrc)
-      $("#big-image}").attr('src', $("#big-image}").attr('src'))
+      rnd = "?__x__=" + new Date().getTime()
+      imgTag.attr('src', oldSrc + rnd)
+      $("#big-image").attr('src', $("#big-image").attr('src') + rnd)
 
     contin(unfreeze)
 

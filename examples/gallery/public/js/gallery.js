@@ -107,8 +107,10 @@
       oldSrc = imgTag.attr('src');
       imgTag.attr('src', '/css/images/wait.gif');
       unfreeze = function() {
-        imgTag.attr('src', oldSrc);
-        return $("#big-image}").attr('src', $("#big-image}").attr('src'));
+        var rnd;
+        rnd = "?__x__=" + new Date().getTime();
+        imgTag.attr('src', oldSrc + rnd);
+        return $("#big-image").attr('src', $("#big-image").attr('src') + rnd);
       };
       return contin(unfreeze);
     };
