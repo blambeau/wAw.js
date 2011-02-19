@@ -1,4 +1,4 @@
-class Follower extends Brick
+class Follower extends Waw.Brick
   
   follow: (cell, oldvalue, newvalue)=>
     this.move $("img[imgid='#{newvalue}']").position()
@@ -16,19 +16,19 @@ class Follower extends Brick
     $('#thumb-hider').hide()
     $('#button-box').hide()
 
-class See extends Brick
+class See extends Waw.Brick
   
   # Builds the Gallery brick
   constructor: (@model)->
 
     # This cell will keep the name of the current album displayed. 
-    @currentAlbum = new Cell("Cars")
+    @currentAlbum = new Waw.Cell("Cars")
 
     # This cell will keep the name of the current image displayed. 
-    @currentImg = new Cell
+    @currentImg = new Waw.Cell
 
     # Rendering of the /see page
-    @index = new View
+    @index = new Waw.View
       handler:  'mustache'
       renderData: => { albums: @model.albums(), images: @model.images(@currentAlbum) }
       partials: [ 'albumSelector', 'thumbs' ]

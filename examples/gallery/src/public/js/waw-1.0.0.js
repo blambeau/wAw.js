@@ -5,6 +5,7 @@
  * Copyright 2011, Bernard Lambeau
  * Released under the MIT License
  */
+var Waw = function(){};
 (function(exports) {
 	var builder, require;
 	builder = [];
@@ -478,4 +479,4 @@
 
   };
   require('./waw');
-}).call(this, this);
+}).call(this, Waw);

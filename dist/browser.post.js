@@ -1,2 +1,2 @@
   require('./waw');
-}).call(this, this);
+}).call(this, Waw);

@@ -1,3 +1,4 @@
+var Waw = function(){};
 (function(exports) {
 	var builder, require;
 	builder = [];

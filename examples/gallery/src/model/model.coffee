@@ -1,4 +1,4 @@
-class Model extends Brick
+class Model extends Waw.Brick
   
   defaults:
     async: false,

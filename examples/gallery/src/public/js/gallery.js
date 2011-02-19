@@ -11,7 +11,7 @@ Model = (function() {
   function Model() {
     Model.__super__.constructor.apply(this, arguments);
   }
-  __extends(Model, Brick);
+  __extends(Model, Waw.Brick);
   Model.prototype.defaults = {
     async: false,
     dataType: 'json'
@@ -41,7 +41,7 @@ Follower = (function() {
   function Follower() {
     this.follow = __bind(this.follow, this);;    Follower.__super__.constructor.apply(this, arguments);
   }
-  __extends(Follower, Brick);
+  __extends(Follower, Waw.Brick);
   Follower.prototype.follow = function(cell, oldvalue, newvalue) {
     return this.move($("img[imgid='" + newvalue + "']").position());
   };
@@ -65,7 +65,7 @@ Follower = (function() {
   return Follower;
 })();
 See = (function() {
-  __extends(See, Brick);
+  __extends(See, Waw.Brick);
   function See(model) {
     this.model = model;
     this.toggleDelete = __bind(this.toggleDelete, this);;
@@ -75,9 +75,9 @@ See = (function() {
     this.withThumbWait = __bind(this.withThumbWait, this);;
     this.render = __bind(this.render, this);;
     this.wInit = __bind(this.wInit, this);;
-    this.currentAlbum = new Cell("Cars");
-    this.currentImg = new Cell;
-    this.index = new View({
+    this.currentAlbum = new Waw.Cell("Cars");
+    this.currentImg = new Waw.Cell;
+    this.index = new Waw.View({
       handler: 'mustache',
       renderData: __bind(function() {
         return {
@@ -155,11 +155,11 @@ See = (function() {
   return See;
 })();
 Gallery = (function() {
-  __extends(Gallery, Brick);
+  __extends(Gallery, Waw.Brick);
   function Gallery() {
     this.model = new Model;
     this.see = new See(this.model);
-    this.main = new View({
+    this.main = new Waw.View({
       render: __bind(function(v) {
         return this.see.render();
       }, this)
