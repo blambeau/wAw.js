@@ -20,7 +20,7 @@ task :build do
   }
   target = _('src/public/js/gallery.js')
   
-  cmd = "coffee -c -j -o #{File.dirname(target)} #{files.join(' ')}"
+  cmd = "coffee -b -c -j -o #{File.dirname(target)} #{files.join(' ')}"
   puts "Build .js client: #{cmd}"
   if Kernel.system(cmd)
     FileUtils.mv File.join(File.dirname(target), "concatenation.js"), target

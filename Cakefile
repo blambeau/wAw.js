@@ -24,27 +24,30 @@ onerror = (err)->
 
 # Build process
 
-build = (callback)->
+build = (callback, contd)->
   log "Compiling CoffeeScript to JavaScript ...", green
   exec "mkdir dist/compile"
   exec "rm -rf lib && coffee -c -b -l -o dist/compile src", (err, stdout)->
     callback err
+    contd() if contd?
 task "build", "Compile CoffeeScript to JavaScript", -> build onerror
 
 dist = (callback)->
   target = "dist/waw-#{VERSION}.js"
   log "Compiling #{target}", green
-  build(callback)
-  code = ""
-  code += fs.readFileSync("dist/browser.pre.js")
-  for file in fs.readdirSync('dist/compile')
-    code += "builder['./Child'] = function(exports){\n"
-    code += fs.readFileSync("dist/compile/#{file}")
-    code += "};"
-  code += fs.readFileSync("dist/browser.post.js")
-  # {parser, uglify} = require 'uglify-js'
-  # code = uglify.gen_code uglify.ast_squeeze uglify.ast_mangle parser.parse code
-  fs.writeFileSync target, code
+  build callback, ->
+    code = ""
+    code += fs.readFileSync("dist/browser.pre.js")
+    for file in fs.readdirSync('dist/compile')
+      file_code = fs.readFileSync("dist/compile/#{file}").toString();
+      file_code = file_code.replace(/^/mg, '    ')
+      code += "  builder['./#{path.basename(file, '.js')}'] = function(exports){\n"
+      code += file_code + "\n"
+      code += "  };\n"
+    code += fs.readFileSync("dist/browser.post.js")
+    # {parser, uglify} = require 'uglify-js'
+    # code = uglify.gen_code uglify.ast_squeeze uglify.ast_mangle parser.parse code
+    fs.writeFileSync target, code
 task "dist", "Building waw.js distribution", -> dist onerror
 
 clean = (callback)->
