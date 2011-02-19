@@ -46,14 +46,12 @@ exports.View = class View extends Brick
     call += "()" unless call[call.length - 1] == ')'
     call = "function(){ this.#{call}; }"
     call = "$.wCall('#{this.wQid()}/..', #{call});"
-    console.log "Rendering |#{call}|"
     call
 
   mustacheRender: =>
 	  tpl = this.template()
-	  data = this.renderData()
-	  callRenderer = this.wCallRenderer
-	  data.wCall = -> callRenderer
+	  callRenderer = this.wCallRenderer      
+	  data = $.extend({}, this.wParent(), {wCall: -> callRenderer}, this.renderData())
 	  Mustache.to_html(tpl, data)
 
   ############################################################## Private API
