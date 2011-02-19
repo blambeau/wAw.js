@@ -15,7 +15,6 @@ class Gallery < Waw::Brick
   set :public, File.expand_path("../public", __FILE__)
   
   get '/' do
-    puts @igallery
     send_file File.expand_path('../public/index.html', __FILE__)
   end
   
