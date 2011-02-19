@@ -33,7 +33,7 @@ exports.View = class View extends Brick
 
   refresh: =>
     sel = this.selector()
-    $(sel).html(this.toString())
+    $(sel).replaceWith(this.toString())
 
   toString: =>
     this.render().toString()
