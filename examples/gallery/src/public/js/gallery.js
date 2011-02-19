@@ -99,7 +99,7 @@ See = (function() {
   See.prototype.render = function() {
     return this.index.render();
   };
-  See.prototype.withThumbWait = function(imgid, contin) {
+  See.prototype.withThumbWait = function(imgid, contd) {
     var imgTag, oldSrc, unfreeze;
     this.follower.hide();
     imgTag = $(".thumbs > li > img[imgid='" + imgid + "']");
@@ -111,7 +111,7 @@ See = (function() {
       imgTag.attr('src', oldSrc + rnd);
       return $("#big-image").attr('src', $("#big-image").attr('src') + rnd);
     };
-    return contin(unfreeze);
+    return contd(unfreeze);
   };
   See.prototype.thumbServerCall = function(service, success) {
     var albid, imgid;

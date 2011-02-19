@@ -45,7 +45,7 @@ class See extends Waw.Brick
   render: => 
     @index.render()
 
-  withThumbWait: (imgid, contin)=>
+  withThumbWait: (imgid, contd)=>
     # Set wait.gif
     @follower.hide()
     imgTag = $(".thumbs > li > img[imgid='#{imgid}']")
@@ -57,7 +57,7 @@ class See extends Waw.Brick
       imgTag.attr('src', oldSrc + rnd)
       $("#big-image").attr('src', $("#big-image").attr('src') + rnd)
 
-    contin(unfreeze)
+    contd(unfreeze)
 
   thumbServerCall: (service, success)=>
     albid = @currentAlbum.get()

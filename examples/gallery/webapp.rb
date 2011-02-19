@@ -51,7 +51,7 @@ end
 
 ### SEE
 get '/see/:what' do
-  send_file _("src/see/views/#{params[:what]}.whtml")
+  send_file _("src/see/public/#{params[:what]}.whtml")
 end
 post '/see/:what' do
   content_type :json
