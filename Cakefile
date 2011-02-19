@@ -34,14 +34,16 @@ dist = (callback)->
   target = "dist/waw-#{VERSION}.js"
   log "Compiling #{target}", green
 
-  # get the browser heading
-  code = fs.readFileSync("dist/browser.js")
-
   # compile .coffee files in order
   order = fs.readFileSync("src/dependencies").toString().split("\n")
   exec "coffee -p -c -l -j src/#{order.join(' src/')}", (err, stdout)->
     callback err
+
+    code = ""
+    code += fs.readFileSync("dist/browser.pre.js")
     code += stdout.toString()
+    code += fs.readFileSync("dist/browser.post.js")
+
     fs.writeFileSync target, code
 task "dist", "Building waw.js distribution", -> dist onerror
 
