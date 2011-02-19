@@ -15,18 +15,18 @@
   <div id="button-box" style="display:none;">
     <div class="container">
       <a id="button-v" onclick=""></a>
-      <a id="button-d" onclick="$.gallery.toggleDelete()"></a>
-      <a id="button-rleft" onclick="$.gallery.rotateLeft()"></a>
-      <a id="button-rright" onclick="$.gallery.rotateRight()"></a>
+      <a id="button-d" onclick="$.gallery.see.toggleDelete()"></a>
+      <a id="button-rleft" onclick="$.gallery.see.rotateLeft()"></a>
+      <a id="button-rright" onclick="$.gallery.see.rotateRight()"></a>
     </div>
   </div>
   <script>
     $('.thumb').mouseover(function(){
-      $.gallery.wSet('currentImg', $(this).attr('imgid'));
-      $.gallery.follower.show();
+      $.gallery.wSet('/see/currentImg', $(this).attr('imgid'));
+      $.gallery.see.follower.show();
     });
     $('#button-box').mouseleave(function(){
-      $.gallery.follower.hide();
+      $.gallery.see.follower.hide();
     });
   </script>
 </div>

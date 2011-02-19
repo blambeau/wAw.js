@@ -1,5 +1,5 @@
 (function() {
-  var Follower, Gallery, Model;
+  var Follower, Gallery, Model, See;
   var __hasProp = Object.prototype.hasOwnProperty, __extends = function(child, parent) {
     for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; }
     function ctor() { this.constructor = child; }
@@ -65,17 +65,19 @@
     };
     return Follower;
   })();
-  Gallery = (function() {
-    __extends(Gallery, Brick);
-    function Gallery() {
+  See = (function() {
+    __extends(See, Brick);
+    function See(model) {
+      this.model = model;
       this.toggleDelete = __bind(this.toggleDelete, this);;
       this.rotateRight = __bind(this.rotateRight, this);;
       this.rotateLeft = __bind(this.rotateLeft, this);;
       this.thumbServerCall = __bind(this.thumbServerCall, this);;
-      this.withThumbWait = __bind(this.withThumbWait, this);;      this.model = new Model;
+      this.withThumbWait = __bind(this.withThumbWait, this);;
+      this.render = __bind(this.render, this);;
       this.currentAlbum = new Cell("Cars");
       this.currentImg = new Cell;
-      this.see = new View({
+      this.index = new View({
         handler: 'mustache',
         renderData: __bind(function() {
           return {
@@ -106,16 +108,11 @@
         }, this),
         autorefresh: this.currentAlbum
       });
-      this.main = new View({
-        render: __bind(function(v) {
-          return this.see.render();
-        }, this)
-      });
     }
-    Gallery.prototype.wInit = function() {
-      return this.main.refresh();
+    See.prototype.render = function() {
+      return this.index.render();
     };
-    Gallery.prototype.withThumbWait = function(imgid, contin) {
+    See.prototype.withThumbWait = function(imgid, contin) {
       var imgTag, oldSrc, unfreeze;
       this.follower.hide();
       imgTag = $(".thumbs > li > img[imgid='" + imgid + "']");
@@ -127,7 +124,7 @@
       };
       return contin(unfreeze);
     };
-    Gallery.prototype.thumbServerCall = function(service, success) {
+    See.prototype.thumbServerCall = function(service, success) {
       var albid, imgid;
       albid = this.currentAlbum.get();
       imgid = this.currentImg.get();
@@ -149,13 +146,13 @@
         });
       });
     };
-    Gallery.prototype.rotateLeft = function() {
+    See.prototype.rotateLeft = function() {
       return this.thumbServerCall('/rotate-left');
     };
-    Gallery.prototype.rotateRight = function() {
+    See.prototype.rotateRight = function() {
       return this.thumbServerCall('/rotate-right');
     };
-    Gallery.prototype.toggleDelete = function() {
+    See.prototype.toggleDelete = function() {
       return this.thumbServerCall('/toggle-delete', function(albid, imgid) {
         var li;
         li = $(".thumbs > li > img[imgid='" + imgid + "']").parent();
@@ -165,6 +162,22 @@
           return li.appendTo($('#kept-thumbs'));
         }
       });
+    };
+    return See;
+  })();
+  Gallery = (function() {
+    __extends(Gallery, Brick);
+    function Gallery() {
+      this.model = new Model;
+      this.see = new See(this.model);
+      this.main = new View({
+        render: __bind(function(v) {
+          return this.see.render();
+        }, this)
+      });
+    }
+    Gallery.prototype.wInit = function() {
+      return this.main.refresh();
     };
     return Gallery;
   })();

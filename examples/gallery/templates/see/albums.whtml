@@ -8,6 +8,6 @@
 </div>
 <script>
   $('#album-selector').change(function(){
-    $.gallery.wSet('currentAlbum', $('#album-selector').val());
+    $.gallery.wSet('/see/currentAlbum', $('#album-selector').val());
   });
 </script>

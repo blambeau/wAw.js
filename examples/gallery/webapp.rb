@@ -48,6 +48,11 @@ get %r{^/([\w]+)$} do
   send_file _("templates/#{params[:captures].first}.whtml")
 end
 
+# Returns uninstantiated templates to the client part
+get %r{^/see/([\w]+)$} do
+  send_file _("templates/see/#{params[:captures].first}.whtml")
+end
+
 post '/toggle-delete' do
   content_type :json
   GALLERY.toggle_delete_image!(params[:album], params[:image])
