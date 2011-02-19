@@ -19,6 +19,9 @@ exports.Helpers = class Helpers
   wEmit: (sel, args...)->
     $.wApp.wEmit(sel, args...)
 
+  wConnect: (signal, slot)->
+	  signal.listen(slot)
+
   wCall: (qid, fn)->
     $.wApp.wCall(qid, fn)
 
