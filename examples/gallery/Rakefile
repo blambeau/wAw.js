@@ -15,8 +15,8 @@ task :build do
   FileUtils.cp WAWJS, _("public/js")
 
   # Compile the client application
-  files = ['model', 'follower', 'see', 'gallery'].collect{|name|
-    _("client/#{name}.coffee")
+  files = ['src/model/model', 'src/see/see', 'src/gallery'].collect{|name|
+    _("#{name}.coffee")
   }
   target = _('public/js/gallery.js')
   

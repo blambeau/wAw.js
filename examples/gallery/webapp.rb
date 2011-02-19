@@ -1,14 +1,13 @@
 ################################################# SOME TOOLS
-$LOAD_PATH.unshift File.expand_path('../server/lib', __FILE__)
 $LOAD_PATH.unshift File.expand_path('../src', __FILE__)
 require 'gallery'
-require 'model'
 
 # Root folder of the gallery example
 EXAMPLE_ROOT = File.expand_path('..', __FILE__)
 GALLERY_ROOT = File.join(EXAMPLE_ROOT, "albums")
 GALLERY      = Gallery.open(GALLERY_ROOT)
 MODEL        = Model.new(GALLERY)
+SEE          = See.new(GALLERY)
 
 # Absolutizes a path from the gallery root (i.e. __DIR__)
 def _(relative) 
@@ -46,32 +45,17 @@ get '/thumb/:album/:image' do
   send_file GALLERY._(image[:thumb])
 end
 
-# Returns uninstantiated templates to the client part
-get %r{^/([\w]+)$} do
-  send_file _("templates/#{params[:captures].first}.whtml")
-end
-
-# Returns uninstantiated templates to the client part
-get %r{^/see/([\w]+)$} do
-  send_file _("templates/see/#{params[:captures].first}.whtml")
-end
-
-post '/toggle-delete' do
-  content_type :json
-  GALLERY.toggle_delete_image!(params[:album], params[:image])
-end
-
-post '/rotate-right' do
-  content_type :json
-  GALLERY.rotate_image_right!(params[:album], params[:image])
-end
-
-post '/rotate-left' do
-  content_type :json
-  GALLERY.rotate_image_left!(params[:album], params[:image])
-end
-
+### MODEL
 get '/model/:what' do
   content_type :json
   MODEL.send(params[:what], params[:albid]).to_json
+end
+
+### SEE
+get '/see/:what' do
+  send_file _("src/see/views/#{params[:what]}.whtml")
+end
+post '/see/:what' do
+  content_type :json
+  SEE.send(params[:what], params[:albid], params[:imgid]).to_json
 end

@@ -1,3 +1,21 @@
+class Follower extends Brick
+  
+  follow: (cell, oldvalue, newvalue)=>
+    this.move $("img[imgid='#{newvalue}']").position()
+
+  move: (pos)->
+    css = {"left": (pos.left) + "px", "top": (pos.top) + "px"}
+    $('#thumb-hider').css(css)
+    $('#button-box').css(css)
+
+  show: ->
+    $('#thumb-hider').show()
+    $('#button-box').show()
+
+  hide: ->
+    $('#thumb-hider').hide()
+    $('#button-box').hide()
+
 class See extends Brick
   
   # Builds the Gallery brick
@@ -46,22 +64,22 @@ class See extends Brick
     imgid = @currentImg.get()
     this.withThumbWait imgid, (unwait)->
       $.ajax
-        url: service
+        url: "/see/#{service}"
         type: 'POST'
-        data: { album: albid, image: imgid }
+        data: { albid: albid, imgid: imgid }
         success: ->
           success(albid, imgid) if success?
           unwait()
         error: unwait
 
   rotateLeft: =>
-    this.thumbServerCall '/rotate-left'
+    this.thumbServerCall 'rotate_left'
     
   rotateRight: =>
-    this.thumbServerCall '/rotate-right'
+    this.thumbServerCall 'rotate_right'
 
   toggleDelete: =>
-    this.thumbServerCall '/toggle-delete', (albid, imgid)->
+    this.thumbServerCall 'toggle_delete', (albid, imgid)->
       li = $(".thumbs > li > img[imgid='#{imgid}']").parent()
       if li.parent().attr('id') == "kept-thumbs"
         li.appendTo $('#deleted-thumbs')

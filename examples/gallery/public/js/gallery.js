@@ -120,11 +120,11 @@
       imgid = this.currentImg.get();
       return this.withThumbWait(imgid, function(unwait) {
         return $.ajax({
-          url: service,
+          url: "/see/" + service,
           type: 'POST',
           data: {
-            album: albid,
-            image: imgid
+            albid: albid,
+            imgid: imgid
           },
           success: function() {
             if (success != null) {
@@ -137,13 +137,13 @@
       });
     };
     See.prototype.rotateLeft = function() {
-      return this.thumbServerCall('/rotate-left');
+      return this.thumbServerCall('rotate_left');
     };
     See.prototype.rotateRight = function() {
-      return this.thumbServerCall('/rotate-right');
+      return this.thumbServerCall('rotate_right');
     };
     See.prototype.toggleDelete = function() {
-      return this.thumbServerCall('/toggle-delete', function(albid, imgid) {
+      return this.thumbServerCall('toggle_delete', function(albid, imgid) {
         var li;
         li = $(".thumbs > li > img[imgid='" + imgid + "']").parent();
         if (li.parent().attr('id') === "kept-thumbs") {
