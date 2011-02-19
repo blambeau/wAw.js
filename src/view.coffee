@@ -16,12 +16,13 @@ exports.View = class View extends Brick
       v._template ?= $.ajax(url: v.url(), async: false).responseText
     handler:
       'server'
+    renderData: {}
     render: (v)->
       switch v.handler()
         when 'server'
           $.ajax(url: v.url(), async: false).responseText
         when 'mustache'
-          Mustache.to_html(v.template(), v.renderData())
+          v.mustacheRender()
 
   ############################################################## wInit
 
@@ -37,6 +38,23 @@ exports.View = class View extends Brick
 
   toString: =>
     this.render().toString()
+
+  ############################################################## Renderers
+
+  wCallRenderer: (text, render)=>
+    call = render(text)
+    call += "()" unless call[call.length - 1] == ')'
+    call = "function(){ this.#{call}; }"
+    call = "$.wCall('#{this.wQid()}/..', #{call});"
+    console.log "Rendering |#{call}|"
+    call
+
+  mustacheRender: =>
+	  tpl = this.template()
+	  data = this.renderData()
+	  callRenderer = this.wCallRenderer
+	  data.wCall = -> callRenderer
+	  Mustache.to_html(tpl, data)
 
   ############################################################## Private API
 
