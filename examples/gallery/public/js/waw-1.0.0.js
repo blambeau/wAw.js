@@ -280,16 +280,10 @@ function require(x) { return exports; };
   })();
   Brick = require('./brick').Brick;
   exports.View = View = (function() {
-    function View() {
-      this.mustacheRender = __bind(this.mustacheRender, this);;
-      this.wCallRenderer = __bind(this.wCallRenderer, this);;
-      this.toString = __bind(this.toString, this);;
-      this.refresh = __bind(this.refresh, this);;      View.__super__.constructor.apply(this, arguments);
-    }
     __extends(View, Brick);
     View.prototype.defaults = {
       url: function(v) {
-        return v.wQid();
+        return v.renderScope().wQid() + '/' + v.wName();
       },
       selector: function(v) {
         return "#" + v.wName();
@@ -302,7 +296,11 @@ function require(x) { return exports; };
         }).responseText;
       },
       handler: 'server',
+      renderScope: function(v) {
+        return v.wParent();
+      },
       renderData: {},
+      partials: [],
       render: function(v) {
         switch (v.handler()) {
           case 'server':
@@ -315,8 +313,16 @@ function require(x) { return exports; };
         }
       }
     };
+    function View(opts) {
+      this._buildPartial = __bind(this._buildPartial, this);;
+      this._normalizePartials = __bind(this._normalizePartials, this);;
+      this.mustacheRender = __bind(this.mustacheRender, this);;
+      this.wCallRenderer = __bind(this.wCallRenderer, this);;
+      this.toString = __bind(this.toString, this);;
+      this.refresh = __bind(this.refresh, this);;      View.__super__.constructor.apply(this, arguments);
+      this._normalizePartials(opts);
+    }
     View.prototype.wInit = function(parent, name) {
-      this._normalize_autorefresh();
       return View.__super__.wInit.apply(this, arguments);
     };
     View.prototype.refresh = function() {
@@ -334,38 +340,52 @@ function require(x) { return exports; };
         call += "()";
       }
       call = "function(){ this." + call + "; }";
-      call = "$.wCall('" + (this.wQid()) + "/..', " + call + ");";
+      call = "$.wCall('" + (this.renderScope().wQid()) + "', " + call + ");";
       return call;
     };
     View.prototype.mustacheRender = function() {
-      var callRenderer, data, tpl;
+      var callRenderer, data, l, partials, tpl, _i, _len, _ref;
       tpl = this.template();
       callRenderer = this.wCallRenderer;
-      data = $.extend({}, this.wParent(), {
+      data = $.extend({}, this.renderScope(), {
         wCall: function() {
           return callRenderer;
         }
       }, this.renderData());
-      return Mustache.to_html(tpl, data);
+      partials = {};
+      _ref = this.partials();
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        l = _ref[_i];
+        data[l.wName()] = l.render();
+        partials[l.wName()] = "{{{" + (l.wName()) + "}}}";
+      }
+      return Mustache.to_html(tpl, data, partials);
     };
-    View.prototype._normalize_autorefresh = function() {
-      var ar, l, _i, _len;
-      ar = this.options['autorefresh'];
-      if (ar == null) {
-        ar = [];
-      }
-      if (!(ar instanceof Array)) {
-        ar = [ar];
-      }
-      for (_i = 0, _len = ar.length; _i < _len; _i++) {
-        l = ar[_i];
-        if (typeof l === "string") {
-          this.wListen(l, this.refresh);
+    View.prototype._normalizePartials = function(opts) {
+      var normalized, p, _base, _i, _len, _ref, _ref2;
+      (_ref = (_base = this.options)['partials']) != null ? _ref : _base['partials'] = [];
+      normalized = [];
+      _ref2 = this.options['partials'];
+      for (_i = 0, _len = _ref2.length; _i < _len; _i++) {
+        p = _ref2[_i];
+        if (typeof p === "string") {
+          this[p] = this._buildPartial(p, opts);
+          normalized.push(this[p]);
         } else {
-          l.listen(this.refresh);
+          normalized.push(p);
         }
       }
-      return this.options['autorefresh'] = ar;
+      return this.options['partials'] = normalized;
+    };
+    View.prototype._buildPartial = function(name, opts) {
+      var override;
+      override = {
+        partials: [],
+        renderScope: function(v) {
+          return v.wParent().wParent();
+        }
+      };
+      return new View($.extend({}, opts, override));
     };
     return View;
   })();

@@ -77,24 +77,22 @@
       this.render = __bind(this.render, this);;
       this.images = __bind(this.images, this);;
       this.albums = __bind(this.albums, this);;
+      this.wInit = __bind(this.wInit, this);;
       this.currentAlbum = new Cell("Cars");
       this.currentImg = new Cell;
       this.index = new View({
-        handler: 'mustache'
+        handler: 'mustache',
+        partials: ['albumSelector', 'thumbs']
       });
       this.currentImg.listen(__bind(function(cell, oldvalue, newvalue) {
         return $('#big-image').attr('src', "/image/" + this.currentAlbum + "/" + newvalue);
       }, this));
       this.follower = new Follower;
       this.currentImg.listen(this.follower.follow);
-      this.albumSelector = new View({
-        handler: 'mustache'
-      });
-      this.thumbs = new View({
-        handler: 'mustache',
-        autorefresh: this.currentAlbum
-      });
     }
+    See.prototype.wInit = function() {
+      return this.currentAlbum.listen(this.index.thumbs.refresh);
+    };
     See.prototype.albums = function() {
       return this.model.albums();
     };

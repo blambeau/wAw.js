@@ -1,9 +1,9 @@
 <div id="see">
   <div id="header">
-    {{{albumSelector}}}
+    {{>albumSelector}}
   </div>
   <div id="left">
-    {{{thumbs}}}
+    {{>thumbs}}
   </div>
   <div id="right">
     <img id="big-image">
