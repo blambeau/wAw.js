@@ -335,17 +335,17 @@ function require(x) { return exports; };
       }
       call = "function(){ this." + call + "; }";
       call = "$.wCall('" + (this.wQid()) + "/..', " + call + ");";
-      console.log("Rendering |" + call + "|");
       return call;
     };
     View.prototype.mustacheRender = function() {
       var callRenderer, data, tpl;
       tpl = this.template();
-      data = this.renderData();
       callRenderer = this.wCallRenderer;
-      data.wCall = function() {
-        return callRenderer;
-      };
+      data = $.extend({}, this.wParent(), {
+        wCall: function() {
+          return callRenderer;
+        }
+      }, this.renderData());
       return Mustache.to_html(tpl, data);
     };
     View.prototype._normalize_autorefresh = function() {

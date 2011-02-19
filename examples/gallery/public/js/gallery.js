@@ -75,40 +75,32 @@
       this.thumbServerCall = __bind(this.thumbServerCall, this);;
       this.withThumbWait = __bind(this.withThumbWait, this);;
       this.render = __bind(this.render, this);;
+      this.images = __bind(this.images, this);;
+      this.albums = __bind(this.albums, this);;
       this.currentAlbum = new Cell("Cars");
       this.currentImg = new Cell;
       this.index = new View({
-        handler: 'mustache',
-        renderData: __bind(function() {
-          return {
-            albums: this.albums,
-            thumbs: this.thumbs
-          };
-        }, this)
+        handler: 'mustache'
       });
       this.currentImg.listen(__bind(function(cell, oldvalue, newvalue) {
         return $('#big-image').attr('src', "/image/" + this.currentAlbum + "/" + newvalue);
       }, this));
       this.follower = new Follower;
       this.currentImg.listen(this.follower.follow);
-      this.albums = new View({
-        handler: 'mustache',
-        renderData: __bind(function() {
-          return {
-            albums: this.model.albums()
-          };
-        }, this)
+      this.albumSelector = new View({
+        handler: 'mustache'
       });
       this.thumbs = new View({
         handler: 'mustache',
-        renderData: __bind(function() {
-          return {
-            images: this.model.images(this.currentAlbum)
-          };
-        }, this),
         autorefresh: this.currentAlbum
       });
     }
+    See.prototype.albums = function() {
+      return this.model.albums();
+    };
+    See.prototype.images = function() {
+      return this.model.images(this.currentAlbum);
+    };
     See.prototype.render = function() {
       return this.index.render();
     };

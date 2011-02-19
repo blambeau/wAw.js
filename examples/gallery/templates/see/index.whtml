@@ -1,6 +1,6 @@
 <div id="see">
   <div id="header">
-    {{{albums}}}
+    {{{albumSelector}}}
   </div>
   <div id="left">
     {{{thumbs}}}

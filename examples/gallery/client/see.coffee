@@ -10,10 +10,7 @@ class See extends Brick
     @currentImg = new Cell
 
     # Rendering of the /see page
-    @index = new View
-      handler: 'mustache'
-      renderData: =>
-        { albums: @albums, thumbs: @thumbs }
+    @index = new View(handler: 'mustache')
 
     # We listen to currentImg to update the big image at right
     @currentImg.listen (cell, oldvalue, newvalue) =>
@@ -24,17 +21,14 @@ class See extends Brick
     @currentImg.listen @follower.follow
 
     # Rendering of the album selector
-    @albums = new View
-      handler: 'mustache'
-      renderData: =>
-        { albums: @model.albums() }
+    @albumSelector = new View(handler: 'mustache')
+    @thumbs = new View(handler: 'mustache', autorefresh: @currentAlbum)
 
-    @thumbs = new View
-      handler: 'mustache'
-      renderData: => 
-        { images: @model.images(@currentAlbum) }
-      autorefresh: 
-        @currentAlbum
+  albums: =>
+	  @model.albums()
+
+  images: =>
+	  @model.images(@currentAlbum)
 
   render: => 
     @index.render()
