@@ -33,11 +33,11 @@ build = (callback, contd)->
 task "build", "Compile CoffeeScript to JavaScript", -> build onerror
 
 dist = (callback)->
-  exec "./bin/wCompile src > dist/waw-#{VERSION}.js"
+  exec "./bin/wCompile --header=dist/waw.header.js src > dist/waw-#{VERSION}.js"
 task "dist", "Building waw.js distribution", -> dist onerror
 
 clean = (callback)->
-  exec "rm -rf lib", callback
+  exec "rm -rf dist/compile", callback
 task "clean", "Remove temporary files and such", -> clean onerror
 
 # Tests
