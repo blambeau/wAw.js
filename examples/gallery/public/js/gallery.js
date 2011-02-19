@@ -68,9 +68,11 @@
   Gallery = (function() {
     __extends(Gallery, Brick);
     function Gallery() {
+      this.toggleDelete = __bind(this.toggleDelete, this);;
       this.rotateRight = __bind(this.rotateRight, this);;
       this.rotateLeft = __bind(this.rotateLeft, this);;
-      this.toggleDelete = __bind(this.toggleDelete, this);;      this.model = new Model;
+      this.thumbServerCall = __bind(this.thumbServerCall, this);;
+      this.withThumbWait = __bind(this.withThumbWait, this);;      this.model = new Model;
       this.currentAlbum = new Cell("Cars");
       this.currentImg = new Cell;
       this.see = new View({
@@ -113,61 +115,54 @@
     Gallery.prototype.wInit = function() {
       return this.main.refresh();
     };
+    Gallery.prototype.withThumbWait = function(imgid, contin) {
+      var imgTag, oldSrc, unfreeze;
+      this.follower.hide();
+      imgTag = $(".thumbs > li > img[imgid='" + imgid + "']");
+      oldSrc = imgTag.attr('src');
+      imgTag.attr('src', '/css/images/wait.gif');
+      unfreeze = function() {
+        imgTag.attr('src', oldSrc);
+        return $("#big-image}").attr('src', $("#big-image}").attr('src'));
+      };
+      return contin(unfreeze);
+    };
+    Gallery.prototype.thumbServerCall = function(service, success) {
+      var albid, imgid;
+      albid = this.currentAlbum.get();
+      imgid = this.currentImg.get();
+      return this.withThumbWait(imgid, function(unwait) {
+        return $.ajax({
+          url: service,
+          type: 'POST',
+          data: {
+            album: albid,
+            image: imgid
+          },
+          success: function() {
+            if (success != null) {
+              success(albid, imgid);
+            }
+            return unwait();
+          },
+          error: unwait
+        });
+      });
+    };
+    Gallery.prototype.rotateLeft = function() {
+      return this.thumbServerCall('/rotate-left');
+    };
+    Gallery.prototype.rotateRight = function() {
+      return this.thumbServerCall('/rotate-right');
+    };
     Gallery.prototype.toggleDelete = function() {
-      var img, success;
-      img = this.currentImg.get();
-      success = function() {
+      return this.thumbServerCall('/toggle-delete', function(albid, imgid) {
         var li;
-        li = $(".thumbs > li > img[imgid='" + img + "']").parent();
+        li = $(".thumbs > li > img[imgid='" + imgid + "']").parent();
         if (li.parent().attr('id') === "kept-thumbs") {
           return li.appendTo($('#deleted-thumbs'));
         } else {
           return li.appendTo($('#kept-thumbs'));
-        }
-      };
-      return $.ajax({
-        url: '/toggle-delete',
-        type: 'POST',
-        data: {
-          album: this.currentAlbum.get(),
-          image: img
-        },
-        success: success
-      });
-    };
-    Gallery.prototype.rotateLeft = function() {
-      var img;
-      img = this.currentImg.get();
-      return $.ajax({
-        url: '/rotate-left',
-        type: 'POST',
-        data: {
-          album: this.currentAlbum.get(),
-          image: img
-        },
-        success: function() {
-          img = $(".thumbs > li > img[imgid='" + img + "']");
-          img.attr('src', img.attr('src'));
-          img = $("#big-image}");
-          return img.attr('src', img.attr('src'));
-        }
-      });
-    };
-    Gallery.prototype.rotateRight = function() {
-      var img;
-      img = this.currentImg.get();
-      return $.ajax({
-        url: '/rotate-right',
-        type: 'POST',
-        data: {
-          album: this.currentAlbum.get(),
-          image: img
-        },
-        success: function() {
-          img = $(".thumbs > li > img[imgid='" + img + "']");
-          img.attr('src', img.attr('src'));
-          img = $("#big-image}");
-          return img.attr('src', img.attr('src'));
         }
       });
     };

@@ -84,43 +84,45 @@ class Gallery extends Brick
   wInit: ->
     @main.refresh()
 
+  withThumbWait: (imgid, contin)=>
+    # Set wait.gif
+    @follower.hide()
+    imgTag = $(".thumbs > li > img[imgid='#{imgid}']")
+    oldSrc = imgTag.attr('src')
+    imgTag.attr('src', '/css/images/wait.gif')
+
+    unfreeze = ->
+      imgTag.attr('src', oldSrc)
+      $("#big-image}").attr('src', $("#big-image}").attr('src'))
+
+    contin(unfreeze)
+
+  thumbServerCall: (service, success)=>
+    albid = @currentAlbum.get()
+    imgid = @currentImg.get()
+    this.withThumbWait imgid, (unwait)->
+      $.ajax
+        url: service
+        type: 'POST'
+        data: { album: albid, image: imgid }
+        success: ->
+          success(albid, imgid) if success?
+          unwait()
+        error: unwait
+
+  rotateLeft: =>
+    this.thumbServerCall '/rotate-left'
+    
+  rotateRight: =>
+    this.thumbServerCall '/rotate-right'
+
   toggleDelete: =>
-    img = @currentImg.get()
-    success = ->
-      li = $(".thumbs > li > img[imgid='#{img}']").parent()
+    this.thumbServerCall '/toggle-delete', (albid, imgid)->
+      li = $(".thumbs > li > img[imgid='#{imgid}']").parent()
       if li.parent().attr('id') == "kept-thumbs"
         li.appendTo $('#deleted-thumbs')
       else
         li.appendTo $('#kept-thumbs')
-    $.ajax
-      url: '/toggle-delete'
-      type: 'POST'
-      data: { album: @currentAlbum.get(), image: img }
-      success: success
-
-  rotateLeft: =>
-    img = @currentImg.get()
-    $.ajax
-      url: '/rotate-left'
-      type: 'POST'
-      data: { album: @currentAlbum.get(), image: img }
-      success: ->
-        img = $(".thumbs > li > img[imgid='#{img}']")
-        img.attr('src', img.attr('src'))
-        img = $("#big-image}")
-        img.attr('src', img.attr('src'))
-    
-  rotateRight: =>
-    img = @currentImg.get()
-    $.ajax
-      url: '/rotate-right'
-      type: 'POST'
-      data: { album: @currentAlbum.get(), image: img }
-      success: ->
-        img = $(".thumbs > li > img[imgid='#{img}']")
-        img.attr('src', img.attr('src'))
-        img = $("#big-image}")
-        img.attr('src', img.attr('src'))
     
 # When the document is ready, we build an app instance and start 
 # running it
