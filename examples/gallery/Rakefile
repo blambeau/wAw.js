@@ -1,5 +1,5 @@
 WAWJS_ROOT = File.expand_path('../../../', __FILE__)
-WAWJS = Dir["#{WAWJS_ROOT}/dist/waw*.js"].last
+WAWJS = Dir["#{WAWJS_ROOT}/dist/waw-*.js"].last
 require 'fileutils'
 
 # Absolutizes a path from here (i.e. __DIR__)

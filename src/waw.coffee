@@ -4,3 +4,6 @@ exports.Cell    = require('./cell').Cell
 exports.SM      = require('./sm').SM
 exports.View    = require('./view').View
 exports.Helpers = require('./helpers').Helpers
+
+$(document).ready ->
+  $.extend($, new exports.Helpers)

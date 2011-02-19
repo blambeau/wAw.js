@@ -472,10 +472,10 @@
     exports.SM = require('./sm').SM;
     exports.View = require('./view').View;
     exports.Helpers = require('./helpers').Helpers;
+    $(document).ready(function() {
+      return $.extend($, new exports.Helpers);
+    });
 
   };
   require('./waw');
 }).call(this, this);
-$(document).ready(function(){
-  $.extend($, new Helpers)
-});
