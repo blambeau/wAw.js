@@ -184,6 +184,7 @@
       };
       return Brick;
     })();
+
   };
   builder['./cell'] = function(exports){
     var Brick, Cell, Signal;
@@ -228,6 +229,7 @@
       };
       return Cell;
     })();
+
   };
   builder['./helpers'] = function(exports){
     var Helpers;
@@ -263,6 +265,7 @@
       };
       return Helpers;
     })();
+
   };
   builder['./signal'] = function(exports){
     var Signal;
@@ -287,6 +290,7 @@
       };
       return Signal;
     })();
+
   };
   builder['./sm'] = function(exports){
     var Cell, SM, Signal;
@@ -336,6 +340,7 @@
       };
       return SM;
     })();
+
   };
   builder['./view'] = function(exports){
     var Brick, View;
@@ -458,6 +463,7 @@
       };
       return View;
     })();
+
   };
   builder['./waw'] = function(exports){
     exports.Signal = require('./signal').Signal;
@@ -466,6 +472,7 @@
     exports.SM = require('./sm').SM;
     exports.View = require('./view').View;
     exports.Helpers = require('./helpers').Helpers;
+
   };
   require('./waw');
 }).call(this, this);

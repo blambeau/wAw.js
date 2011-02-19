@@ -1,0 +1,22 @@
+#!/usr/bin/env ruby
+
+def _(file)
+  File.expand_path("../../#{file}", __FILE__)
+end
+
+def compile(srcfolder)
+  code = ""
+  code += File.read _("dist/browser.pre.js")
+  Dir[_("#{srcfolder}/**/*.coffee")].each do |file|
+    file_code = `cat #{file} | coffee --compile --bare --stdio`
+    file_code = file_code.gsub(/^/m, '    ')
+    code += "  builder['./#{File.basename(file, '.coffee')}'] = function(exports){\n"
+    code += file_code + "\n"
+    code += "  };\n"
+  end
+  code += File.read _("dist/browser.post.js")
+  # {parser, uglify} = require 'uglify-js'
+  # code = uglify.gen_code uglify.ast_squeeze uglify.ast_mangle parser.parse code
+  code
+end
+puts compile(ARGV[0])

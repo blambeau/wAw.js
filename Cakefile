@@ -33,21 +33,7 @@ build = (callback, contd)->
 task "build", "Compile CoffeeScript to JavaScript", -> build onerror
 
 dist = (callback)->
-  target = "dist/waw-#{VERSION}.js"
-  log "Compiling #{target}", green
-  build callback, ->
-    code = ""
-    code += fs.readFileSync("dist/browser.pre.js")
-    for file in fs.readdirSync('dist/compile')
-      file_code = fs.readFileSync("dist/compile/#{file}").toString();
-      file_code = file_code.replace(/^/mg, '    ')
-      code += "  builder['./#{path.basename(file, '.js')}'] = function(exports){\n"
-      code += file_code + "\n"
-      code += "  };\n"
-    code += fs.readFileSync("dist/browser.post.js")
-    # {parser, uglify} = require 'uglify-js'
-    # code = uglify.gen_code uglify.ast_squeeze uglify.ast_mangle parser.parse code
-    fs.writeFileSync target, code
+  exec "./bin/wCompile src > dist/waw-#{VERSION}.js"
 task "dist", "Building waw.js distribution", -> dist onerror
 
 clean = (callback)->
