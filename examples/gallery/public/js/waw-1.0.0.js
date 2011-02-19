@@ -412,6 +412,9 @@ function require(x) { return exports; };
       sel = arguments[0], args = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
       return (_ref = $.wApp).wEmit.apply(_ref, [sel].concat(__slice.call(args)));
     };
+    Helpers.prototype.wConnect = function(signal, slot) {
+      return signal.listen(slot);
+    };
     Helpers.prototype.wCall = function(qid, fn) {
       return $.wApp.wCall(qid, fn);
     };

@@ -75,29 +75,27 @@
       this.thumbServerCall = __bind(this.thumbServerCall, this);;
       this.withThumbWait = __bind(this.withThumbWait, this);;
       this.render = __bind(this.render, this);;
-      this.images = __bind(this.images, this);;
-      this.albums = __bind(this.albums, this);;
       this.wInit = __bind(this.wInit, this);;
       this.currentAlbum = new Cell("Cars");
       this.currentImg = new Cell;
       this.index = new View({
         handler: 'mustache',
+        renderData: __bind(function() {
+          return {
+            albums: this.model.albums(),
+            images: this.model.images(this.currentAlbum)
+          };
+        }, this),
         partials: ['albumSelector', 'thumbs']
       });
-      this.currentImg.listen(__bind(function(cell, oldvalue, newvalue) {
-        return $('#big-image').attr('src', "/image/" + this.currentAlbum + "/" + newvalue);
-      }, this));
       this.follower = new Follower;
-      this.currentImg.listen(this.follower.follow);
     }
     See.prototype.wInit = function() {
-      return this.currentAlbum.listen(this.index.thumbs.refresh);
-    };
-    See.prototype.albums = function() {
-      return this.model.albums();
-    };
-    See.prototype.images = function() {
-      return this.model.images(this.currentAlbum);
+      $.wConnect(this.currentAlbum, this.index.thumbs.refresh);
+      $.wConnect(this.currentImg, this.follower.follow);
+      return $.wConnect(this.currentImg, __bind(function(cell, oldvalue, newvalue) {
+        return $('#big-image').attr('src', "/image/" + this.currentAlbum + "/" + newvalue);
+      }, this));
     };
     See.prototype.render = function() {
       return this.index.render();

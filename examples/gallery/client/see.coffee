@@ -12,22 +12,17 @@ class See extends Brick
     # Rendering of the /see page
     @index = new View
       handler:  'mustache'
+      renderData: => { albums: @model.albums(), images: @model.images(@currentAlbum) }
       partials: [ 'albumSelector', 'thumbs' ]
 
     # We also listen to update a Follower instance
     @follower = new Follower
 
   wInit: =>
-	  @currentAlbum.listen @index.thumbs.refresh 
-    @currentImg.listen   @follower.follow
-    @currentImg.listen (cell, oldvalue, newvalue) =>
+	  $.wConnect @currentAlbum, @index.thumbs.refresh
+	  $.wConnect @currentImg, @follower.follow
+	  $.wConnect @currentImg, (cell, oldvalue, newvalue) =>
       $('#big-image').attr('src', "/image/#{@currentAlbum}/#{newvalue}")
-
-  albums: =>
-	  @model.albums()
-
-  images: =>
-	  @model.images(@currentAlbum)
 
   render: => 
     @index.render()
