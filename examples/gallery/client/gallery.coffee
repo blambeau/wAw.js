@@ -22,5 +22,7 @@ class Gallery extends Brick
 # When the document is ready, we build an app instance and start 
 # running it
 $(document).ready ->
+  $.wCall = (qid, fn)->
+    fn($.gallery.wFetch(qid))
   $.gallery = new Gallery
   $.gallery.wRun()

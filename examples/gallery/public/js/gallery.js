@@ -68,7 +68,6 @@
   See = (function() {
     __extends(See, Brick);
     function See(model) {
-      var wCallRender;
       this.model = model;
       this.toggleDelete = __bind(this.toggleDelete, this);;
       this.rotateRight = __bind(this.rotateRight, this);;
@@ -76,6 +75,7 @@
       this.thumbServerCall = __bind(this.thumbServerCall, this);;
       this.withThumbWait = __bind(this.withThumbWait, this);;
       this.render = __bind(this.render, this);;
+      this.wCallRender = __bind(this.wCallRender, this);;
       this.currentAlbum = new Cell("Cars");
       this.currentImg = new Cell;
       this.index = new View({
@@ -92,23 +92,15 @@
       }, this));
       this.follower = new Follower;
       this.currentImg.listen(this.follower.follow);
-      wCallRender = function(text, render) {
-        var x;
-        x = "$.gallery.see." + (render(text));
-        if (x[x.length - 1] !== ')') {
-          x += "()";
-        }
-        x += ";";
-        console.log("Rendering |" + x + "|");
-        return x;
-      };
       this.albums = new View({
         handler: 'mustache',
         renderData: __bind(function() {
+          var renderer;
+          renderer = this.wCallRender;
           return {
             albums: this.model.albums(),
             wCall: function() {
-              return wCallRender;
+              return renderer;
             }
           };
         }, this)
@@ -116,16 +108,29 @@
       this.thumbs = new View({
         handler: 'mustache',
         renderData: __bind(function() {
+          var renderer;
+          renderer = this.wCallRender;
           return {
             images: this.model.images(this.currentAlbum),
             wCall: function() {
-              return wCallRender;
+              return renderer;
             }
           };
         }, this),
         autorefresh: this.currentAlbum
       });
     }
+    See.prototype.wCallRender = function(text, render) {
+      var call;
+      call = render(text);
+      if (call[call.length - 1] !== ')') {
+        call += "()";
+      }
+      call = "function(callee){ callee." + call + "; }";
+      call = "$.wCall('" + (this.wQid()) + "', " + call + ");";
+      console.log("Rendering |" + call + "|");
+      return call;
+    };
     See.prototype.render = function() {
       return this.index.render();
     };
@@ -199,6 +204,9 @@
     return Gallery;
   })();
   $(document).ready(function() {
+    $.wCall = function(qid, fn) {
+      return fn($.gallery.wFetch(qid));
+    };
     $.gallery = new Gallery;
     return $.gallery.wRun();
   });

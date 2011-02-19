@@ -23,26 +23,28 @@ class See extends Brick
     @follower = new Follower
     @currentImg.listen @follower.follow
 
-    # Rendering of the thumbnails at left of /see
-    wCallRender = (text, render)->
-      x = "$.gallery.see.#{render(text)}"
-      x += "()" unless x[x.length - 1] == ')'
-      x += ";"
-      console.log "Rendering |#{x}|"
-      x
-
     # Rendering of the album selector
     @albums = new View
       handler: 'mustache'
       renderData: =>
-        { albums: @model.albums(), wCall: -> wCallRender }
+        renderer = this.wCallRender
+        { albums: @model.albums(), wCall: -> renderer }
 
     @thumbs = new View
       handler: 'mustache'
-      renderData: => {
-        images: @model.images(@currentAlbum), wCall: -> wCallRender }
+      renderData: => 
+        renderer = this.wCallRender
+        { images: @model.images(@currentAlbum), wCall: -> renderer }
       autorefresh: 
         @currentAlbum
+
+   wCallRender: (text, render)=>
+     call = render(text)
+     call += "()" unless call[call.length - 1] == ')'
+     call = "function(callee){ callee.#{call}; }"
+     call = "$.wCall('#{this.wQid()}', #{call});"
+     console.log "Rendering |#{call}|"
+     call
 
   render: => 
     @index.render()
