@@ -48,14 +48,23 @@ class WawJS::Commands::Main
     def _(file)
       File.expand_path("../../#{file}", __FILE__)
     end
+    
+    # Runs a command, returns result on STDOUT. If the exit status was no 0,
+    # a RuntimeError is raised. 
+    def safe_run(cmd)
+      res = `#{cmd}`
+      unless $?.exitstatus == 0
+        raise RuntimeError, "Error while executing #{cmd}" 
+      end
+      res
+    end
   
     def do_uglify(code)
       require "tempfile"
       file = Tempfile.new('waw.js.code')
       file << code
       file.close
-      command = "uglifyjs #{file.path}"
-      code = `#{command}`
+      code = safe_run("uglifyjs #{file.path}")
       file.unlink
       code
     end
@@ -92,7 +101,7 @@ class WawJS::Commands::Main
       code = ""
       Dir["#{srcfolder}/**/*.coffee"].each do |file|
         code += with_builder(File.basename(file, '.coffee')){
-          `cat #{file} | coffee --compile --bare --stdio`
+          safe_run("cat #{file} | coffee --compile --bare --stdio")
         }
       end
       code
@@ -102,7 +111,7 @@ class WawJS::Commands::Main
       files = Dir["#{srcfolder}/**/*.coffee"]
       files.sort{|f1,f2| f1.split('/').size <=> f2.split('/').size}
       with_builder(name){
-        `cat #{files.join(' ')} | coffee --compile --bare --stdio --join`
+        safe_run("cat #{files.join(' ')} | coffee --compile --bare --stdio --join")
       }
     end
 

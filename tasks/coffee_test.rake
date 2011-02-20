@@ -2,7 +2,7 @@
 begin
   desc "Run coffee tests"
   task :coffee_test do |t|
-    puts `cake test`
+    shell_safe_exec "cake test"
   end
 ensure
   desc "coffee"

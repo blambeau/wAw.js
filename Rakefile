@@ -6,6 +6,14 @@ rescue LoadError => ex
   abort "Bundler failed to load, (did you run 'gem install bundler' ?)"
 end
 
+# Runs a command, returns result on STDOUT. If the exit status was no 0,
+# a RuntimeError is raised. 
+def shell_safe_exec(cmd)
+  unless system(cmd)
+    raise RuntimeError, "Error while executing #{cmd}" 
+  end
+end
+  
 # Dynamically load the gem spec
 $gemspec_file = File.expand_path('../wawjs.gemspec', __FILE__)
 $gemspec      = Kernel.eval(File.read($gemspec_file))

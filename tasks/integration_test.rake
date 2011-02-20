@@ -4,7 +4,7 @@ begin
   task :integration_test do |t|
     examples = File.expand_path('../../examples', __FILE__)
     Dir["#{examples}/*"].each{|folder|
-      system("cd #{folder} && rake")
+      shell_safe_exec("cd #{folder} && rake")
     }
   end
 ensure
