@@ -2,6 +2,26 @@
 require "rubygems"
 require "quickl"
 
+def headize(name)
+  <<-EOF.gsub(/^\s*\| /m, "")
+  | var #{name.capitalize} = function(){};
+  | (function(exports) {
+  |   var builder, require;
+  |   builder = [];
+  |   require = function(name) {
+  |     var _ref;
+  |     (_ref = exports[name]) != null ? _ref : exports[name] = builder[name](exports);
+  |     return exports;
+  |   };
+  EOF
+end
+def terminize(name)
+  <<-EOF.gsub(/^\s*\| /m, "")
+  |   require('./#{name}');
+  | }).call(this, #{name.capitalize});
+  EOF
+end
+
 #
 # Compile a waw.js application 
 #
@@ -19,16 +39,27 @@ class Compile < Quickl::Command(__FILE__, __LINE__)
   # Command's version
   VERSION = "1.0.0"
   
+  # Lowercase name of the application to compile
+  attr_reader :name
+  
   # Which header file to use
   attr_reader :header
   
   # Uglify result?
   attr_reader :uglify
   
+  # Join coffee script before compilation?
+  attr_reader :join
+  
   # Install command options
   options do |opt|
+    @name = "app"
+    @join = false
+    @uglify = false
+    opt.on('--name=NAME'){|value| @name = value}
     opt.on('--header=FILE'){|value| @header = value}
     opt.on('-u', '--[no-]uglify'){|value| @uglify = value}
+    opt.on_tail("j", "--[no-]join", "Join coffee scripts before compilation?"){|value| @join = value}
     opt.on_tail("--help", "Show help"){ raise Quickl::Help }
     opt.on_tail("--version", "Show version") do
       raise Quickl::Exit, "#{program_name} #{VERSION} (c) 2010, Bernard Lambeau"
@@ -53,7 +84,7 @@ class Compile < Quickl::Command(__FILE__, __LINE__)
   def compile(srcfolder)
     code = ""
     code += File.read(@header) if @header
-    code += File.read _("dist/browser.pre.js")
+    code += headize(name)
     Dir[_("#{srcfolder}/**/*.coffee")].each do |file|
       file_code = `cat #{file} | coffee --compile --bare --stdio`
       file_code = file_code.gsub(/^/m, '    ')
@@ -61,7 +92,7 @@ class Compile < Quickl::Command(__FILE__, __LINE__)
       code += file_code + "\n"
       code += "  };\n"
     end
-    code += File.read _("dist/browser.post.js")
+    code += terminize(name)
     code = do_uglify(code) if uglify
     code
   end
