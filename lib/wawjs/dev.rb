@@ -47,9 +47,8 @@ module WawJS
       c.compile(File.join(@app_root, 'src'))
     end
     
-    get %r{([\w]+).js$} do
+    get %r{([\w\-]+).js$} do
       libname = params[:captures].first
-      puts "Requesting #{libname} and #{File.basename(@app_root)}"
       if file = look_for(libname)
         send_file file
       elsif libname == File.basename(@app_root)

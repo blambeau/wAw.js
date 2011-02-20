@@ -20,11 +20,12 @@ module WawJS
       assert app.look_for('wawjs') =~ /min.js$/
       assert app.look_for('third') =~ /dev.js$/
       assert_not_nil app.look_for('less')
+      assert_not_nil app.look_for('coffee-script')
       assert_nil app.look_for('none')
     end
   
     def test_service_ok_on_existing
-      [ 'wawjs', 'third' ].each{|which|
+      [ 'wawjs', 'third', 'coffee-script' ].each{|which|
         get "/#{which}.js"
         assert last_response.ok?
         assert last_response.content_type =~ /javascript/
