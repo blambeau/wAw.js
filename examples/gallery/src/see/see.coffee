@@ -25,10 +25,6 @@ class See extends WawJS.Brick
   wInit: =>
     thiz = this
     $.wConnect @currentAlbum, @index.thumbs.refresh
-    $.wConnect @currentImg, (c, oldval, newval)->
-      $('#big-image').fadeOut 100, ->
-        $('#big-image').attr('src', "/image/#{thiz.currentAlbum}/#{newval}")
-        $('#big-image').fadeIn(100)
     $.wConnect @mode, (c,oldval,newval)=>
       oldval.stop(this) if oldval?
       newval.start(this) if newval?
@@ -45,6 +41,12 @@ class See extends WawJS.Brick
         @mode.set(@follower)
       when 'diapo'
         @mode.set(@diapo)
+  
+  resetBigImage: (fOut, fIn)=>
+    thiz = this
+    $('#big-image').fadeOut fOut, ->
+      $('#big-image').attr('src', "/image/#{thiz.currentAlbum}/#{thiz.currentImg}")
+      $('#big-image').fadeIn(fIn)
     
   withThumbWait: (imgid, contd)=>
     # Set wait.gif
