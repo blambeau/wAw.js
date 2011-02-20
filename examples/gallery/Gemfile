@@ -1,0 +1,5 @@
+source 'http://rubygems.org'
+gem 'rake'
+gem 'rack-test'
+gem 'wawjs', :path => File.expand_path('../../../', __FILE__)
+gem 'less'

@@ -1,7 +1,13 @@
+begin
+  gem "bundler", "~> 1.0"
+  require "bundler/setup"
+rescue LoadError => ex
+  puts ex.message
+  abort "Bundler failed to load, (did you run 'gem install bundler' ?)"
+end
+
 WAWJS_ROOT = File.expand_path('../../../', __FILE__)
 $LOAD_PATH.unshift File.join(WAWJS_ROOT, 'lib')
-require 'rubygems'
-require 'wawjs'
 require 'fileutils'
 
 # Absolutizes a path from here (i.e. __DIR__)
@@ -19,7 +25,9 @@ begin
   end
 rescue LoadError => ex
   task :unit_test do
-    abort 'rspec is not available. In order to run spec, you must: gem install rspec'
+    puts ex.message
+    puts ex.backtrace.join("\n")
+    abort 'rake/testtask does not seem available. '
   end
 ensure
   desc "Run all tests"
@@ -42,4 +50,4 @@ task :"run" => :build do
   Kernel.exec "./config.ru"
 end
 
-task :default => :"run"
+task :default => :"test"

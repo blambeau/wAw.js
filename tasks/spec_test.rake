@@ -75,6 +75,5 @@ rescue LoadError => ex
   end
 ensure
   task :spec => [:spec_test]
-  desc "spec"
   task :test => [:spec_test]
 end

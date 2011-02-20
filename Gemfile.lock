@@ -3,6 +3,8 @@ PATH
   specs:
     wawjs (1.0.0)
       bundler (~> 1.0)
+      json (>= 1.5.0)
+      quickl (~> 0.2.0)
       sinatra (~> 1.1.0)
 
 GEM
@@ -10,7 +12,11 @@ GEM
   specs:
     bluecloth (2.0.10)
     diff-lcs (1.1.2)
+    json (1.5.1)
+    quickl (0.2.0)
     rack (1.2.1)
+    rack-test (0.5.7)
+      rack (>= 1.0)
     rake (0.8.7)
     rspec (2.4.0)
       rspec-core (~> 2.4.0)
@@ -33,6 +39,9 @@ PLATFORMS
 DEPENDENCIES
   bluecloth (~> 2.0.9)
   bundler (~> 1.0)
+  json (>= 1.5.0)
+  quickl (~> 0.2.0)
+  rack-test (~> 0.5)
   rake (~> 0.8.7)
   rspec (~> 2.4.0)
   sinatra (~> 1.1.0)
