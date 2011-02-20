@@ -1,13 +1,10 @@
 require 'wawjs'
+require 'wawjs/no_cache'
 require 'wawjs/commands/main'
 require 'wawjs/commands/compile'
 module WawJS
   class Dev < Sinatra::Base
     
-    NO_CACHE_HEADERS = {'Cache-control' => "no-store, no-cache, must-revalidate", 
-                        'Pragma'        => "no-cache", 
-                        'Expires'       => "Thu, 01 Dec 1994 16:00:00 GMT"}
-                        
     VENDOR_JS = File.expand_path('../../../vendor/js', __FILE__)
     
     def initialize(configru)
@@ -62,7 +59,7 @@ module WawJS
       if file = look_for(libname)
         send_file file
       elsif libname == File.basename(@app_root)
-        headers NO_CACHE_HEADERS.merge("Content-Type" => "text/javascript")
+        headers NoCache::NO_CACHE_HEADERS.merge("Content-Type" => "text/javascript")
         compile_app(libname)
       else
         not_found
@@ -72,7 +69,7 @@ module WawJS
     get %r{([\w\-]+).coffee$} do
       libname = params[:captures].first
       if libname == File.basename(@app_root)
-        headers NO_CACHE_HEADERS.merge("Content-Type" => "text/coffeescript")
+        headers NoCache::NO_CACHE_HEADERS.merge("Content-Type" => "text/coffeescript")
         join_app(libname)
       else
         not_found
