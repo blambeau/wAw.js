@@ -7,7 +7,7 @@ class Gallery < WawJS::Brick
                       'Pragma'        => "no-cache", 
                       'Expires'       => "Thu, 01 Dec 1994 16:00:00 GMT"}
 
-  def initialize(igallery)
+  def initialize(igallery = nil)
     super
     @igallery = igallery
   end
