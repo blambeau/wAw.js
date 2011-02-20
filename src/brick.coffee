@@ -196,6 +196,21 @@ exports.Brick = class Brick
     else
       throw "Not a listenable #{fetched}"
     this
+    
+  #
+  # Convenient method for wFetch(sel).unlisten(fn)
+  #
+  # Throws when:
+  #   - wFetch(sel) throws an error itself
+  #   - No method unlisten() can be found on fetched component
+  #
+  wUnlisten: (sel, fn)->
+    fetched = this.wFetch(sel)
+    if (fetched? && fetched['unlisten']?)
+      fetched.unlisten(fn)
+    else
+      throw "Not a listenable #{fetched}"
+    this
 
   # 
   # Convenient method for wFetch(sel).emit(args...)

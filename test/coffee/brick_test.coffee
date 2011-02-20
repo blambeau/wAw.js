@@ -51,21 +51,28 @@ test "Brick#wFetch with sel references", ->
 
 # Signals and signals
 
-test "Brick#wListen", ->
+test "Brick#wListen and Brick#wEmit Brick#wUnlisten", ->
+  local = null
   b = new Brick
   b.hello = new Signal(b)
-  x = b.wListen 'hello', (name) ->
-    "Hello #{name}"
+  listener = (name)->
+    local = "Hello #{name}"
+
+  x = b.wListen 'hello', listener
   ok (x == b)
 
-test "Brick#wEmit", ->
-  local = ""
-  b = new Brick
-  b.hello = new Signal(b)
-  b.wListen 'hello', (name) ->
-    local = "Hello #{name}"
   b.wEmit 'hello', 'waw'
   ok ("Hello waw" == local)
+  
+  b.wUnlisten 'hello', listener
+  ok (x == b)
+
+  b.wEmit 'hello', 'waw2'
+  ok ("Hello waw" == local)
+  
+  x = b.wListen 'hello', listener
+  b.wEmit 'hello', 'waw3'
+  ok ("Hello waw3" == local)
 
 ## wGet
 

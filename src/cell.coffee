@@ -6,21 +6,24 @@
 #
 exports.Cell = class Cell extends Brick
 
-  constructor: (@value) ->
+  constructor: (@_value) ->
     super
     @changed = new Signal(this)
 
   get: -> 
-    @value
+    @_value
   
   set: (value) ->
-    oldval = @value
-    @value = value
+    oldval = @_value
+    @_value = value
     @changed.emit(this, oldval, value)
-    @value
+    @_value
 
   listen: (fn) -> 
     this.wListen('changed', fn)
+
+  unlisten: (fn) -> 
+    this.wUnlisten('changed', fn)
 
   toString: ->
     v = this.get()
