@@ -163,6 +163,16 @@ var WawJS = function(){};
         }
         return this;
       };
+      Brick.prototype.wUnlisten = function(sel, fn) {
+        var fetched;
+        fetched = this.wFetch(sel);
+        if ((fetched != null) && (fetched['unlisten'] != null)) {
+          fetched.unlisten(fn);
+        } else {
+          throw "Not a listenable " + fetched;
+        }
+        return this;
+      };
       Brick.prototype.wEmit = function() {
         var args, fetched, sel;
         sel = arguments[0], args = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
@@ -200,23 +210,26 @@ var WawJS = function(){};
     Signal = require('./signal').Signal;
     exports.Cell = Cell = (function() {
       __extends(Cell, Brick);
-      function Cell(value) {
-        this.value = value;
+      function Cell(_value) {
+        this._value = _value;
         Cell.__super__.constructor.apply(this, arguments);
         this.changed = new Signal(this);
       }
       Cell.prototype.get = function() {
-        return this.value;
+        return this._value;
       };
       Cell.prototype.set = function(value) {
         var oldval;
-        oldval = this.value;
-        this.value = value;
+        oldval = this._value;
+        this._value = value;
         this.changed.emit(this, oldval, value);
-        return this.value;
+        return this._value;
       };
       Cell.prototype.listen = function(fn) {
         return this.wListen('changed', fn);
+      };
+      Cell.prototype.unlisten = function(fn) {
+        return this.wUnlisten('changed', fn);
       };
       Cell.prototype.toString = function() {
         var v;
@@ -246,10 +259,13 @@ var WawJS = function(){};
         return $.wApp.wGet(qid);
       };
       Helpers.prototype.wSet = function(qid, value) {
-        return $.wApp.wSet(qid, fn);
+        return $.wApp.wSet(qid, value);
       };
       Helpers.prototype.wListen = function(sel, fn) {
         return $.wApp.wListen(sel, fn);
+      };
+      Helpers.prototype.wUnlisten = function(sel, fn) {
+        return $.wApp.wUnlisten(sel, fn);
       };
       Helpers.prototype.wEmit = function() {
         var args, sel, _ref;
@@ -258,6 +274,9 @@ var WawJS = function(){};
       };
       Helpers.prototype.wConnect = function(signal, slot) {
         return signal.listen(slot);
+      };
+      Helpers.prototype.wDisconnect = function(signal, slot) {
+        return signal.unlisten(slot);
       };
       Helpers.prototype.wCall = function(qid, fn) {
         return $.wApp.wCall(qid, fn);
@@ -275,6 +294,20 @@ var WawJS = function(){};
       Signal.prototype.listen = function(l) {
         this.listeners.push(l);
         return this;
+      };
+      Signal.prototype.unlisten = function(l) {
+        var candidate, i, index, _len, _ref;
+        index = null;
+        _ref = this.listeners;
+        for (i = 0, _len = _ref.length; i < _len; i++) {
+          candidate = _ref[i];
+          if (candidate === l) {
+            index = i;
+          }
+        }
+        if (index != null) {
+          return this.listeners.splice(index, 1);
+        }
       };
       Signal.prototype.emit = function() {
         var l, _i, _len, _ref, _results;

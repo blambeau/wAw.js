@@ -5,10 +5,18 @@
       <option value="{{albid}}">{{name}}</option>
     {{/albums}}
   </select>
+  <input class="see-mode" id="see-mode-edit" type="radio" name="mode" value="edit" checked="checked">
+  <label for="see-mode-edit">Edit</label>
+  <input class="see-mode" id="see-mode-diapo" type="radio" name="mode" value="diapo">
+  <label for="see-mode-diapo">Diaporama</label>
 </div>
 <script>
   $('#album-selector').change(function(){
     albid = $('#album-selector').val();
     {{#wCall}}currentAlbum.set(albid){{/wCall}}
+  });
+  $('.see-mode').click(function(){
+    val = $(this).val();
+    {{#wCall}}setMode(val){{/wCall}}
   });
 </script>

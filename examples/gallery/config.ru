@@ -14,6 +14,7 @@ require 'gallery'
 
 GALLERY = IGallery.open(File.expand_path('../albums', __FILE__))
 
+use WawJS::NoCache
 map '/jsdev' do
   run WawJS::Dev.new __FILE__
 end

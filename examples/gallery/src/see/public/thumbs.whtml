@@ -20,14 +20,4 @@
       <a id="button-rright" onclick="{{#wCall}}rotateRight{{/wCall}}"></a>
     </div>
   </div>
-  <script>
-    $('.thumb').mouseover(function(){
-      img = $(this).attr('imgid');
-      {{#wCall}}currentImg.set(img){{/wCall}}
-      {{#wCall}}follower.show{{/wCall}}
-    });
-    $('#button-box').mouseleave(function(){
-      {{#wCall}}follower.hide{{/wCall}}
-    });
-  </script>
 </div>

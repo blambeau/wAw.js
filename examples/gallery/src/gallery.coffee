@@ -18,6 +18,7 @@ class Gallery extends WawJS.Brick
   # This function is called when the application is started.
   wInit: ->
     @main.refresh()
+    @see.setMode('edit')
 
 # When the document is ready, we build an app instance and start 
 # running it
@@ -27,5 +28,5 @@ $(document).ready ->
     if See?
       $.wRun(new Gallery)
     else
-      setTimeOut f
+      setTimeout f
   setTimeout f, 100

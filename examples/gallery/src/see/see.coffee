@@ -1,30 +1,12 @@
-class Follower extends WawJS.Brick
-  
-  follow: (cell, oldvalue, newvalue)=>
-    this.move $("img[imgid='#{newvalue}']").position()
-
-  move: (pos)->
-    css = {"left": (pos.left) + "px", "top": (pos.top) + "px"}
-    $('#thumb-hider').css(css)
-    $('#button-box').css(css)
-
-  show: ->
-    $('#thumb-hider').show()
-    $('#button-box').show()
-
-  hide: ->
-    $('#thumb-hider').hide()
-    $('#button-box').hide()
-
 class See extends WawJS.Brick
   
   # Builds the Gallery brick
   constructor: (@model)->
 
-    # This cell will keep the name of the current album displayed. 
+    # This cell will keep the name of the current album displayed
     @currentAlbum = new WawJS.Cell("Cars")
 
-    # This cell will keep the name of the current image displayed. 
+    # This cell will keep the name of the current image displayed
     @currentImg = new WawJS.Cell
 
     # Rendering of the /see page
@@ -34,17 +16,36 @@ class See extends WawJS.Brick
       partials: [ 'albumSelector', 'thumbs' ]
 
     # We also listen to update a Follower instance
-    @follower = new Follower
+    @follower  = new Follower
+    @diapo = new Diaporama
 
+    # This cell will keep the current mode 
+    @mode = new WawJS.Cell
+    
   wInit: =>
-	  $.wConnect @currentAlbum, @index.thumbs.refresh
-	  $.wConnect @currentImg, @follower.follow
-	  $.wConnect @currentImg, (cell, oldvalue, newvalue) =>
-      $('#big-image').attr('src', "/image/#{@currentAlbum}/#{newvalue}")
+    thiz = this
+    $.wConnect @currentAlbum, @index.thumbs.refresh
+    $.wConnect @currentImg, (c, oldval, newval)->
+      $('#big-image').fadeOut 100, ->
+        $('#big-image').attr('src', "/image/#{thiz.currentAlbum}/#{newval}")
+        $('#big-image').fadeIn(100)
+    $.wConnect @mode, (c,oldval,newval)=>
+      oldval.stop(this) if oldval?
+      newval.start(this) if newval?
 
   render: => 
     @index.render()
-
+    
+  images: =>
+    @model.images(@currentAlbum)
+    
+  setMode: (mode)=>
+    switch mode
+      when 'edit'
+        @mode.set(@follower)
+      when 'diapo'
+        @mode.set(@diapo)
+    
   withThumbWait: (imgid, contd)=>
     # Set wait.gif
     @follower.hide()
