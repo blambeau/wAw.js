@@ -1,4 +1,4 @@
-{Signal} = require '../src/signal'
+{Signal} = require '../../src/signal'
 
 test "Signal's constructor", ->
   s = new Signal

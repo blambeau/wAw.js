@@ -1,5 +1,5 @@
-{Cell} = require '../src/cell'
-{Signal} = require '../src/signal'
+{Cell} = require '../../src/cell'
+{Signal} = require '../../src/signal'
 
 test "Cell's basic contract", ->
   c = new Cell(14)

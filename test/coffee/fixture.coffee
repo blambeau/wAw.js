@@ -1,6 +1,6 @@
-{Brick}  = require('../src/brick')
-{Cell} = require('../src/cell')
-{SM}  = require('../src/sm')
+{Brick}  = require('../../src/brick')
+{Cell} = require('../../src/cell')
+{SM}  = require('../../src/sm')
 
 exports.FixtureApp = class FixtureApp extends Brick
   constructor: ->

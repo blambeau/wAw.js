@@ -106,10 +106,10 @@ runTests = ->
       console.log "  #{error.source}" if error.source
 
   # Run every test in the `test` folder, recording failures.
-  fs.readdir 'test', (err, files) ->
+  fs.readdir 'test/coffee', (err, files) ->
     files.forEach (file) ->
       return unless file.match(/\.coffee$/i)
-      filename = path.join 'test', file
+      filename = path.join 'test/coffee', file
       fs.readFile filename, (err, code) ->
         currentFile = filename
         try
