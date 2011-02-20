@@ -71,7 +71,7 @@ rescue LoadError => ex
     abort 'rspec is not available. In order to run spec, you must: gem install rspec'
   end
 ensure
-  desc "Run all tests"
+  desc "unit"
   task :test => [:unit_test]
 end
 

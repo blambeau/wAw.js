@@ -1,5 +1,6 @@
 WAWJS_ROOT = File.expand_path('../../../', __FILE__)
 $LOAD_PATH.unshift File.join(WAWJS_ROOT, 'lib')
+require 'rubygems'
 require 'wawjs'
 require 'fileutils'
 
@@ -14,7 +15,6 @@ begin
   Rake::TestTask.new(:unit_test) do |t|
     t.libs = ["src"]
     t.verbose = false
-    # Glob pattern to match test files. (default is 'test/test*.rb')
     t.pattern = "test/*_test.rb"
   end
 rescue LoadError => ex
