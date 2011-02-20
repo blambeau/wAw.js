@@ -116,7 +116,7 @@ variables:
       rspec_opts: [--color, --backtrace]
     unit_test:
       # Glob pattern to match test files. (default is 'test/test*.rb')
-      pattern: test/ruby/test*.rb
+      pattern: test/ruby/*_test.rb
       # Array of directories to added to $LOAD_PATH before running the tests.
       libs: [ lib ]
       # True if verbose test output desired.

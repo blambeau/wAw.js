@@ -14,16 +14,16 @@ class WawJS::Commands::Main
   class Compile < Quickl::Command(__FILE__, __LINE__)
   
     # Lowercase name of the application to compile
-    attr_reader :name
+    attr_accessor :name
   
     # Which header file to use
-    attr_reader :header
+    attr_accessor :header
   
     # Uglify result?
-    attr_reader :uglify
+    attr_accessor :uglify
   
     # Join coffee script before compilation?
-    attr_reader :join
+    attr_accessor :join
   
     # Install command options
     options do |opt|

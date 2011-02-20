@@ -34,19 +34,8 @@ ensure
   task :test => [:unit_test]
 end
 
-desc "Builds the application (gallery.coffee -> gallery.js)"
-task :build do
-  # Copy the last waw.js version 
-  puts `cd #{WAWJS_ROOT} && cake dist`
-  wawjs = Dir["#{WAWJS_ROOT}/vendor/js/wawjs-*.js"].last
-  FileUtils.cp wawjs, _("src/public/js")
-
-  # Compile the application
-  puts `../../bin/wawjs compile --no-uglify --join src > src/public/js/gallery.js`
-end
-
 desc "Runs the application"
-task :"run" => :build do
+task :run do
   Kernel.exec "./config.ru"
 end
 

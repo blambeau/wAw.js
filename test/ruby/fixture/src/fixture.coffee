@@ -1,0 +1,1 @@
+exports.Fixture = class Fixture

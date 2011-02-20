@@ -11,11 +11,6 @@ GEM
   remote: http://rubygems.org/
   specs:
     json (1.5.1)
-    less (1.2.21)
-      mutter (>= 0.4.2)
-      treetop (>= 1.4.2)
-    mutter (0.5.3)
-    polyglot (0.3.1)
     quickl (0.2.0)
     rack (1.2.1)
     rack-test (0.5.7)
@@ -25,14 +20,12 @@ GEM
       rack (~> 1.1)
       tilt (~> 1.2)
     tilt (1.2.2)
-    treetop (1.4.9)
-      polyglot (>= 0.3.1)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
-  less
+  json
   rack-test
   rake
   wawjs!
