@@ -1,5 +1,6 @@
 WAWJS_ROOT = File.expand_path('../../../', __FILE__)
-WAWJS = Dir["#{WAWJS_ROOT}/dist/wawjs-*.js"].last
+$LOAD_PATH.unshift File.join(WAWJS_ROOT, 'lib')
+require 'wawjs'
 require 'fileutils'
 
 # Absolutizes a path from here (i.e. __DIR__)
@@ -29,10 +30,11 @@ desc "Builds the application (gallery.coffee -> gallery.js)"
 task :build do
   # Copy the last waw.js version 
   puts `cd #{WAWJS_ROOT} && cake dist`
-  FileUtils.cp WAWJS, _("src/public/js")
+  wawjs = Dir["#{WAWJS_ROOT}/dist/wawjs-*.js"].last
+  FileUtils.cp wawjs, _("src/public/js")
 
   # Compile the application
-  puts `../../bin/wCompile --join src > src/public/js/gallery.js`
+  puts `../../bin/wawjs compile --no-uglify --join src > src/public/js/gallery.js`
 end
 
 desc "Runs the application"

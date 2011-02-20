@@ -1,0 +1,4 @@
+#!/usr/bin/env ruby -rrubygems
+$LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
+require 'wawjs/commands/main'
+WawJS::Commands::Main.run(ARGV, __FILE__)
