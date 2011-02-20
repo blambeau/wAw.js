@@ -1,4 +1,3 @@
-require "rubygems"
 require "sinatra/base"
 module WawJS
   class Brick < Sinatra::Base
