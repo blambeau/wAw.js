@@ -1,4 +1,4 @@
-class Gallery extends Waw.Brick
+class Gallery extends WawJS.Brick
   
   # Builds the Gallery brick
   constructor: ->
@@ -11,7 +11,7 @@ class Gallery extends Waw.Brick
   
     # This is the main page, as a View. It will be explicitely
     # refreshed at startup (see wInit)
-    @main = new Waw.View
+    @main = new WawJS.View
       render: (v)=> 
         @see.render()
 

@@ -1,4 +1,4 @@
-class See < Waw::Brick
+class See < WawJS::Brick
   
   def initialize(gallery)
     super

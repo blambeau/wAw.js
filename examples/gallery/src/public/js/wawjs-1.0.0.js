@@ -5,7 +5,7 @@
  * Copyright 2011, Bernard Lambeau
  * Released under the MIT License
  */
-var Waw = function(){};
+var WawJS = function(){};
 (function(exports) {
   var builder, require;
   builder = [];
@@ -460,7 +460,7 @@ var Waw = function(){};
       return View;
     })();
   };
-  builder['./waw'] = function(exports){
+  builder['./wawjs'] = function(exports){
     exports.Signal = require('./signal').Signal;
     exports.Brick = require('./brick').Brick;
     exports.Cell = require('./cell').Cell;
@@ -471,5 +471,5 @@ var Waw = function(){};
       return $.extend($, new exports.Helpers);
     });
   };
-  require('./waw');
-}).call(this, Waw);
+  require('./wawjs');
+}).call(this, WawJS);

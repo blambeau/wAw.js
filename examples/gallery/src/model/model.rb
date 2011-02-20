@@ -1,4 +1,4 @@
-class Model < Waw::Brick
+class Model < WawJS::Brick
   
   def initialize(igallery)
     super

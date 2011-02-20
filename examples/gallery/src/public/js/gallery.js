@@ -1,4 +1,4 @@
-var App = function(){};
+var app = function(){};
 (function(exports) {
   var builder, require;
   builder = [];
@@ -18,11 +18,11 @@ var App = function(){};
       return child;
     }, __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
     Gallery = (function() {
-      __extends(Gallery, Waw.Brick);
+      __extends(Gallery, WawJS.Brick);
       function Gallery() {
         this.model = new Model;
         this.see = new See(this.model);
-        this.main = new Waw.View({
+        this.main = new WawJS.View({
           render: __bind(function(v) {
             return this.see.render();
           }, this)
@@ -40,7 +40,7 @@ var App = function(){};
       function Model() {
         Model.__super__.constructor.apply(this, arguments);
       }
-      __extends(Model, Waw.Brick);
+      __extends(Model, WawJS.Brick);
       Model.prototype.defaults = {
         async: false,
         dataType: 'json'
@@ -70,7 +70,7 @@ var App = function(){};
       function Follower() {
         this.follow = __bind(this.follow, this);;    Follower.__super__.constructor.apply(this, arguments);
       }
-      __extends(Follower, Waw.Brick);
+      __extends(Follower, WawJS.Brick);
       Follower.prototype.follow = function(cell, oldvalue, newvalue) {
         return this.move($("img[imgid='" + newvalue + "']").position());
       };
@@ -94,7 +94,7 @@ var App = function(){};
       return Follower;
     })();
     See = (function() {
-      __extends(See, Waw.Brick);
+      __extends(See, WawJS.Brick);
       function See(model) {
         this.model = model;
         this.toggleDelete = __bind(this.toggleDelete, this);;
@@ -104,9 +104,9 @@ var App = function(){};
         this.withThumbWait = __bind(this.withThumbWait, this);;
         this.render = __bind(this.render, this);;
         this.wInit = __bind(this.wInit, this);;
-        this.currentAlbum = new Waw.Cell("Cars");
-        this.currentImg = new Waw.Cell;
-        this.index = new Waw.View({
+        this.currentAlbum = new WawJS.Cell("Cars");
+        this.currentImg = new WawJS.Cell;
+        this.index = new WawJS.View({
           handler: 'mustache',
           renderData: __bind(function() {
             return {
@@ -185,4 +185,4 @@ var App = function(){};
     })();
   };
   require('./app');
-}).call(this, App);
+}).call(this, app);

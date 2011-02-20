@@ -1,4 +1,4 @@
-class Model extends Waw.Brick
+class Model extends WawJS.Brick
   
   defaults:
     async: false,

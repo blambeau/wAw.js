@@ -4,7 +4,7 @@ require "quickl"
 
 def headize(name)
   <<-EOF.gsub(/^\s*\| /m, "")
-  | var #{name.capitalize} = function(){};
+  | var #{name} = function(){};
   | (function(exports) {
   |   var builder, require;
   |   builder = [];
@@ -17,8 +17,8 @@ def headize(name)
 end
 def terminize(name)
   <<-EOF.gsub(/^\s*\| /m, "")
-  |   require('./#{name}');
-  | }).call(this, #{name.capitalize});
+  |   require('./#{name.downcase}');
+  | }).call(this, #{name});
   EOF
 end
 

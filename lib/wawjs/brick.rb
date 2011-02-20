@@ -1,6 +1,6 @@
 require "rubygems"
 require "sinatra/base"
-module Waw
+module WawJS
   class Brick < Sinatra::Base
     
     # def self.method_added(name)
@@ -19,4 +19,4 @@ module Waw
     # end
 
   end # class Brick
-end # module Waw 
+end # module WawJS 

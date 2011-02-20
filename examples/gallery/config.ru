@@ -4,7 +4,7 @@ require 'less'
 require 'json'
 
 $LOAD_PATH.unshift File.expand_path('../../lib')
-require 'waw/brick'
+require 'wawjs/brick'
 
 $LOAD_PATH.unshift File.expand_path('../src', __FILE__)
 require 'gallery'

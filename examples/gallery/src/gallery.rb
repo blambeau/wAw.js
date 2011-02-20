@@ -1,7 +1,7 @@
 require File.expand_path('../../server/lib/igallery', __FILE__)
 require File.expand_path('../model/model', __FILE__)
 require File.expand_path('../see/see', __FILE__)
-class Gallery < Waw::Brick
+class Gallery < WawJS::Brick
   
   NO_CACHE_HEADERS = {'Cache-control' => "no-store, no-cache, must-revalidate", 
                       'Pragma'        => "no-cache", 
