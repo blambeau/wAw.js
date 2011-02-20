@@ -22,11 +22,5 @@ class Gallery extends WawJS.Brick
 
 # When the document is ready, we build an app instance and start 
 # running it
-$(document).ready ->
-  f = null
-  f = ->
-    if See?
-      $.wRun(new Gallery)
-    else
-      setTimeout f
-  setTimeout f, 100
+$.wApp.ready ->
+  $.wRun(new Gallery)

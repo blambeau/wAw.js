@@ -68,10 +68,46 @@ class WawJS::Commands::Main
       file.unlink
       code
     end
-
-    def headize(name)
-      <<-EOF.gsub(/^\s*\| /m, "")
-      | var #{name} = function(){};
+    
+    def with_coffee_application_header(name) 
+      code = ""
+      code += <<-EOF.gsub(/^\s*\| /m, "")
+      | #{name} ?= {
+      |   onReady: []
+      |   start: ->
+      |     for fn in #{name}.onReady
+      |       fn()
+      |   ready: (fn)-> 
+      |     #{name}.onReady.push fn
+      | }
+      EOF
+      code += yield
+      code += <<-EOF.gsub(/^\s*\| /m, "")
+      | if #{name}.onReady? 
+      |   #{name}.start()
+      EOF
+    end
+    
+    def with_js_application_header(name)
+      code = ""
+      code += <<-EOF.gsub(/^\s*\| /m, "")
+      | var #{name};
+      | (_ref = #{name}) != null ? _ref : #{name} = {
+      |   onReady: [],
+      |   start: function() {
+      |     var fn, _i, _len, _ref, _results;
+      |     _ref = #{name}.onReady;
+      |     _results = [];
+      |     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      |       fn = _ref[_i];
+      |       _results.push(fn());
+      |     }
+      |     return _results;
+      |   },
+      |   ready: function(fn) {
+      |     return #{name}.onReady.push(fn);
+      |   }
+      | };
       | (function(exports) {
       |   var builder, require;
       |   builder = [];
@@ -81,11 +117,12 @@ class WawJS::Commands::Main
       |     return exports;
       |   };
       EOF
-    end
-    
-    def terminize(name)
-      <<-EOF.gsub(/^\s*\| /m, "")
+      code += yield.gsub(/^/m, '  ')
+      code += <<-EOF.gsub(/^\s*\| /m, "")
       |   require('./#{name.downcase}');
+      |   if (#{name}.onReady != null) {
+      |     #{name}.start();
+      |   }
       | }).call(this, #{name});
       EOF
     end
@@ -123,13 +160,13 @@ class WawJS::Commands::Main
     def compile(srcfolder)
       code = ""
       code += File.read(@header) if @header
-      code += headize(name)
-      if join
-        code += join_compile(srcfolder).gsub(/^/m, '  ')
-      else
-        code += nojoin_compile(srcfolder).gsub(/^/m, '  ')
-      end
-      code += terminize(name)
+      code += with_js_application_header(name){
+        if join
+          join_compile(srcfolder)
+        else
+          nojoin_compile(srcfolder)
+        end
+      }
       code = do_uglify(code) if uglify
       code
     end

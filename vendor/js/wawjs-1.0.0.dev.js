@@ -5,7 +5,23 @@
  * Copyright 2011, Bernard Lambeau
  * Released under the MIT License
  */
-var WawJS = function(){};
+var WawJS;
+(_ref = WawJS) != null ? _ref : WawJS = {
+  onReady: [],
+  start: function() {
+    var fn, _i, _len, _ref, _results;
+    _ref = WawJS.onReady;
+    _results = [];
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      fn = _ref[_i];
+      _results.push(fn());
+    }
+    return _results;
+  },
+  ready: function(fn) {
+    return WawJS.onReady.push(fn);
+  }
+};
 (function(exports) {
   var builder, require;
   builder = [];
@@ -505,4 +521,7 @@ var WawJS = function(){};
     });
   };
   require('./wawjs');
+  if (WawJS.onReady != null) {
+    WawJS.start();
+  }
 }).call(this, WawJS);

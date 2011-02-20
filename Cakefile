@@ -22,26 +22,6 @@ onerror = (err)->
     process.stdout.write "#{red}#{err.stack}#{reset}\n"
     process.exit -1
 
-# Build process
-
-build = (callback, contd)->
-  log "Compiling CoffeeScript to JavaScript ...", green
-  exec "mkdir dist/compile"
-  exec "rm -rf lib && coffee -c -b -l -o dist/compile src", (err, stdout)->
-    callback err
-    contd() if contd?
-task "build", "Compile CoffeeScript to JavaScript", -> build onerror
-
-dist = (callback)->
-  exec "./bin/wawjs compile --name=WawJS --header=dist/waw.header.js --no-join --no-uglify src > dist/wawjs-#{VERSION}.js"
-task "dist", "Building waw.js distribution", -> dist onerror
-
-clean = (callback)->
-  exec "rm -rf dist/compile", callback
-task "clean", "Remove temporary files and such", -> clean onerror
-
-# Tests
-
 runTests = ->
   startTime   = Date.now()
   currentFile = null

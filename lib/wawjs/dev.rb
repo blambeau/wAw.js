@@ -46,12 +46,13 @@ module WawJS
     
     def join_app(libname)
       c = WawJS::Commands::Main::Compile.new
-      source = []
-      c.coffee_files_in_order(File.join(@app_root, 'src')).each{|f|
-        source << File.read(f)
-        source << "\n"
+      c.with_coffee_application_header("$.wApp"){
+        source = []
+        c.coffee_files_in_order(File.join(@app_root, 'src')).each{|f|
+          source << File.read(f)
+        }
+        source.join("\n")
       }
-      source
     end
     
     get %r{([\w\-]+).js$} do

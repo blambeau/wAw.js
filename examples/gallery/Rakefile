@@ -15,6 +15,14 @@ def _(relative)
   File.expand_path("../#{relative}", __FILE__)
 end
 
+# Runs a command, returns result on STDOUT. If the exit status was no 0,
+# a RuntimeError is raised. 
+def shell_safe_exec(cmd)
+  unless system(cmd)
+    raise RuntimeError, "Error while executing #{cmd}" 
+  end
+end
+
 begin
   require 'rake/testtask'
   desc "Run unit tests"
@@ -32,6 +40,16 @@ rescue LoadError => ex
 ensure
   desc "Run all tests"
   task :test => [:unit_test]
+end
+  
+desc "Generates the application in src/public/js"
+task :"js:build" do
+  wawjs  = File.join(WAWJS_ROOT, 'bin', 'wawjs')
+  target = File.expand_path("../src/public/js/gallery.dev.js", __FILE__)
+  FileUtils.mkdir_p File.dirname(target)
+  src    = File.expand_path("../src", __FILE__)
+  cmd = "#{wawjs} compile --name='$.wApp' --join --no-uglify #{src} > #{target}"
+  shell_safe_exec(cmd)
 end
 
 desc "Runs the application"
