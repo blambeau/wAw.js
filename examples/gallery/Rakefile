@@ -25,32 +25,19 @@ ensure
   task :test => [:unit_test]
 end
 
-
 desc "Builds the application (gallery.coffee -> gallery.js)"
 task :build do
-  
   # Copy the last waw.js version 
-  `cd #{WAWJS_ROOT} && cake dist`
+  puts `cd #{WAWJS_ROOT} && cake dist`
   FileUtils.cp WAWJS, _("src/public/js")
 
-  # Compile the client application
-  files = ['src/model/model', 'src/see/see', 'src/gallery'].collect{|name|
-    _("#{name}.coffee")
-  }
-  target = _('src/public/js/gallery.js')
-  
-  cmd = "coffee -b -c -j -o #{File.dirname(target)} #{files.join(' ')}"
-  puts "Build .js client: #{cmd}"
-  if Kernel.system(cmd)
-    FileUtils.mv File.join(File.dirname(target), "concatenation.js"), target
-  else
-    raise "An error occured when building .js client"
-  end
+  # Compile the application
+  puts `../../bin/wCompile --join src > src/public/js/gallery.js`
 end
 
 desc "Runs the application"
-task :"run:sinatra" => :build do
-  Kernel.exec "ruby #{_('webapp.rb')}"
+task :"run" => :build do
+  Kernel.exec "./config.ru"
 end
 
-task :default => :"run:sinatra"
+task :default => :"run"

@@ -81,16 +81,39 @@ class Compile < Quickl::Command(__FILE__, __LINE__)
     code
   end
 
+  def with_builder(name)
+    code = ""
+    code += "builder['./#{name}'] = function(exports){\n"
+    code += yield.gsub(/^/m, '  ')
+    code += "};\n"
+  end
+
+  def nojoin_compile(srcfolder)
+    code = ""
+    Dir["#{srcfolder}/**/*.coffee"].each do |file|
+      code += with_builder(File.basename(file, '.coffee')){
+        `cat #{file} | coffee --compile --bare --stdio`
+      }
+    end
+    code
+  end
+  
+  def join_compile(srcfolder)
+    files = Dir["#{srcfolder}/**/*.coffee"]
+    files.sort{|f1,f2| f1.split('/').size <=> f2.split('/').size}
+    with_builder(name){
+      `cat #{files.join(' ')} | coffee --compile --bare --stdio --join`
+    }
+  end
+
   def compile(srcfolder)
     code = ""
     code += File.read(@header) if @header
     code += headize(name)
-    Dir[_("#{srcfolder}/**/*.coffee")].each do |file|
-      file_code = `cat #{file} | coffee --compile --bare --stdio`
-      file_code = file_code.gsub(/^/m, '    ')
-      code += "  builder['./#{File.basename(file, '.coffee')}'] = function(exports){\n"
-      code += file_code + "\n"
-      code += "  };\n"
+    if join
+      code += join_compile(srcfolder).gsub(/^/m, '  ')
+    else
+      code += nojoin_compile(srcfolder).gsub(/^/m, '  ')
     end
     code += terminize(name)
     code = do_uglify(code) if uglify
