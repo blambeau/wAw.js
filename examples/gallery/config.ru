@@ -1,5 +1,4 @@
 #!/usr/bin/env rackup
-require 'rubygems'
 require 'less'
 require 'json'
 
