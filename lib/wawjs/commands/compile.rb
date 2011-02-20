@@ -129,7 +129,7 @@ class WawJS::Commands::Main
 
     def with_builder(name)
       code = ""
-      code += "builder['./#{name}'] = function(exports){\n"
+      code += "builder['./#{name.downcase}'] = function(exports){\n"
       code += yield.gsub(/^/m, '  ')
       code += "};\n"
     end

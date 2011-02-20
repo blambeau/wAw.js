@@ -286,24 +286,24 @@ var WawJS;
         return app;
       };
       Helpers.prototype.wFetch = function(qid) {
-        return $.wApps[0].wFetch(qid);
+        return $.wApp.running[0].wFetch(qid);
       };
       Helpers.prototype.wGet = function(qid) {
-        return $.wApps[0].wGet(qid);
+        return $.wApp.running[0].wGet(qid);
       };
       Helpers.prototype.wSet = function(qid, value) {
-        return $.wApps[0].wSet(qid, value);
+        return $.wApp.running[0].wSet(qid, value);
       };
       Helpers.prototype.wListen = function(sel, fn) {
-        return $.wApps[0].wListen(sel, fn);
+        return $.wApp.running[0].wListen(sel, fn);
       };
       Helpers.prototype.wUnlisten = function(sel, fn) {
-        return $.wApps[0].wUnlisten(sel, fn);
+        return $.wApp.running[0].wUnlisten(sel, fn);
       };
       Helpers.prototype.wEmit = function() {
         var args, sel, _ref;
         sel = arguments[0], args = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
-        return (_ref = $.wApps[0]).wEmit.apply(_ref, [sel].concat(__slice.call(args)));
+        return (_ref = $.wApp.running[0]).wEmit.apply(_ref, [sel].concat(__slice.call(args)));
       };
       Helpers.prototype.wConnect = function(signal, slot) {
         return signal.listen(slot);
@@ -312,7 +312,7 @@ var WawJS;
         return signal.unlisten(slot);
       };
       Helpers.prototype.wCall = function(qid, fn) {
-        return $.wApps[0].wCall(qid, fn);
+        return $.wApp.running[0].wCall(qid, fn);
       };
       return Helpers;
     })();
