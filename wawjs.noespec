@@ -1,0 +1,145 @@
+# See 'noe help prepare' and 'noe help show-spec' for more information.
+template-info:
+  name: "ruby"
+  version: 1.3.0
+
+# The following entries are template-related variables. Update to match your 
+# own configuration.
+variables:
+  lower: 
+    wawjs
+  upper:
+    WawJS
+  version:
+    1.0.0
+  summary: 
+    waw.js - Thinking web applications differently
+  description: |-
+    waw.js is a heavy client web framework for developing web applications powered 
+    by coffeescript client-side and ruby/sinatra server side.
+  authors:
+    - name: Bernard Lambeau
+      email: blambeau@gmail.com
+  links: 
+    - http://github.com/blambeau/wAw.js
+  dependencies: 
+    # Rake is required for developers, as usual
+    - {name: rake,      version: "~> 0.8.7",  groups: [development]}
+    - {name: rspec,     version: "~> 2.4.0",  groups: [development]}
+    - {name: yard,      version: "~> 0.6.4",  groups: [development]}
+    - {name: bluecloth, version: "~> 2.0.9",  groups: [development]}
+    - {name: wlang,     version: "~> 0.10.1", groups: [development]}
+    - {name: bundler,   version: "~> 1.0",    groups: [development, runtime]}
+    - {name: sinatra,   version: "~> 1.1.0",  groups: [development, runtime]}
+  
+  # Below are defined a certain number of specific variables for the .gemspec file
+  # of your library. We'll include it here to keep .gemspec under Noe's control for
+  # simple yet flexible cases. If your gem configuration is really specific, you
+  # can always maintain the .gemspec manually by setting
+  # template-info/manifest/__lower__.gemspec/safe-override to false
+  gemspec:  
+    # Paths in the gem to add to $LOAD_PATH when the gem is activated (required).
+    require_paths: [ lib ]
+    # The path in the gem for executable scripts
+    bindir: 'bin'
+    # Array containing the names of executables included in the gem, 
+    # if any (Dir[...] patterns are supported). 
+    executables: [ 'bin/*' ]
+    # Array of test files (Dir[...] patterns are supported).
+    test_files: ['test/**/*', 'spec/**/*']
+    # Array of options to use when invoking rdoc
+    rdoc_options: [ ]
+    # Array of extra files to give to rdoc (Dir[...] patterns are supported)
+    extra_rdoc_files: [ README.md, CHANGELOG.md, LICENCE.md ]
+    # Array of extensions to build when installing the gem.  
+    extensions: []
+    # External (to RubyGems) requirements that must be met for this gem to work (informal)
+    requirements:
+    # A friendly message you would like to display when the user installs your gem
+    post_install_message:
+    
+  # Below are defined a certain number of specific variables for each rake task.
+  # Have a look at tasks/*.rake for additional details on each one.
+  rake_tasks:
+    gem:
+      # Folder in which the packages are generated
+      package_dir: pkg
+      # Do you need a .tar package?
+      need_tar: false
+      # Do you need a .tar.gz package?
+      need_tar_gz: false
+      # Do you need a .tar.bz2 package?
+      need_tar_bz2: false
+      # Do you need a .zip package?
+      need_zip: false
+      # The shell command executed to build a .tar
+      tar_command: tar
+      # The shell command executed to build a .zip
+      zip_command: zip
+    debug_mail:
+      # Regular expression to detect change sections in
+      # the CHANGELOG file
+      rx_changelog_sections: '/^#/'
+      # Number of change sections to show in the mail
+      nb_changelog_sections: 1
+    spec_test:
+      # Pattern to find spec tests
+      pattern: spec/**/*_spec.rb
+      # By default, if there is a Gemfile, the generated command will include
+      # 'bundle exec'. Set this to true to ignore the presence of a Gemfile, 
+      # and not add 'bundle exec' to the command.
+      skip_bundler: false
+      # Name of Gemfile to use
+      gemfile: Gemfile
+      # Whether or not to fail Rake when an error occurs (typically when 
+      # examples fail).
+      fail_on_error: true
+      # A message to print to stderr when there are failures.
+      failure_message:
+      # Use verbose output. If this is set to true, the task will print the
+      # executed spec command to stdout.
+      verbose: true
+      # Use rcov for code coverage?
+      rcov: false
+      # Path to rcov.
+      rcov_path: rcov
+      # Command line options to pass to rcov. See 'rcov --help' about this
+      rcov_opts: []
+      # Command line options to pass to ruby. See 'ruby --help' about this 
+      ruby_opts: []
+      # Path to rspec
+      rspec_path: rspec
+      # Command line options to pass to rspec. See 'rspec --help' about this
+      rspec_opts: [--color, --backtrace]
+    unit_test:
+      # Glob pattern to match test files. (default is 'test/test*.rb')
+      pattern: test/ruby/test*.rb
+      # Array of directories to added to $LOAD_PATH before running the tests.
+      libs: [ lib ]
+      # True if verbose test output desired.
+      verbose: false
+      # Test options passed to the test suite. An explicit TESTOPTS=opts 
+      # on the command line will override this.
+      options:
+      # Request that the tests be run with the warning flag set.
+      # E.g. warning=true implies "ruby -w" used to run the tests.
+      warning: false
+      # Style of test loader to use. Options are:
+      #
+      # * :rake -- Rake provided test loading script (default).
+      # * :testrb -- Ruby provided test loading script.
+      # * :direct -- Load tests using command line loader.
+      # 
+      loader: :rake
+      # Array of commandline options to pass to ruby when running test loader.
+      ruby_opts: []
+      # Explicitly define the list of test files to be included in a
+      # test.  +list+ is expected to be an array of file names (a
+      # FileList is acceptable).  If both +pattern+ and +test_files+ are
+      # used, then the list of test files is the union of the two.
+      test_files:
+    yard:
+      # Array of ruby source files
+      files: ['lib/**/*.rb']
+      # Array of options passed to yard commandline. See 'yardoc --help' about this
+      options: ['--output-dir', 'doc/api', '-', 'README.md', 'CHANGELOG.md', 'LICENCE.md']
