@@ -1,1 +1,1 @@
-exports.Fixture = class Fixture
+class Fixture < WawJS::Brick

@@ -18,8 +18,14 @@ class Gallery extends WawJS.Brick
   # This function is called when the application is started.
   wInit: ->
     @main.refresh()
-    
+
 # When the document is ready, we build an app instance and start 
 # running it
 $(document).ready ->
-  $.wRun(new Gallery)
+  f = null
+  f = ->
+    if See?
+      $.wRun(new Gallery)
+    else
+      setTimeOut f
+  setTimeout f, 100

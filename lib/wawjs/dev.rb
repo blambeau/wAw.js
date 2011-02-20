@@ -47,6 +47,16 @@ module WawJS
       c.compile(File.join(@app_root, 'src'))
     end
     
+    def join_app(libname)
+      c = WawJS::Commands::Main::Compile.new
+      source = []
+      c.coffee_files_in_order(File.join(@app_root, 'src')).each{|f|
+        source << File.read(f)
+        source << "\n"
+      }
+      source
+    end
+    
     get %r{([\w\-]+).js$} do
       libname = params[:captures].first
       if file = look_for(libname)
@@ -54,6 +64,16 @@ module WawJS
       elsif libname == File.basename(@app_root)
         headers NO_CACHE_HEADERS.merge("Content-Type" => "text/javascript")
         compile_app(libname)
+      else
+        not_found
+      end
+    end
+
+    get %r{([\w\-]+).coffee$} do
+      libname = params[:captures].first
+      if libname == File.basename(@app_root)
+        headers NO_CACHE_HEADERS.merge("Content-Type" => "text/coffeescript")
+        join_app(libname)
       else
         not_found
       end

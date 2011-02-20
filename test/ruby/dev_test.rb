@@ -37,12 +37,22 @@ module WawJS
       assert last_response.not_found?
     end
     
-    def test_service_ok_on_application_name
+    def test_service_ok_on_application_dot_js
       get '/fixture.js'
       assert last_response.ok?
       assert last_response.content_type =~ /javascript/
       assert last_response.include?("Cache-control")
       assert_equal last_response.headers["Pragma"], "no-cache"
+    end
+
+    def test_service_ok_on_application_dot_coffee
+      get '/fixture.coffee'
+      assert last_response.ok?
+      assert last_response.content_type =~ /coffeescript/
+      assert last_response.include?("Cache-control")
+      assert_equal last_response.headers["Pragma"], "no-cache"
+      assert last_response.body =~ /class Fixture/
+      assert last_response.body =~ /class Sub/
     end
 
   end

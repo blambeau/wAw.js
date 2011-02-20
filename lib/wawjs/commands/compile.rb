@@ -106,10 +106,15 @@ class WawJS::Commands::Main
       end
       code
     end
-  
-    def join_compile(srcfolder)
+    
+    def coffee_files_in_order(srcfolder)
       files = Dir["#{srcfolder}/**/*.coffee"]
       files.sort{|f1,f2| f1.split('/').size <=> f2.split('/').size}
+      files
+    end
+  
+    def join_compile(srcfolder)
+      files = coffee_files_in_order(srcfolder)
       with_builder(name){
         safe_run("cat #{files.join(' ')} | coffee --compile --bare --stdio --join")
       }
