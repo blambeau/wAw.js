@@ -9,6 +9,7 @@ end
 # Runs a command, returns result on STDOUT. If the exit status was no 0,
 # a RuntimeError is raised. 
 def shell_safe_exec(cmd)
+  puts cmd
   unless system(cmd)
     raise RuntimeError, "Error while executing #{cmd}" 
   end
@@ -26,6 +27,6 @@ task :default => :test
 #
 # See .rake files there for complete documentation.
 #
-Dir["tasks/*.rake"].each do |taskfile|
+Dir["tasks/**/*.rake"].each do |taskfile|
   instance_eval File.read(taskfile), taskfile
 end
