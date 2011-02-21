@@ -12,11 +12,11 @@ require 'json'
 $LOAD_PATH.unshift File.expand_path('../src', __FILE__)
 require 'gallery'
 
-GALLERY_PATH = "/Users/blambeau/work/chefbe/devel/pv/albums"
-#GALLERY_PATH = File.expand_path('../albums', __FILE__)
+#GALLERY_PATH = "/Users/blambeau/Pictures/valentine"
+GALLERY_PATH = File.expand_path('../albums', __FILE__)
 GALLERY = IGallery.open(GALLERY_PATH)
 
-#use WawJS::NoCache
+use WawJS::NoCache
 map '/jsdev' do
   run WawJS::Dev.new __FILE__
 end

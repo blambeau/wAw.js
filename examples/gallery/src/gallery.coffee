@@ -22,6 +22,5 @@ class Gallery extends WawJS.Brick
 
 # When the document is ready, we build an app instance and start 
 # running it
-$(document).ready ->
-  $.wApp.ready ->
-    $.wRun(new Gallery)
+$.wApp.ready ->
+  $.wRun(new Gallery)

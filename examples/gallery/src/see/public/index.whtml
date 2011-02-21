@@ -6,7 +6,6 @@
     {{>thumbs}}
   </div>
   <div id="right">
-    <img id="big-image-loader" src="/css/images/wait.gif" style="display:none;">
-    <img id="big-image" src="/image/Cars/Chrysler.jpg">
+    <img id="big-image"/>
   </div>
 </div>

@@ -4,7 +4,7 @@ class See extends WawJS.Brick
   constructor: (@model)->
 
     # This cell will keep the name of the current album displayed
-    @currentAlbum = new WawJS.Cell("Cars")
+    @currentAlbum = new WawJS.Cell
 
     # This cell will keep the name of the current image displayed
     @currentImg = new WawJS.Cell
@@ -28,6 +28,7 @@ class See extends WawJS.Brick
     $.wConnect @mode, (c,oldval,newval)=>
       oldval.stop(this) if oldval?
       newval.start(this) if newval?
+    @currentAlbum.set @model.albums()[0].albid
 
   render: => 
     @index.render()
