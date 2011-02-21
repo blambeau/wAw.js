@@ -30,6 +30,26 @@ var WawJS;
     (_ref = exports[name]) != null ? _ref : exports[name] = builder[name](exports);
     return exports;
   };
+  builder['./nnbb'] = function(exports){
+    var NnBb;
+    NnBb = function() {
+      return {
+        pending: [],
+        running: [],
+        ready: function(fn) {
+          return NnBb.pending.push(fn);
+        },
+        start: function(fn) {
+          var i, _i, _len;
+          for (_i = 0, _len = pending.length; _i < _len; _i++) {
+            i = pending[_i];
+            NnBb.running.push(fn(i));
+          }
+          return NnBb.pending = [];
+        }
+      };
+    };
+  };
   builder['./brick'] = function(exports){
     var Brick, Signal;
     var __slice = Array.prototype.slice;

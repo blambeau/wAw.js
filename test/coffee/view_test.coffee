@@ -1,4 +1,4 @@
-{View} = require '../../src/view'
+{View} = require '../../src/wawjs/view'
 
 test "View's url getter inline", ->
   v = new View url: 'hello'

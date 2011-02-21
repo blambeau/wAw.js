@@ -1,6 +1,6 @@
-{Brick}  = require('../../src/brick')
-{Cell} = require('../../src/cell')
-{SM}  = require('../../src/sm')
+{Brick}  = require('../../src/wawjs/brick')
+{Cell} = require('../../src/wawjs/cell')
+{SM}  = require('../../src/wawjs/sm')
 
 exports.FixtureApp = class FixtureApp extends Brick
   constructor: ->

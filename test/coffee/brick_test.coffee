@@ -1,6 +1,6 @@
-{Brick} = require('../../src/brick')
-{Signal}  = require('../../src/signal')
-{Cell}  = require('../../src/cell')
+{Brick} = require('../../src/wawjs/brick')
+{Signal}  = require('../../src/wawjs/signal')
+{Cell}  = require('../../src/wawjs/cell')
 
 b1 = new Brick
 b1.b2 = new Brick
