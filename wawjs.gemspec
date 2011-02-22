@@ -133,10 +133,12 @@ Gem::Specification.new do |s|
   s.add_development_dependency("sinatra", "~> 1.1.0")
   s.add_development_dependency("json", ">= 1.5.0")
   s.add_development_dependency("quickl", "~> 0.2.0")
+  #s.add_development_dependency("nibjs", "~> 1.0.0")
   s.add_dependency("bundler", "~> 1.0")
   s.add_dependency("sinatra", "~> 1.1.0")
   s.add_dependency("json", ">= 1.5.0")
   s.add_dependency("quickl", "~> 0.2.0")
+  #s.add_dependency("nibjs", "~> 1.0.0")
 
   # The version of ruby required by this gem
   #

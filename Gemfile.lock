@@ -1,4 +1,11 @@
 PATH
+  remote: /Users/blambeau/work/chefbe/devel/nib.js
+  specs:
+    nibjs (1.0.0)
+      bundler (~> 1.0)
+      quickl (~> 0.2.0)
+
+PATH
   remote: .
   specs:
     wawjs (1.0.0)
@@ -40,6 +47,7 @@ DEPENDENCIES
   bluecloth (~> 2.0.9)
   bundler (~> 1.0)
   json (>= 1.5.0)
+  nibjs (~> 1.0.0)!
   quickl (~> 0.2.0)
   rack-test (~> 0.5)
   rake (~> 0.8.7)

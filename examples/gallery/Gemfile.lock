@@ -1,4 +1,11 @@
 PATH
+  remote: /Users/blambeau/work/chefbe/devel/nib.js
+  specs:
+    nibjs (1.0.0)
+      bundler (~> 1.0)
+      quickl (~> 0.2.0)
+
+PATH
   remote: /Users/blambeau/work/chefbe/devel/waw.js
   specs:
     wawjs (1.0.0)
@@ -26,6 +33,7 @@ PLATFORMS
 
 DEPENDENCIES
   json
+  nibjs!
   rack-test
   rake
   wawjs!

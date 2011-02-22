@@ -19,8 +19,3 @@ class Gallery extends WawJS.Brick
   wInit: ->
     @main.refresh()
     @see.setMode('edit')
-
-# When the document is ready, we build an app instance and start 
-# running it
-$.wApp.ready ->
-  $.wRun(new Gallery)

@@ -2,4 +2,5 @@ source 'http://rubygems.org'
 gem 'rake'
 gem 'rack-test'
 gem 'json'
+gem 'nibjs', :path => File.expand_path('../../../../nib.js', __FILE__)
 gem 'wawjs', :path => File.expand_path('../../../', __FILE__)

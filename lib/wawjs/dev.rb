@@ -36,23 +36,16 @@ module WawJS
       nil
     end
     
-    def compile_app(name)
-      c = WawJS::Commands::Main::Compile.new
-      c.name = name
-      c.join = true
-      c.uglify = false
-      c.compile(File.join(@app_root, 'src'))
-    end
-    
-    def join_app(libname)
-      c = WawJS::Commands::Main::Compile.new
-      c.with_coffee_application_header("$.wApp"){
-        source = []
-        c.coffee_files_in_order(File.join(@app_root, 'src')).each{|f|
-          source << File.read(f)
-        }
-        source.join("\n")
-      }
+    def compile_app(name, coffee)
+      require 'nibjs/main'
+      c = NibJS::Main.new
+      c.output = []
+      args = coffee ? ["--coffee"] : []
+      args += ["--no-uglify", "--libname=#{name}", "--join"]
+      args += [ File.join(@app_root, 'src') ]
+      puts args.inspect
+      c.run(args)
+      c.output.join("\n")
     end
     
     get %r{([\w\-]+).js$} do
@@ -61,7 +54,7 @@ module WawJS
         send_file file
       elsif libname == File.basename(@app_root)
         headers NoCache::NO_CACHE_HEADERS.merge("Content-Type" => "text/javascript")
-        compile_app(libname)
+        compile_app(libname, false)
       else
         not_found
       end
@@ -71,7 +64,7 @@ module WawJS
       libname = params[:captures].first
       if libname == File.basename(@app_root)
         headers NoCache::NO_CACHE_HEADERS.merge("Content-Type" => "text/coffeescript")
-        join_app(libname)
+        compile_app(libname, true)
       else
         not_found
       end

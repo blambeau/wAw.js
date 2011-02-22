@@ -2,6 +2,9 @@
 template-info:
   name: "ruby"
   version: 1.3.0
+  manifest:
+    Rakefile:
+      safe-override: false
 
 # The following entries are template-related variables. Update to match your 
 # own configuration.
@@ -34,6 +37,7 @@ variables:
     - {name: sinatra,   version: "~> 1.1.0",  groups: [development, runtime]}
     - {name: json,      version: ">= 1.5.0",  groups: [development, runtime]}
     - {name: quickl,    version: "~> 0.2.0",  groups: [development, runtime]}
+    - {name: nibjs,     version: "~> 1.0.0",  groups: [development, runtime]}
   
   # Below are defined a certain number of specific variables for the .gemspec file
   # of your library. We'll include it here to keep .gemspec under Noe's control for
