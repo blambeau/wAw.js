@@ -19,3 +19,5 @@ class Gallery extends WawJS.Brick
   wInit: ->
     @main.refresh()
     @see.setMode('edit')
+
+exports.Gallery = Gallery

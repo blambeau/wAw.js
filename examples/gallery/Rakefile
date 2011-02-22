@@ -44,11 +44,11 @@ end
   
 desc "Generates the application in src/public/js"
 task :"js:build" do
-  wawjs  = File.join(WAWJS_ROOT, 'bin', 'wawjs')
-  target = File.expand_path("../src/public/js/gallery.dev.js", __FILE__)
+  nibjs  = File.join(WAWJS_ROOT, '..', 'nib.js', 'bin', 'nibjs')
+  target = _("src/public/js/gallery.dev.js")
   FileUtils.mkdir_p File.dirname(target)
   src    = File.expand_path("../src", __FILE__)
-  cmd = "#{wawjs} compile --name='$.wApp' --join --no-uglify #{src} > #{target}"
+  cmd = "#{nibjs} --autorequire --coffee --coffee-compile --join --libname=Gallery --no-uglify --output=#{target} #{src}"
   shell_safe_exec(cmd)
 end
 

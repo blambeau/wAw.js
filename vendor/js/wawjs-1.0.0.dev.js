@@ -239,46 +239,29 @@ NibJS.define('WawJS', function(nibjs) {
     var Helpers;
     return exports.Helpers = Helpers = (function() {
       function Helpers() {}
-      Helpers.prototype.wApp = {
-        onReady: [],
-        running: [],
-        start: function() {
-          var fn, _i, _len, _ref, _results;
-          _ref = $.wApp.onReady;
-          _results = [];
-          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            fn = _ref[_i];
-            _results.push($.wApp.running.push(fn()));
-          }
-          return _results;
-        },
-        ready: function(fn) {
-          return $.wApp.onReady.push(fn);
-        }
-      };
       Helpers.prototype.wRun = function(app) {
         app.wRun();
-        return app;
+        return $.wApp = app;
       };
       Helpers.prototype.wFetch = function(qid) {
-        return $.wApp.running[0].wFetch(qid);
+        return $.wApp.wFetch(qid);
       };
       Helpers.prototype.wGet = function(qid) {
-        return $.wApp.running[0].wGet(qid);
+        return $.wApp.wGet(qid);
       };
       Helpers.prototype.wSet = function(qid, value) {
-        return $.wApp.running[0].wSet(qid, value);
+        return $.wApp.wSet(qid, value);
       };
       Helpers.prototype.wListen = function(sel, fn) {
-        return $.wApp.running[0].wListen(sel, fn);
+        return $.wApp.wListen(sel, fn);
       };
       Helpers.prototype.wUnlisten = function(sel, fn) {
-        return $.wApp.running[0].wUnlisten(sel, fn);
+        return $.wApp.wUnlisten(sel, fn);
       };
       Helpers.prototype.wEmit = function() {
         var args, sel, _ref;
         sel = arguments[0], args = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
-        return (_ref = $.wApp.running[0]).wEmit.apply(_ref, [sel].concat(__slice.call(args)));
+        return (_ref = $.wApp).wEmit.apply(_ref, [sel].concat(__slice.call(args)));
       };
       Helpers.prototype.wConnect = function(signal, slot) {
         return signal.listen(slot);
@@ -287,7 +270,7 @@ NibJS.define('WawJS', function(nibjs) {
         return signal.unlisten(slot);
       };
       Helpers.prototype.wCall = function(qid, fn) {
-        return $.wApp.running[0].wCall(qid, fn);
+        return $.wApp.wCall(qid, fn);
       };
       return Helpers;
     })();
