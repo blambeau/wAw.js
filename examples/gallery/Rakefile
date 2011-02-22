@@ -48,7 +48,7 @@ task :"js:build" do
   target = _("src/public/js/gallery.dev.js")
   FileUtils.mkdir_p File.dirname(target)
   src    = File.expand_path("../src", __FILE__)
-  cmd = "#{nibjs} --autorequire --coffee --coffee-compile --join --libname=Gallery --no-uglify --output=#{target} #{src}"
+  cmd = "#{nibjs} --autorequire --coffee --coffee-compile --join --libname=gallery --no-uglify --output=#{target} #{src}"
   shell_safe_exec(cmd)
 end
 

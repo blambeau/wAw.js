@@ -37,15 +37,23 @@ module WawJS
     end
     
     def compile_app(name, coffee)
+      # build a command
       require 'nibjs/main'
-      c = NibJS::Main.new
-      c.output = []
-      args = coffee ? ["--coffee"] : []
-      args += ["--no-uglify", "--libname=#{name}", "--join"]
+      command = NibJS::Main.new
+      
+      # set options
+      args = if coffee 
+        [ "--coffee", "--no-coffee-compile", "--join" ]
+      else
+        [ "--join" ]
+      end
+      args += [ "--no-uglify", "--libname=#{name}" ]
       args += [ File.join(@app_root, 'src') ]
-      puts args.inspect
-      c.run(args)
-      c.output.join("\n")
+
+      # let's go!
+      command.output = []
+      command.run(args)
+      command.output.join("\n")
     end
     
     get %r{([\w\-]+).js$} do
