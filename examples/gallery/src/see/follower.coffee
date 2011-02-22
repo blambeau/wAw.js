@@ -16,6 +16,14 @@ class Follower extends WawJS.Brick
     $('#thumb-hider').css(css)
     $('#button-box').css(css)
 
+  reinit: =>
+    thiz = this
+    $('.thumb').mouseover ->
+      img = $(this).attr('imgid');
+      thiz.set(img)
+    $('#button-box').mouseleave ->
+      thiz.hide()
+
   show: ->
     $('#thumb-hider').show()
     $('#button-box').show()
@@ -27,16 +35,14 @@ class Follower extends WawJS.Brick
   start: (see)=>
     thiz = this
     $.wConnect see.currentImg, thiz.onImageChange
-    $('.thumb').mouseover ->
-      img = $(this).attr('imgid');
-      thiz.set(img)
-    $('#button-box').mouseleave ->
-      thiz.hide()
+    $.wConnect see.currentAlbum, thiz.reinit
+    thiz.reinit()
     @started = true
     
   stop: (see)=>
     thiz = this
     $.wDisconnect see.currentImg, thiz.onImageChange
+    $.wDisconnect see.currentAlbum, thiz.reinit
     $('.thumb').unbind 'mouseover'
     $('#button-box').unbind 'mouseleave'
     thiz.hide()

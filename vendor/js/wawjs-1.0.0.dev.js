@@ -1,60 +1,16 @@
-/**
- * wAw.js micro web framework v1.0.0
- * http://github.com/blambeau/waw.js
- *
- * Copyright 2011, Bernard Lambeau
- * Released under the MIT License
- */
-var WawJS;
-(_ref = WawJS) != null ? _ref : WawJS = {
-  onReady: [],
-  start: function() {
-    var fn, _i, _len, _ref, _results;
-    _ref = WawJS.onReady;
-    _results = [];
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      fn = _ref[_i];
-      _results.push(fn());
-    }
-    return _results;
-  },
-  ready: function(fn) {
-    return WawJS.onReady.push(fn);
-  }
-};
-(function(exports) {
-  var builder, require;
-  builder = [];
-  require = function(name) {
-    var _ref;
-    (_ref = exports[name]) != null ? _ref : exports[name] = builder[name](exports);
-    return exports;
-  };
-  builder['./nnbb'] = function(exports){
-    var NnBb;
-    NnBb = function() {
-      return {
-        pending: [],
-        running: [],
-        ready: function(fn) {
-          return NnBb.pending.push(fn);
-        },
-        start: function(fn) {
-          var i, _i, _len;
-          for (_i = 0, _len = pending.length; _i < _len; _i++) {
-            i = pending[_i];
-            NnBb.running.push(fn(i));
-          }
-          return NnBb.pending = [];
-        }
-      };
-    };
-  };
-  builder['./brick'] = function(exports){
+var __slice = Array.prototype.slice, __hasProp = Object.prototype.hasOwnProperty, __extends = function(child, parent) {
+  for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; }
+  function ctor() { this.constructor = child; }
+  ctor.prototype = parent.prototype;
+  child.prototype = new ctor;
+  child.__super__ = parent.prototype;
+  return child;
+}, __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+NibJS.define('WawJS', function(nibjs) {
+  nibjs.register('./brick', function(exports, require) {
     var Brick, Signal;
-    var __slice = Array.prototype.slice;
     Signal = require('./signal').Signal;
-    exports.Brick = Brick = (function() {
+    return exports.Brick = Brick = (function() {
       function Brick(opts) {
         var defs;
         if (opts == null) {
@@ -231,20 +187,12 @@ var WawJS;
       };
       return Brick;
     })();
-  };
-  builder['./cell'] = function(exports){
+  });
+  nibjs.register('./cell', function(exports, require) {
     var Brick, Cell, Signal;
-    var __hasProp = Object.prototype.hasOwnProperty, __extends = function(child, parent) {
-      for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; }
-      function ctor() { this.constructor = child; }
-      ctor.prototype = parent.prototype;
-      child.prototype = new ctor;
-      child.__super__ = parent.prototype;
-      return child;
-    };
     Brick = require('./brick').Brick;
     Signal = require('./signal').Signal;
-    exports.Cell = Cell = (function() {
+    return exports.Cell = Cell = (function() {
       __extends(Cell, Brick);
       function Cell(_value) {
         this._value = _value;
@@ -278,11 +226,10 @@ var WawJS;
       };
       return Cell;
     })();
-  };
-  builder['./helpers'] = function(exports){
+  });
+  nibjs.register('./helpers', function(exports, require) {
     var Helpers;
-    var __slice = Array.prototype.slice;
-    exports.Helpers = Helpers = (function() {
+    return exports.Helpers = Helpers = (function() {
       function Helpers() {}
       Helpers.prototype.wApp = {
         onReady: [],
@@ -336,10 +283,21 @@ var WawJS;
       };
       return Helpers;
     })();
-  };
-  builder['./signal'] = function(exports){
+  });
+  nibjs.register('./index', function(exports, require) {
+    exports.Signal = require('./signal').Signal;
+    exports.Brick = require('./brick').Brick;
+    exports.Cell = require('./cell').Cell;
+    exports.SM = require('./sm').SM;
+    exports.View = require('./view').View;
+    exports.Helpers = require('./helpers').Helpers;
+    return $(document).ready(function() {
+      return $.extend($, new exports.Helpers);
+    });
+  });
+  nibjs.register('./signal', function(exports, require) {
     var Signal;
-    exports.Signal = Signal = (function() {
+    return exports.Signal = Signal = (function() {
       function Signal(brick) {
         this.brick = brick;
         this.listeners = [];
@@ -374,20 +332,12 @@ var WawJS;
       };
       return Signal;
     })();
-  };
-  builder['./sm'] = function(exports){
+  });
+  nibjs.register('./sm', function(exports, require) {
     var Cell, SM, Signal;
-    var __hasProp = Object.prototype.hasOwnProperty, __extends = function(child, parent) {
-      for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; }
-      function ctor() { this.constructor = child; }
-      ctor.prototype = parent.prototype;
-      child.prototype = new ctor;
-      child.__super__ = parent.prototype;
-      return child;
-    }, __slice = Array.prototype.slice, __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
     Cell = require('./cell').Cell;
     Signal = require('./signal').Signal;
-    exports.SM = SM = (function() {
+    return exports.SM = SM = (function() {
       __extends(SM, Cell);
       function SM(def) {
         this.def = def;
@@ -423,19 +373,11 @@ var WawJS;
       };
       return SM;
     })();
-  };
-  builder['./view'] = function(exports){
+  });
+  nibjs.register('./view', function(exports, require) {
     var Brick, View;
-    var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; }, __hasProp = Object.prototype.hasOwnProperty, __extends = function(child, parent) {
-      for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; }
-      function ctor() { this.constructor = child; }
-      ctor.prototype = parent.prototype;
-      child.prototype = new ctor;
-      child.__super__ = parent.prototype;
-      return child;
-    };
     Brick = require('./brick').Brick;
-    exports.View = View = (function() {
+    return exports.View = View = (function() {
       __extends(View, Brick);
       View.prototype.defaults = {
         url: function(v) {
@@ -475,7 +417,7 @@ var WawJS;
         this.mustacheRender = __bind(this.mustacheRender, this);;
         this.wCallRenderer = __bind(this.wCallRenderer, this);;
         this.toString = __bind(this.toString, this);;
-        this.refresh = __bind(this.refresh, this);;    View.__super__.constructor.apply(this, arguments);
+        this.refresh = __bind(this.refresh, this);;        View.__super__.constructor.apply(this, arguments);
         this._normalizePartials(opts);
       }
       View.prototype.wInit = function(parent, name) {
@@ -545,20 +487,7 @@ var WawJS;
       };
       return View;
     })();
-  };
-  builder['./wawjs'] = function(exports){
-    exports.Signal = require('./signal').Signal;
-    exports.Brick = require('./brick').Brick;
-    exports.Cell = require('./cell').Cell;
-    exports.SM = require('./sm').SM;
-    exports.View = require('./view').View;
-    exports.Helpers = require('./helpers').Helpers;
-    $(document).ready(function() {
-      return $.extend($, new exports.Helpers);
-    });
-  };
-  require('./wawjs');
-  if (WawJS.onReady != null) {
-    WawJS.start();
-  }
-}).call(this, WawJS);
+  });
+  return nibjs.require('./index');
+});
+var WawJS = NibJS.require('WawJS');
