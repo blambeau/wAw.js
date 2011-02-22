@@ -14,6 +14,10 @@ def shell_safe_exec(cmd)
     raise RuntimeError, "Error while executing #{cmd}" 
   end
 end
+
+def _(path)
+  File.join(File.dirname(__FILE__), path)
+end
   
 # Dynamically load the gem spec
 $gemspec_file = File.expand_path('../wawjs.gemspec', __FILE__)

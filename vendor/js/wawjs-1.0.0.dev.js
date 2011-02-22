@@ -1,3 +1,11 @@
+/**
+ * wAw.js micro web framework v1.0.0
+ *
+ * Copyright 2011, Bernard Lambeau
+ * Released under the MIT License
+ * http://github.com/blambeau/waw.js
+ */
+
 var __slice = Array.prototype.slice, __hasProp = Object.prototype.hasOwnProperty, __extends = function(child, parent) {
   for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; }
   function ctor() { this.constructor = child; }
